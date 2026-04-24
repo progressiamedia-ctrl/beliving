@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -38,27 +40,27 @@ export default function HostOnboarding() {
   const stepNumber = ['propertyType', 'location', 'price', 'occupancy', 'goals'].indexOf(step) + 1
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
         {/* Barra de progreso */}
         <div className="mb-12">
-          <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-1 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
             <div
-              className="h-full bg-black transition-all duration-300"
+              className="h-full bg-black dark:bg-white transition-all duration-300"
               style={{ width: `${(stepNumber / 5) * 100}%` }}
             />
           </div>
-          <p className="text-xs text-gray-600 mt-2">Paso {stepNumber} de 5</p>
+          <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Paso {stepNumber} de 5</p>
         </div>
 
         {/* Pregunta 1: Tipo de propiedad */}
         {step === 'propertyType' && (
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl font-light text-black mb-4">
+              <h1 className="text-4xl font-light text-black dark:text-white mb-4">
                 ¿Qué tipo de propiedad tienes?
               </h1>
-              <p className="text-gray-600">Selecciona la categoría que mejor describe tu propiedad</p>
+              <p className="text-gray-600 dark:text-gray-400">Selecciona la categoría que mejor describe tu propiedad</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -69,8 +71,8 @@ export default function HostOnboarding() {
                     onClick={() => setResponses({ ...responses, propertyType: type })}
                     className={`p-4 border-2 rounded-lg transition ${
                       responses.propertyType === type
-                        ? 'border-black bg-black text-white'
-                        : 'border-gray-300 text-black hover:border-black'
+                        ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
+                        : 'border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
                     }`}
                   >
                     {type}
@@ -85,10 +87,10 @@ export default function HostOnboarding() {
         {step === 'location' && (
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl font-light text-black mb-4">
+              <h1 className="text-4xl font-light text-black dark:text-white mb-4">
                 ¿Dónde está ubicada tu propiedad?
               </h1>
-              <p className="text-gray-600">Elige la ciudad o región</p>
+              <p className="text-gray-600 dark:text-gray-400">Elige la ciudad o región</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -99,8 +101,8 @@ export default function HostOnboarding() {
                     onClick={() => setResponses({ ...responses, location })}
                     className={`p-4 border-2 rounded-lg transition ${
                       responses.location === location
-                        ? 'border-black bg-black text-white'
-                        : 'border-gray-300 text-black hover:border-black'
+                        ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
+                        : 'border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
                     }`}
                   >
                     {location}
@@ -115,10 +117,10 @@ export default function HostOnboarding() {
         {step === 'price' && (
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl font-light text-black mb-4">
+              <h1 className="text-4xl font-light text-black dark:text-white mb-4">
                 ¿Cuál es tu precio promedio por noche?
               </h1>
-              <p className="text-gray-600">En dólares USD</p>
+              <p className="text-gray-600 dark:text-gray-400">En dólares USD</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -128,8 +130,8 @@ export default function HostOnboarding() {
                   onClick={() => setResponses({ ...responses, price })}
                   className={`p-4 border-2 rounded-lg transition ${
                     responses.price === price
-                      ? 'border-black bg-black text-white'
-                      : 'border-gray-300 text-black hover:border-black'
+                      ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
+                      : 'border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
                   }`}
                 >
                   {price}
@@ -143,10 +145,10 @@ export default function HostOnboarding() {
         {step === 'occupancy' && (
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl font-light text-black mb-4">
+              <h1 className="text-4xl font-light text-black dark:text-white mb-4">
                 ¿Cuál es tu nivel de ocupación promedio?
               </h1>
-              <p className="text-gray-600">Porcentaje de reservas al año</p>
+              <p className="text-gray-600 dark:text-gray-400">Porcentaje de reservas al año</p>
             </div>
 
             <div className="space-y-3">
@@ -156,8 +158,8 @@ export default function HostOnboarding() {
                   onClick={() => setResponses({ ...responses, occupancy })}
                   className={`w-full p-4 border-2 rounded-lg text-left transition ${
                     responses.occupancy === occupancy
-                      ? 'border-black bg-black text-white'
-                      : 'border-gray-300 text-black hover:border-black'
+                      ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
+                      : 'border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
                   }`}
                 >
                   {occupancy}
@@ -171,10 +173,10 @@ export default function HostOnboarding() {
         {step === 'goals' && (
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl font-light text-black mb-4">
+              <h1 className="text-4xl font-light text-black dark:text-white mb-4">
                 ¿Cuáles son tus objetivos?
               </h1>
-              <p className="text-gray-600">Selecciona uno o más</p>
+              <p className="text-gray-600 dark:text-gray-400">Selecciona uno o más</p>
             </div>
 
             <div className="space-y-3">
@@ -193,8 +195,8 @@ export default function HostOnboarding() {
                     }}
                     className={`w-full p-4 border-2 rounded-lg text-left transition ${
                       responses.goals.includes(goal)
-                        ? 'border-black bg-black text-white'
-                        : 'border-gray-300 text-black hover:border-black'
+                        ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
+                        : 'border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
                     }`}
                   >
                     {goal}
@@ -209,13 +211,13 @@ export default function HostOnboarding() {
         <div className="flex gap-4 mt-12">
           <button
             onClick={handleBack}
-            className="flex-1 px-6 py-3 border-2 border-black text-black rounded-lg hover:bg-gray-100 transition"
+            className="flex-1 px-6 py-3 border-2 border-black dark:border-white text-black dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition"
           >
             Atrás
           </button>
           <button
             onClick={handleNext}
-            className="flex-1 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition"
+            className="flex-1 px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition"
           >
             {step === 'goals' ? 'Comenzar' : 'Siguiente'}
           </button>
