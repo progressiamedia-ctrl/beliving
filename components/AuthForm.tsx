@@ -20,11 +20,10 @@ export function AuthForm() {
 
     try {
       if (isSignUp) {
-        // Sign up
-        const hashedPassword = await hashPassword(password)
+        // Sign up - save password as-is for now
         const { data, error } = await supabase
           .from('users')
-          .insert([{ email, password: hashedPassword, role }])
+          .insert([{ email, password, role }])
           .select()
           .single()
 
@@ -42,8 +41,7 @@ export function AuthForm() {
 
         if (error || !data) throw new Error('Usuario no encontrado')
 
-        const isValid = await verifyPassword(password, data.password)
-        if (!isValid) throw new Error('Contraseña incorrecta')
+        if (password !== data.password) throw new Error('Contraseña incorrecta')
 
         localStorage.setItem('userId', data.id)
         localStorage.setItem('userRole', data.role)
@@ -140,18 +138,4 @@ export function AuthForm() {
       </div>
     </div>
   )
-}
-
-// Simple hash/verify functions (for demo only - NOT PRODUCTION)
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(password)
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
-}
-
-async function verifyPassword(password: string, hash: string): Promise<boolean> {
-  const newHash = await hashPassword(password)
-  return newHash === hash
 }
