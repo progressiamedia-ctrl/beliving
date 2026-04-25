@@ -7,14 +7,18 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Header } from '@/components/Header'
 import { BookingCalendar, BookingData } from '@/components/BookingCalendar'
+import { RatingsList } from '@/components/RatingsList'
 import { properties } from '@/lib/properties-data'
 import { getPropertyBookedDates, createBooking } from '@/lib/booking-utils'
+import { getPropertyRatings, getRatingStats } from '@/lib/rating-utils'
 
 export default function PropertyDetail() {
   const params = useParams()
   const router = useRouter()
   const property = properties.find((p) => p.id === params.id)
   const [bookedDates, setBookedDates] = useState<string[]>([])
+  const [ratings, setRatings] = useState<any[]>([])
+  const [ratingStats, setRatingStats] = useState({ average: 0, count: 0, distribution: {} })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null
@@ -23,6 +27,7 @@ export default function PropertyDetail() {
   useEffect(() => {
     if (property) {
       loadBookedDates()
+      loadRatings()
     }
   }, [property?.id])
 
@@ -33,6 +38,18 @@ export default function PropertyDetail() {
       setBookedDates(dates)
     } catch (err) {
       console.error('Error loading booked dates:', err)
+    }
+  }
+
+  const loadRatings = async () => {
+    try {
+      if (!property) return
+      const ratings = await getPropertyRatings(property.id)
+      const stats = await getRatingStats(property.id)
+      setRatings(ratings)
+      setRatingStats(stats)
+    } catch (err) {
+      console.error('Error loading ratings:', err)
     }
   }
 
@@ -153,6 +170,18 @@ export default function PropertyDetail() {
                       </div>
                     ))}
                   </div>
+                </div>
+              )}
+
+              {/* Ratings */}
+              {ratingStats.count > 0 && (
+                <div className="border-t border-b border-gray-200 dark:border-gray-800 py-8">
+                  <h2 className="text-lg font-medium text-black dark:text-white mb-6">Calificaciones de huéspedes</h2>
+                  <RatingsList
+                    ratings={ratings}
+                    averageRating={ratingStats.average}
+                    totalCount={ratingStats.count}
+                  />
                 </div>
               )}
 

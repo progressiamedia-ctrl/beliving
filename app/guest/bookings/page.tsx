@@ -77,6 +77,13 @@ function GuestBookingsContent() {
     }
   }
 
+  const isCheckoutPassed = (checkoutDate: string) => {
+    const checkout = new Date(checkoutDate)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    return checkout <= today
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
@@ -149,6 +156,14 @@ function GuestBookingsContent() {
                       >
                         Cancelar
                       </button>
+                    )}
+                    {booking.status === 'confirmed' && isCheckoutPassed(booking.check_out) && (
+                      <Link
+                        href={`/bookings/${booking.id}/rate`}
+                        className="text-sm bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 hover:bg-yellow-100 dark:hover:bg-yellow-900/40 px-3 py-1 rounded transition"
+                      >
+                        Calificar
+                      </Link>
                     )}
                     {booking.status !== 'cancelled' && (
                       <Link

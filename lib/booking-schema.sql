@@ -30,6 +30,18 @@ CREATE TABLE IF NOT EXISTS magic_links (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
+-- Ratings Table
+CREATE TABLE IF NOT EXISTS ratings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  booking_id UUID NOT NULL,
+  property_id VARCHAR NOT NULL,
+  guest_id UUID NOT NULL,
+  rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
+  comment TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  CONSTRAINT unique_booking_rating UNIQUE (booking_id)
+);
+
 -- Indexes for performance
 CREATE INDEX idx_bookings_guest_id ON bookings(guest_id);
 CREATE INDEX idx_bookings_host_id ON bookings(host_id);
@@ -37,3 +49,6 @@ CREATE INDEX idx_bookings_property_id ON bookings(property_id);
 CREATE INDEX idx_bookings_status ON bookings(status);
 CREATE INDEX idx_magic_links_token ON magic_links(token);
 CREATE INDEX idx_magic_links_email ON magic_links(email);
+CREATE INDEX idx_ratings_property_id ON ratings(property_id);
+CREATE INDEX idx_ratings_guest_id ON ratings(guest_id);
+CREATE INDEX idx_ratings_booking_id ON ratings(booking_id);
