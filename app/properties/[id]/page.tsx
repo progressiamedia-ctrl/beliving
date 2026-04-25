@@ -2,15 +2,82 @@
 
 export const dynamic = 'force-dynamic'
 
+import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Header } from '@/components/Header'
+import { BookingCalendar, BookingData } from '@/components/BookingCalendar'
 import { properties } from '@/lib/properties-data'
+import { getPropertyBookedDates, createBooking } from '@/lib/booking-utils'
 
 export default function PropertyDetail() {
   const params = useParams()
   const router = useRouter()
   const property = properties.find((p) => p.id === params.id)
+  const [bookedDates, setBookedDates] = useState<string[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null
+  const userRole = typeof window !== 'undefined' ? localStorage.getItem('userRole') : null
+
+  useEffect(() => {
+    if (property) {
+      loadBookedDates()
+    }
+  }, [property?.id])
+
+  const loadBookedDates = async () => {
+    try {
+      if (!property) return
+      const dates = await getPropertyBookedDates(property.id)
+      setBookedDates(dates)
+    } catch (err) {
+      console.error('Error loading booked dates:', err)
+    }
+  }
+
+  const handleBookingConfirm = async (bookingData: BookingData) => {
+    if (!userId || userRole !== 'guest') {
+      router.push('/')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    try {
+      if (!property) throw new Error('Propiedad no encontrada')
+
+      const guestName = localStorage.getItem('userName') || 'Guest'
+      const guestEmail = localStorage.getItem('userEmail') || ''
+
+      // Get host_id from property (we'll use a hardcoded value for now since properties-data doesn't include it)
+      // In a real app, properties would have host_id
+      const hostId = 'host-' + property.id
+
+      await createBooking({
+        propertyId: property.id,
+        guestId: userId,
+        hostId,
+        checkIn: bookingData.checkIn,
+        checkOut: bookingData.checkOut,
+        nights: bookingData.nights,
+        totalPrice: bookingData.totalPrice,
+        guestName,
+        guestEmail,
+      })
+
+      // Reload booked dates
+      await loadBookedDates()
+
+      // Show success message and redirect to bookings page
+      router.push(`/guest/bookings?success=true`)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al crear la reserva')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   if (!property) {
     return (
@@ -107,38 +174,36 @@ export default function PropertyDetail() {
                 <p className="text-4xl font-light text-black dark:text-white">${property.price}</p>
               </div>
 
-              {/* Detalles */}
-              <div className="space-y-3 mb-6 pb-6 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">1 noche × ${property.price}</span>
-                  <span className="text-black dark:text-white">${property.price}</span>
+              {userRole === 'guest' ? (
+                <>
+                  {error && (
+                    <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-sm text-red-700 dark:text-red-400">
+                      {error}
+                    </div>
+                  )}
+                  <BookingCalendar
+                    propertyId={property.id}
+                    nightlyPrice={property.price}
+                    bookedDates={bookedDates}
+                    onConfirmBooking={handleBookingConfirm}
+                    isLoading={loading}
+                  />
+                </>
+              ) : (
+                <div className="space-y-4">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {userRole === 'host' ? 'Como anfitrión, no puedes reservar tus propias propiedades' : 'Inicia sesión como huésped para reservar'}
+                  </p>
+                  {!userId && (
+                    <Link
+                      href="/"
+                      className="block text-center bg-black dark:bg-white text-white dark:text-black py-3 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition"
+                    >
+                      Iniciar sesión
+                    </Link>
+                  )}
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">Fee de servicio (5%)</span>
-                  <span className="text-black dark:text-white">${(property.price * 0.05).toFixed(2)}</span>
-                </div>
-              </div>
-
-              {/* Total */}
-              <div className="flex justify-between font-medium mb-6 text-black dark:text-white">
-                <span>Total</span>
-                <span className="text-2xl">${(property.price * 1.05).toFixed(2)}</span>
-              </div>
-
-              {/* Booking Button */}
-              <button
-                onClick={() => alert('✓ Solicitud de reserva enviada!')}
-                className="w-full bg-black dark:bg-white text-white dark:text-black py-3 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition mb-3"
-              >
-                Reservar ahora
-              </button>
-
-              <button
-                onClick={() => alert('♥ Agregado a favoritos')}
-                className="w-full border-2 border-black dark:border-white text-black dark:text-white py-3 rounded-lg font-medium hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition"
-              >
-                Guardar
-              </button>
+              )}
 
               <p className="text-xs text-gray-600 dark:text-gray-400 mt-4 text-center">
                 No se cobra hasta confirmar la reserva
