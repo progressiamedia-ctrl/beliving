@@ -1,51 +1,40 @@
 'use client'
 
-export const dynamic = 'force-dynamic'
-
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import dynamicImport from 'next/dynamic'
 import { Header } from '@/components/Header'
-import { SearchBar } from '@/components/SearchBar'
-import { AdvancedFilters, FilterValues } from '@/components/AdvancedFilters'
 import { properties } from '@/lib/properties-data'
 
-const PropertyMap = dynamicImport(() => import('@/components/PropertyMap').then((m) => m.PropertyMap), {
-  ssr: false,
-  loading: () => <div className="w-full h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center text-gray-600 dark:text-gray-400">Cargando mapa...</div>,
-})
-
-export default function Properties() {
+export default function PropertiesPage() {
   const router = useRouter()
-  const [filteredProperties, setFilteredProperties] = useState(properties)
+  const [user, setUser] = useState<{ id: string; role: string; email: string } | null>(null)
+  const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedCity, setSelectedCity] = useState('')
-  const [maxPrice, setMaxPrice] = useState('')
-  const [selectedPropertyId, setSelectedPropertyId] = useState<string>('')
-  const [filters, setFilters] = useState<FilterValues>({
-    priceMin: 0,
-    priceMax: 3000,
-    ratingMin: 0,
-    amenities: [],
-    cities: [],
-  })
+  const [filteredProperties, setFilteredProperties] = useState(properties)
 
   useEffect(() => {
     const userId = localStorage.getItem('userId')
     const userRole = localStorage.getItem('userRole')
+    const userEmail = localStorage.getItem('userEmail')
 
-    if (!userId || userRole !== 'guest') {
+    if (!userId) {
       router.push('/')
       return
     }
+
+    setUser({
+      id: userId,
+      role: userRole || 'guest',
+      email: userEmail || 'user@example.com',
+    })
+    setLoading(false)
   }, [router])
 
   useEffect(() => {
     let filtered = properties
 
-    // Search query filter
-    if (searchQuery) {
+    if (searchQuery.trim()) {
       filtered = filtered.filter(
         (p) =>
           p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -54,171 +43,121 @@ export default function Properties() {
       )
     }
 
-    // City filter (from search bar)
-    if (selectedCity) {
-      filtered = filtered.filter((p) => p.city === selectedCity)
-    }
-
-    // Price filter (from search bar)
-    if (maxPrice) {
-      filtered = filtered.filter((p) => p.price <= parseInt(maxPrice))
-    }
-
-    // Advanced filters
-    filtered = filtered.filter((p) => {
-      // Price range
-      if (p.price < filters.priceMin || p.price > filters.priceMax) return false
-
-      // Rating
-      if (p.rating < filters.ratingMin) return false
-
-      // Cities filter
-      if (filters.cities.length > 0 && !filters.cities.includes(p.city)) return false
-
-      // Amenities filter (all selected amenities must be present)
-      if (filters.amenities.length > 0) {
-        return filters.amenities.every((amenity) => p.amenities.includes(amenity))
-      }
-
-      return true
-    })
-
     setFilteredProperties(filtered)
-  }, [searchQuery, selectedCity, maxPrice, filters])
-
-  const cities = [...new Set(properties.map((p) => p.city))]
-  const allAmenities = [...new Set(properties.flatMap((p) => p.amenities))]
+  }, [searchQuery])
 
   const handleLogout = () => {
-    localStorage.removeItem('userId')
-    localStorage.removeItem('userRole')
+    localStorage.clear()
     router.push('/')
   }
 
-  return (
-    <div className="min-h-screen bg-white dark:bg-black flex flex-col">
-      <Header title="Be Living" showThemeToggle={true} />
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <p className="text-white">Cargando...</p>
+      </div>
+    )
+  }
 
-      <div className="sticky top-16 z-40 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 px-6 py-3 flex items-center justify-between">
-        <button
-          onClick={handleLogout}
-          className="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition"
-        >
-          Salir
-        </button>
-        <Link
-          href="/messages"
-          className="text-sm text-black dark:text-white hover:underline transition"
-        >
-          💬 Mensajes
-        </Link>
+  return (
+    <div className="min-h-screen bg-black">
+      <Header title="Be Living - Propiedades" showThemeToggle={false} />
+
+      {/* Navbar */}
+      <div className="sticky top-16 z-40 bg-black border-b border-gray-800 px-6 py-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <h2 className="text-white font-light text-2xl">Propiedades Disponibles</h2>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 text-sm text-gray-400 hover:text-white transition"
+          >
+            Salir
+          </button>
+        </div>
       </div>
 
-      {/* Main content con layout split */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Left side - Search, Filters & Properties */}
-        <div className="w-full lg:w-1/2 flex flex-col overflow-hidden bg-white dark:bg-black">
-          {/* Conversational Search Bar */}
-          <div className="h-64 lg:h-80 border-b border-gray-200 dark:border-gray-800 overflow-hidden">
-            <SearchBar
-              properties={properties}
-              cities={cities}
-              onSearch={(filterData) => {
-                setSearchQuery(filterData.searchQuery)
-                setSelectedCity(filterData.selectedCity)
-                setMaxPrice(filterData.maxPrice)
-              }}
-            />
-          </div>
-
-          {/* Advanced Filters */}
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-            <AdvancedFilters
-              onFilterChange={setFilters}
-              availableCities={cities}
-              availableAmenities={allAmenities}
-            />
-          </div>
-
-          {/* Properties Grid */}
-          <div className="flex-1 overflow-y-auto p-6 bg-white dark:bg-black border-r border-gray-200 dark:border-gray-800">
-            {filteredProperties.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-600 dark:text-gray-400 mb-4">No hay propiedades que coincidan con tus filtros</p>
-                <button
-                  onClick={() => {
-                    setSearchQuery('')
-                    setSelectedCity('')
-                    setMaxPrice('')
-                    setFilters({
-                      priceMin: 0,
-                      priceMax: 3000,
-                      ratingMin: 0,
-                      amenities: [],
-                      cities: [],
-                    })
-                  }}
-                  className="text-black dark:text-white underline hover:no-underline text-sm"
-                >
-                  Limpiar todos los filtros
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {filteredProperties.map((property) => (
-                  <Link
-                    key={property.id}
-                    href={`/properties/${property.id}`}
-                    onMouseEnter={() => setSelectedPropertyId(property.id)}
-                    onMouseLeave={() => setSelectedPropertyId('')}
-                    className={`group block p-4 border rounded-lg cursor-pointer transition ${
-                      selectedPropertyId === property.id
-                        ? 'border-black dark:border-white bg-gray-50 dark:bg-gray-900 shadow-md'
-                        : 'border-gray-200 dark:border-gray-800 hover:border-black dark:hover:border-white hover:shadow-sm'
-                    }`}
-                  >
-                    <div className="flex gap-4">
-                      {/* Mini image */}
-                      <div className="w-24 h-24 flex-shrink-0 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
-                        <img
-                          src={property.images[0]}
-                          alt={property.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition"
-                        />
-                      </div>
-
-                      {/* Info */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-medium text-black dark:text-white group-hover:underline truncate">
-                          {property.title}
-                        </h3>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 truncate">{property.location}</p>
-
-                        <div className="flex items-center gap-2 mt-2">
-                          <span className="text-xs text-black dark:text-white">★ {property.rating}</span>
-                          {property.verified && (
-                            <span className="text-xs bg-black dark:bg-white text-white dark:text-black px-2 py-0.5 rounded">
-                              Verified
-                            </span>
-                          )}
-                        </div>
-
-                        <p className="text-sm font-medium text-black dark:text-white mt-3">${property.price}/noche</p>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Right side - Map (hidden on mobile) */}
-        <div className="hidden lg:flex lg:w-1/2 h-full">
-          <PropertyMap
-            properties={filteredProperties}
-            selectedPropertyId={selectedPropertyId}
+      {/* Search */}
+      <div className="bg-black border-b border-gray-800 px-6 py-6">
+        <div className="max-w-7xl mx-auto">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Buscar por ciudad, ubicación o nombre..."
+            className="w-full px-6 py-3 bg-gray-900 border border-gray-800 text-white placeholder-gray-500 rounded-xl focus:outline-none focus:border-yellow-400"
           />
+        </div>
+      </div>
+
+      {/* Properties Grid */}
+      <div className="bg-black px-6 py-12">
+        <div className="max-w-7xl mx-auto">
+          {filteredProperties.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-gray-400 text-lg">No hay propiedades que coincidan con tu búsqueda</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredProperties.map((property) => (
+                <Link
+                  key={property.id}
+                  href={`/properties/${property.id}`}
+                  className="group bg-gray-900 rounded-xl overflow-hidden hover:shadow-2xl transition duration-300 border border-gray-800 hover:border-yellow-400"
+                >
+                  {/* Image */}
+                  <div className="relative w-full h-64 bg-gray-800 overflow-hidden">
+                    <img
+                      src={property.images[0] || 'https://via.placeholder.com/400x300?text=No+Image'}
+                      alt={property.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                    />
+                    {property.verified && (
+                      <div className="absolute top-4 right-4 bg-yellow-400 text-black px-3 py-1 rounded-full text-xs font-bold">
+                        ✓ Verificado
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-5">
+                    <h3 className="text-white font-semibold text-lg mb-2 group-hover:text-yellow-400 transition">
+                      {property.title}
+                    </h3>
+
+                    <p className="text-gray-400 text-sm mb-4">{property.location}</p>
+
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-1">
+                        <span className="text-yellow-400">★</span>
+                        <span className="text-white text-sm font-medium">{property.rating.toFixed(1)}</span>
+                      </div>
+                      <span className="text-gray-400 text-sm">{property.city}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-800">
+                      <span className="text-white font-bold text-xl">${property.price}</span>
+                      <span className="text-gray-400 text-sm">por noche</span>
+                    </div>
+
+                    {property.amenities.length > 0 && (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {property.amenities.slice(0, 3).map((amenity) => (
+                          <span key={amenity} className="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded">
+                            {amenity}
+                          </span>
+                        ))}
+                        {property.amenities.length > 3 && (
+                          <span className="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded">
+                            +{property.amenities.length - 3}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

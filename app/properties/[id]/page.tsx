@@ -1,108 +1,23 @@
 'use client'
 
-export const dynamic = 'force-dynamic'
-
-import { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { Header } from '@/components/Header'
-import { BookingCalendar, BookingData } from '@/components/BookingCalendar'
-import { RatingsList } from '@/components/RatingsList'
 import { properties } from '@/lib/properties-data'
-import { getPropertyBookedDates, createBooking } from '@/lib/booking-utils'
-import { getPropertyRatings, getRatingStats } from '@/lib/rating-utils'
 
-export default function PropertyDetail() {
+export default function PropertyDetailPage() {
   const params = useParams()
-  const router = useRouter()
-  const property = properties.find((p) => p.id === params.id)
-  const [bookedDates, setBookedDates] = useState<string[]>([])
-  const [ratings, setRatings] = useState<any[]>([])
-  const [ratingStats, setRatingStats] = useState({ average: 0, count: 0, distribution: {} })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null
-  const userRole = typeof window !== 'undefined' ? localStorage.getItem('userRole') : null
-
-  useEffect(() => {
-    if (property) {
-      loadBookedDates()
-      loadRatings()
-    }
-  }, [property?.id])
-
-  const loadBookedDates = async () => {
-    try {
-      if (!property) return
-      const dates = await getPropertyBookedDates(property.id)
-      setBookedDates(dates)
-    } catch (err) {
-      console.error('Error loading booked dates:', err)
-    }
-  }
-
-  const loadRatings = async () => {
-    try {
-      if (!property) return
-      const ratings = await getPropertyRatings(property.id)
-      const stats = await getRatingStats(property.id)
-      setRatings(ratings)
-      setRatingStats(stats)
-    } catch (err) {
-      console.error('Error loading ratings:', err)
-    }
-  }
-
-  const handleBookingConfirm = async (bookingData: BookingData) => {
-    if (!userId || userRole !== 'guest') {
-      router.push('/')
-      return
-    }
-
-    setLoading(true)
-    setError('')
-
-    try {
-      if (!property) throw new Error('Propiedad no encontrada')
-
-      const guestName = localStorage.getItem('userName') || 'Guest'
-      const guestEmail = localStorage.getItem('userEmail') || ''
-
-      // Get host_id from property (we'll use a hardcoded value for now since properties-data doesn't include it)
-      // In a real app, properties would have host_id
-      const hostId = 'host-' + property.id
-
-      await createBooking({
-        propertyId: property.id,
-        guestId: userId,
-        hostId,
-        checkIn: bookingData.checkIn,
-        checkOut: bookingData.checkOut,
-        nights: bookingData.nights,
-        totalPrice: bookingData.totalPrice,
-        guestName,
-        guestEmail,
-      })
-
-      // Reload booked dates
-      await loadBookedDates()
-
-      // Show success message and redirect to bookings page
-      router.push(`/guest/bookings?success=true`)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear la reserva')
-    } finally {
-      setLoading(false)
-    }
-  }
+  const propertyId = params.id as string
+  const property = properties.find((p) => p.id === propertyId)
 
   if (!property) {
     return (
-      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600 dark:text-gray-400 mb-4">Propiedad no encontrada</p>
-          <Link href="/properties" className="text-black dark:text-white underline">
-            Volver a propiedades
+      <div className="min-h-screen bg-black">
+        <Header title="Propiedad no encontrada" showThemeToggle={false} />
+        <div className="max-w-4xl mx-auto px-6 py-12 mt-16">
+          <p className="text-white mb-6">La propiedad que buscas no existe.</p>
+          <Link href="/properties" className="text-yellow-400 hover:text-yellow-500">
+            ← Volver a propiedades
           </Link>
         </div>
       </div>
@@ -110,132 +25,118 @@ export default function PropertyDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black">
-      <Header title="Be Living" showThemeToggle={true} />
-      <div className="border-b border-gray-200 dark:border-gray-800 sticky top-16 z-50 bg-white dark:bg-black">
-        <div className="max-w-7xl mx-auto px-6 py-3">
-          <Link href="/properties" className="text-black dark:text-white underline text-sm">
-            ← Volver
-          </Link>
-        </div>
-      </div>
+    <div className="min-h-screen bg-black">
+      <Header title={property.title} showThemeToggle={false} />
 
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-4xl mx-auto px-6 py-12 mt-16">
+        {/* Back button */}
+        <Link href="/properties" className="text-gray-400 hover:text-white text-sm mb-8 inline-block transition">
+          ← Volver a propiedades
+        </Link>
+
+        {/* Image */}
+        <div className="mb-12 rounded-xl overflow-hidden h-96 bg-gray-900">
+          <img
+            src={property.images[0] || 'https://via.placeholder.com/800x400?text=No+Image'}
+            alt={property.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Galería */}
+          {/* Left - Info */}
           <div className="lg:col-span-2">
-            <div className="bg-gray-100 dark:bg-gray-800 h-96 rounded-lg overflow-hidden mb-8">
-              <img
-                src={property.images[0]}
-                alt={property.title}
-                className="w-full h-full object-cover"
-              />
+            {/* Title and Rating */}
+            <div className="mb-8">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h1 className="text-4xl font-bold text-white mb-2">{property.title}</h1>
+                  <p className="text-gray-400 text-lg">{property.location}</p>
+                </div>
+                {property.verified && (
+                  <div className="bg-yellow-400 text-black px-4 py-2 rounded-lg text-sm font-bold">
+                    ✓ Verificado
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-yellow-400 text-2xl">★</span>
+                  <span className="text-white text-2xl font-bold">{property.rating.toFixed(1)}</span>
+                </div>
+                <span className="text-gray-400">({Math.floor(Math.random() * 100) + 10} reseñas)</span>
+              </div>
             </div>
 
-            {/* Información */}
-            <div className="space-y-8">
-              <div>
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h1 className="text-3xl font-light text-black dark:text-white mb-2">{property.title}</h1>
-                    <p className="text-gray-600 dark:text-gray-400">{property.location}</p>
+            {/* Description */}
+            <div className="mb-8 pb-8 border-b border-gray-800">
+              <h2 className="text-white text-xl font-semibold mb-4">Acerca de este lugar</h2>
+              <p className="text-gray-300 leading-relaxed text-lg">{property.description}</p>
+            </div>
+
+            {/* Amenities */}
+            <div className="mb-8 pb-8 border-b border-gray-800">
+              <h2 className="text-white text-xl font-semibold mb-4">Amenidades</h2>
+              <div className="grid grid-cols-2 gap-4">
+                {property.amenities.map((amenity) => (
+                  <div key={amenity} className="flex items-center gap-3 text-gray-300">
+                    <span className="text-yellow-400">✓</span>
+                    <span>{amenity}</span>
                   </div>
-                  {property.verified && (
-                    <div className="bg-black dark:bg-white text-white dark:text-black px-4 py-2 rounded-full text-sm font-medium">
-                      ✓ Verified
-                    </div>
-                  )}
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-lg text-black dark:text-white">★ {property.rating}</span>
-                  <span className="text-gray-600 dark:text-gray-400">({Math.floor(Math.random() * 200 + 50)} reviews)</span>
-                </div>
+                ))}
               </div>
+            </div>
 
-              {/* Descripción */}
-              <div className="border-t border-b border-gray-200 dark:border-gray-800 py-8">
-                <h2 className="text-lg font-medium text-black dark:text-white mb-4">Acerca de esta propiedad</h2>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{property.description}</p>
-              </div>
-
-              {/* Amenidades */}
-              {property.amenities.length > 0 && (
-                <div>
-                  <h2 className="text-lg font-medium text-black dark:text-white mb-4">Amenidades</h2>
-                  <div className="grid grid-cols-2 gap-4">
-                    {property.amenities.map((amenity) => (
-                      <div key={amenity} className="flex items-center text-black dark:text-white">
-                        <span className="mr-3 text-lg">✓</span>
-                        <span>{amenity}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Ratings */}
-              {ratingStats.count > 0 && (
-                <div className="border-t border-b border-gray-200 dark:border-gray-800 py-8">
-                  <h2 className="text-lg font-medium text-black dark:text-white mb-6">Calificaciones de huéspedes</h2>
-                  <RatingsList
-                    ratings={ratings}
-                    averageRating={ratingStats.average}
-                    totalCount={ratingStats.count}
-                  />
-                </div>
-              )}
-
-              {/* Ubicación */}
-              <div>
-                <h2 className="text-lg font-medium text-black dark:text-white mb-4">Ubicación</h2>
-                <div className="bg-gray-100 dark:bg-gray-800 h-64 rounded-lg flex items-center justify-center text-gray-600 dark:text-gray-400">
-                  📍 {property.city} · {property.location}
-                </div>
-              </div>
+            {/* Location */}
+            <div>
+              <h2 className="text-white text-xl font-semibold mb-4">Ubicación</h2>
+              <p className="text-gray-300 text-lg mb-2">{property.city}</p>
+              <p className="text-gray-400 text-sm">Coordenadas: {property.lat.toFixed(4)}, {property.lng.toFixed(4)}</p>
             </div>
           </div>
 
-          {/* Panel de Booking */}
-          <div>
-            <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-6 sticky top-24 bg-white dark:bg-gray-950">
+          {/* Right - Booking Card */}
+          <div className="lg:col-span-1">
+            <div className="bg-gray-900 rounded-xl p-8 border border-gray-800 sticky top-32">
+              {/* Price */}
               <div className="mb-6">
-                <p className="text-gray-600 dark:text-gray-400 text-sm mb-2">Precio por noche</p>
-                <p className="text-4xl font-light text-black dark:text-white">${property.price}</p>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-3xl font-bold text-white">${property.price}</span>
+                  <span className="text-gray-400">/noche</span>
+                </div>
+                <p className="text-gray-400 text-sm">Incluye impuestos y tasas</p>
               </div>
 
-              {userRole === 'guest' ? (
-                <>
-                  {error && (
-                    <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-sm text-red-700 dark:text-red-400">
-                      {error}
-                    </div>
-                  )}
-                  <BookingCalendar
-                    propertyId={property.id}
-                    nightlyPrice={property.price}
-                    bookedDates={bookedDates}
-                    onConfirmBooking={handleBookingConfirm}
-                    isLoading={loading}
-                  />
-                </>
-              ) : (
-                <div className="space-y-4">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {userRole === 'host' ? 'Como anfitrión, no puedes reservar tus propias propiedades' : 'Inicia sesión como huésped para reservar'}
-                  </p>
-                  {!userId && (
-                    <Link
-                      href="/"
-                      className="block text-center bg-black dark:bg-white text-white dark:text-black py-3 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition"
-                    >
-                      Iniciar sesión
-                    </Link>
-                  )}
+              {/* Booking Info */}
+              <div className="space-y-4 mb-8 pb-8 border-b border-gray-800">
+                <div className="flex justify-between text-gray-300 text-sm">
+                  <span>Check-in</span>
+                  <span className="text-white">Flexible</span>
                 </div>
-              )}
+                <div className="flex justify-between text-gray-300 text-sm">
+                  <span>Check-out</span>
+                  <span className="text-white">Flexible</span>
+                </div>
+                <div className="flex justify-between text-gray-300 text-sm">
+                  <span>Huéspedes</span>
+                  <span className="text-white">Hasta 4</span>
+                </div>
+              </div>
 
-              <p className="text-xs text-gray-600 dark:text-gray-400 mt-4 text-center">
-                No se cobra hasta confirmar la reserva
+              {/* Reserve Button */}
+              <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 rounded-lg transition mb-4">
+                Reservar ahora
+              </button>
+
+              <button className="w-full border border-gray-700 text-white hover:bg-gray-800 font-semibold py-3 rounded-lg transition">
+                Contactar anfitrión
+              </button>
+
+              {/* Info */}
+              <p className="text-gray-500 text-xs text-center mt-6">
+                Responde en menos de una hora
               </p>
             </div>
           </div>
