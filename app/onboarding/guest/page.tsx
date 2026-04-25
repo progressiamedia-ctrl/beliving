@@ -2,8 +2,9 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { Header } from '@/components/Header'
 
 type Step = 'destination' | 'type' | 'budget' | 'purpose' | 'experiences' | 'done'
 
@@ -18,13 +19,20 @@ export default function GuestOnboarding() {
     experiences: [] as string[],
   })
 
+  useEffect(() => {
+    const userId = localStorage.getItem('userId')
+    if (!userId) {
+      router.push('/')
+    }
+  }, [router])
+
   const handleNext = () => {
     const steps: Step[] = ['destination', 'type', 'budget', 'purpose', 'experiences', 'done']
     const currentIndex = steps.indexOf(step)
     if (currentIndex < steps.length - 1) {
       setStep(steps[currentIndex + 1])
     } else {
-      localStorage.setItem('onboardingData', JSON.stringify(responses))
+      localStorage.setItem('guestOnboarding', JSON.stringify(responses))
       router.push('/properties')
     }
   }
@@ -40,27 +48,35 @@ export default function GuestOnboarding() {
   const stepNumber = ['destination', 'type', 'budget', 'purpose', 'experiences'].indexOf(step) + 1
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl">
-        {/* Barra de progreso */}
-        <div className="mb-12">
-          <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-black transition-all duration-300"
-              style={{ width: `${(stepNumber / 5) * 100}%` }}
-            />
+    <div className="min-h-screen bg-white dark:bg-black">
+      <Header title="Completa tu perfil - Be Living" showThemeToggle={true} />
+
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
+        <div className="w-full max-w-2xl">
+          {/* Progress bar */}
+          <div className="mb-12">
+            <div className="flex justify-between items-center mb-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Pregunta {stepNumber} de 5
+              </p>
+              <p className="text-sm font-medium text-gray-900 dark:text-white">{Math.round((stepNumber / 5) * 100)}%</p>
+            </div>
+            <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2">
+              <div
+                className="bg-black dark:bg-white h-2 rounded-full transition-all duration-300"
+                style={{ width: `${(stepNumber / 5) * 100}%` }}
+              />
+            </div>
           </div>
-          <p className="text-xs text-gray-600 mt-2">Paso {stepNumber} de 5</p>
-        </div>
 
         {/* Pregunta 1: Destino */}
         {step === 'destination' && (
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl font-light text-black mb-4">
+              <h1 className="text-4xl font-light text-black dark:text-white mb-4">
                 ¿Dónde quieres viajar?
               </h1>
-              <p className="text-gray-600">Selecciona tu destino favorito</p>
+              <p className="text-gray-600 dark:text-gray-400">Selecciona tu destino favorito</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -71,8 +87,8 @@ export default function GuestOnboarding() {
                     onClick={() => setResponses({ ...responses, destination: city })}
                     className={`p-4 border-2 rounded-lg transition ${
                       responses.destination === city
-                        ? 'border-black bg-black text-white'
-                        : 'border-gray-300 text-black hover:border-black'
+                        ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
+                        : 'border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
                     }`}
                   >
                     {city}
@@ -87,10 +103,10 @@ export default function GuestOnboarding() {
         {step === 'type' && (
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl font-light text-black mb-4">
+              <h1 className="text-4xl font-light text-black dark:text-white mb-4">
                 ¿Qué tipo de alojamiento prefieres?
               </h1>
-              <p className="text-gray-600">Elige tu estilo de estancia</p>
+              <p className="text-gray-600 dark:text-gray-400">Elige tu estilo de estancia</p>
             </div>
 
             <div className="space-y-3">
@@ -101,8 +117,8 @@ export default function GuestOnboarding() {
                     onClick={() => setResponses({ ...responses, type })}
                     className={`w-full p-4 border-2 rounded-lg text-left transition ${
                       responses.type === type
-                        ? 'border-black bg-black text-white'
-                        : 'border-gray-300 text-black hover:border-black'
+                        ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
+                        : 'border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
                     }`}
                   >
                     {type}
@@ -117,10 +133,10 @@ export default function GuestOnboarding() {
         {step === 'budget' && (
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl font-light text-black mb-4">
+              <h1 className="text-4xl font-light text-black dark:text-white mb-4">
                 ¿Cuál es tu presupuesto por noche?
               </h1>
-              <p className="text-gray-600">En dólares USD</p>
+              <p className="text-gray-600 dark:text-gray-400">En dólares USD</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -130,8 +146,8 @@ export default function GuestOnboarding() {
                   onClick={() => setResponses({ ...responses, budget })}
                   className={`p-4 border-2 rounded-lg transition ${
                     responses.budget === budget
-                      ? 'border-black bg-black text-white'
-                      : 'border-gray-300 text-black hover:border-black'
+                      ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
+                      : 'border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
                   }`}
                 >
                   {budget}
@@ -145,10 +161,10 @@ export default function GuestOnboarding() {
         {step === 'purpose' && (
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl font-light text-black mb-4">
+              <h1 className="text-4xl font-light text-black dark:text-white mb-4">
                 ¿Cuál es el propósito de tu viaje?
               </h1>
-              <p className="text-gray-600">Elige una o más opciones</p>
+              <p className="text-gray-600 dark:text-gray-400">Elige una o más opciones</p>
             </div>
 
             <div className="space-y-3">
@@ -159,8 +175,8 @@ export default function GuestOnboarding() {
                     onClick={() => setResponses({ ...responses, purpose })}
                     className={`w-full p-4 border-2 rounded-lg text-left transition ${
                       responses.purpose === purpose
-                        ? 'border-black bg-black text-white'
-                        : 'border-gray-300 text-black hover:border-black'
+                        ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
+                        : 'border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
                     }`}
                   >
                     {purpose}
@@ -175,10 +191,10 @@ export default function GuestOnboarding() {
         {step === 'experiences' && (
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl font-light text-black mb-4">
+              <h1 className="text-4xl font-light text-black dark:text-white mb-4">
                 ¿Qué experiencias te atraen?
               </h1>
-              <p className="text-gray-600">Selecciona las que te interesan</p>
+              <p className="text-gray-600 dark:text-gray-400">Selecciona las que te interesan</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -196,8 +212,8 @@ export default function GuestOnboarding() {
                   }}
                   className={`p-4 border-2 rounded-lg transition ${
                     responses.experiences.includes(exp)
-                      ? 'border-black bg-black text-white'
-                      : 'border-gray-300 text-black hover:border-black'
+                      ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
+                      : 'border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
                   }`}
                 >
                   {exp}
@@ -207,21 +223,24 @@ export default function GuestOnboarding() {
           </div>
         )}
 
-        {/* Botones */}
+        {/* Buttons */}
         <div className="flex gap-4 mt-12">
-          <button
-            onClick={handleBack}
-            className="flex-1 px-6 py-3 border-2 border-black text-black rounded-lg hover:bg-gray-100 transition"
-          >
-            Atrás
-          </button>
+          {stepNumber > 1 && (
+            <button
+              onClick={handleBack}
+              className="flex-1 px-6 py-3 border-2 border-gray-300 dark:border-gray-700 text-black dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition"
+            >
+              ← Atrás
+            </button>
+          )}
           <button
             onClick={handleNext}
-            className="flex-1 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition"
+            className="flex-1 px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition font-medium"
           >
-            {step === 'experiences' ? 'Continuar' : 'Siguiente'}
+            {step === 'experiences' ? '¡Comenzar!' : 'Siguiente →'}
           </button>
         </div>
+      </div>
       </div>
     </div>
   )

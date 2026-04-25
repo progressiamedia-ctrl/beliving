@@ -13,21 +13,21 @@ const CITY_IMAGES = [
   'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=80', // Viña del Mar
 ]
 
+type Step = 'role-select' | 'registration' | 'confirmation' | 'login'
+
 export function AuthForm() {
+  const [step, setStep] = useState<Step>('role-select')
+  const [role, setRole] = useState<'host' | 'guest' | null>(null)
+  const [isSignUp, setIsSignUp] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [role, setRole] = useState<'host' | 'guest'>('guest')
-  const [isSignUp, setIsSignUp] = useState(false)
-  const [authMethod, setAuthMethod] = useState<'password' | 'magic-link'>('password')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
-  const [magicLinkUrl, setMagicLinkUrl] = useState('')
   const [bgIndex, setBgIndex] = useState(0)
-  const [showForm, setShowForm] = useState(false)
   const router = useRouter()
 
-  // Rotar imagen de fondo cada 5 segundos
   useEffect(() => {
     const interval = setInterval(() => {
       setBgIndex((prev) => (prev + 1) % CITY_IMAGES.length)
@@ -35,112 +35,88 @@ export function AuthForm() {
     return () => clearInterval(interval)
   }, [])
 
-  const handleQuickTest = async (testRole: 'guest' | 'host') => {
+  const handleRoleSelect = (selectedRole: 'guest' | 'host') => {
+    setRole(selectedRole)
+    setStep('registration')
+    setIsSignUp(true)
+    setError('')
+  }
+
+  const handleRegistration = async (e: React.FormEvent) => {
+    e.preventDefault()
     setLoading(true)
     setError('')
+
     try {
-      const testEmail = testRole === 'guest' ? 'guest@test.com' : 'host@test.com'
-      const testPassword = 'test123'
+      if (!email.includes('@')) throw new Error('Email inválido')
+      if (password.length < 6) throw new Error('Contraseña debe tener al menos 6 caracteres')
+      if (password !== confirmPassword) throw new Error('Las contraseñas no coinciden')
+      if (!role) throw new Error('Debes seleccionar un tipo de cuenta')
 
-      // Try to sign in first
-      const { signIn } = await import('@/lib/auth')
-      try {
-        const user = await signIn(testEmail, testPassword)
-        localStorage.setItem('userId', user.id)
-        localStorage.setItem('userRole', user.user_type)
-        localStorage.setItem('userEmail', user.email)
-        router.push(user.user_type === 'host' ? '/host/dashboard' : '/properties')
-        return
-      } catch {
-        // User doesn't exist, create it
-      }
-
-      // Create test user if it doesn't exist
       const { hashPassword } = await import('@/lib/auth')
-      const hashedPassword = await hashPassword(testPassword)
+      const hashedPassword = await hashPassword(password)
 
+      // Check if user already exists
+      const { data: existingUser } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', email)
+        .single()
+
+      if (existingUser) throw new Error('Este email ya está registrado')
+
+      // Create new user
       const { data, error: insertError } = await supabase
         .from('users')
         .insert([{
-          email: testEmail,
+          email,
           password_hash: hashedPassword,
-          user_type: testRole,
-          first_name: testRole === 'guest' ? 'Guest' : 'Host',
-          last_name: 'Test'
+          user_type: role,
+          verified: false
         }])
         .select()
         .single()
 
       if (insertError) throw insertError
 
+      // Save to localStorage
       localStorage.setItem('userId', data.id)
       localStorage.setItem('userRole', data.user_type)
       localStorage.setItem('userEmail', data.email)
-      router.push(testRole === 'host' ? '/host/dashboard' : '/properties')
+
+      setStep('confirmation')
+      setSuccessMessage(`¡Cuenta creada! Te hemos enviado un email de confirmación a ${email}`)
+
+      // Simulate email confirmation - in production, use Resend or similar
+      setTimeout(() => {
+        router.push(`/onboarding/${role}`)
+      }, 3000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al acceder')
+      setError(err instanceof Error ? err.message : 'Error al registrarse')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleAuth = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError('')
-    setSuccessMessage('')
-    setMagicLinkUrl('')
 
     try {
-      if (authMethod === 'magic-link') {
-        // Validar email
-        if (!email.includes('@')) throw new Error('Email inválido')
+      if (!email.includes('@')) throw new Error('Email inválido')
+      if (!password) throw new Error('Ingresa tu contraseña')
 
-        // Generate magic link
-        const { generateMagicLink, getMagicLinkURL } = await import('@/lib/magic-link-service')
-        const token = await generateMagicLink(email)
-        const magicUrl = getMagicLinkURL(token)
+      const { signIn } = await import('@/lib/auth')
+      const user = await signIn(email, password)
 
-        setSuccessMessage(`¡Enlace mágico generado! Haz clic en el enlace de abajo (o cópialo):`)
-        setMagicLinkUrl(magicUrl)
+      localStorage.setItem('userId', user.id)
+      localStorage.setItem('userRole', user.user_type)
+      localStorage.setItem('userEmail', user.email)
 
-        // In production, you would send this via email
-        console.log('Magic Link URL:', magicUrl)
-      } else {
-        // Password-based auth
-        if (isSignUp) {
-          // Validar email
-          if (!email.includes('@')) throw new Error('Email inválido')
-          if (password.length < 6) throw new Error('Contraseña debe tener al menos 6 caracteres')
-
-          // Import auth functions
-          const { hashPassword } = await import('@/lib/auth')
-          const hashedPassword = await hashPassword(password)
-
-          const { data, error } = await supabase
-            .from('users')
-            .insert([{ email, password_hash: hashedPassword, user_type: role }])
-            .select()
-            .single()
-
-          if (error) throw error
-          localStorage.setItem('userId', data.id)
-          localStorage.setItem('userRole', data.user_type)
-          localStorage.setItem('userEmail', data.email)
-          router.push(`/onboarding/${role}`)
-        } else {
-          // Import auth functions
-          const { signIn } = await import('@/lib/auth')
-          const user = await signIn(email, password)
-
-          localStorage.setItem('userId', user.id)
-          localStorage.setItem('userRole', user.user_type)
-          localStorage.setItem('userEmail', user.email)
-          router.push(user.user_type === 'host' ? '/host/dashboard' : '/properties')
-        }
-      }
+      router.push(user.user_type === 'host' ? '/host/dashboard' : '/properties')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error en autenticación')
+      setError(err instanceof Error ? err.message : 'Error al ingresar')
     } finally {
       setLoading(false)
     }
@@ -155,10 +131,8 @@ export function AuthForm() {
         backgroundPosition: 'center',
       }}
     >
-      {/* Overlay oscuro */}
       <div className="absolute inset-0 bg-black/40" />
 
-      {/* Card glassmorphism */}
       <div className="relative z-10 w-full max-w-md px-6">
         <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 shadow-2xl">
           {/* Logo */}
@@ -167,213 +141,169 @@ export function AuthForm() {
             <p className="text-white/80 text-sm">Access the global stay network</p>
           </div>
 
-          {!showForm ? (
+          {/* STEP 1: Role Selection */}
+          {step === 'role-select' && (
             <div className="space-y-4">
+              <p className="text-white text-center mb-6">¿Qué tipo de cuenta deseas?</p>
               <button
-                onClick={() => handleQuickTest('guest')}
-                disabled={loading}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 disabled:bg-yellow-300 text-black font-semibold py-3 rounded-lg transition"
+                onClick={() => handleRoleSelect('guest')}
+                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 rounded-lg transition"
               >
-                {loading ? 'Accediendo...' : '🏠 Entrar como Guest'}
+                🏠 Buscar Hospedajes (Guest)
+              </button>
+              <button
+                onClick={() => handleRoleSelect('host')}
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition"
+              >
+                🔑 Listar Propiedades (Host)
               </button>
 
-              <button
-                onClick={() => handleQuickTest('host')}
-                disabled={loading}
-                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white font-semibold py-3 rounded-lg transition"
-              >
-                {loading ? 'Accediendo...' : '🔑 Entrar como Host'}
-              </button>
-
-              {error && <p className="text-red-300 text-sm text-center">{error}</p>}
-
-              <div className="relative my-6">
+              <div className="relative my-4">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-white/20"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white/10 text-white/60">O usa tu propia cuenta</span>
+                  <span className="px-2 bg-white/10 text-white/60">¿Ya tienes cuenta?</span>
                 </div>
               </div>
 
               <button
-                onClick={() => setShowForm(true)}
+                onClick={() => {
+                  setStep('login')
+                  setIsSignUp(false)
+                  setError('')
+                }}
                 className="w-full border border-white/20 text-white py-2 rounded-lg hover:bg-white/5 transition"
               >
-                Ingresar con credenciales
+                Ingresar
               </button>
             </div>
-          ) : (
-            <div>
-              <button
-                onClick={() => setShowForm(false)}
-                className="text-white/60 hover:text-white text-sm mb-4"
-              >
-                ← Volver
-              </button>
+          )}
 
-              {/* Auth Method Tabs */}
-              <div className="flex gap-2 mb-6">
-            <button
-              type="button"
-              onClick={() => {
-                setAuthMethod('password')
-                setError('')
-                setSuccessMessage('')
-                setMagicLinkUrl('')
-              }}
-              className={`flex-1 py-2 px-4 text-xs font-semibold rounded-lg transition ${
-                authMethod === 'password'
-                  ? 'bg-yellow-400 text-black'
-                  : 'bg-white/10 border border-white/20 text-white/80 hover:bg-white/20'
-              }`}
-            >
-              Contraseña
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setAuthMethod('magic-link')
-                setError('')
-                setSuccessMessage('')
-                setMagicLinkUrl('')
-                setIsSignUp(false)
-              }}
-              className={`flex-1 py-2 px-4 text-xs font-semibold rounded-lg transition ${
-                authMethod === 'magic-link'
-                  ? 'bg-yellow-400 text-black'
-                  : 'bg-white/10 border border-white/20 text-white/80 hover:bg-white/20'
-              }`}
-            >
-              Magic Link
-            </button>
-          </div>
-
-          <form onSubmit={handleAuth} className="space-y-5">
-            {/* Email */}
-            <div>
-              <label className="block text-xs font-semibold text-white/80 mb-2 uppercase tracking-wide">
-                Email
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
-                placeholder="tu@email.com"
-                required
-              />
-            </div>
-
-            {/* Contraseña (solo si está usando password auth) */}
-            {authMethod === 'password' && (
+          {/* STEP 2: Registration Form */}
+          {step === 'registration' && isSignUp && (
+            <form onSubmit={handleRegistration} className="space-y-5">
               <div>
-                <label className="block text-xs font-semibold text-white/80 mb-2 uppercase tracking-wide">
-                  Contraseña
-                </label>
+                <p className="text-white/80 text-sm mb-4">
+                  Registrarse como <span className="font-semibold capitalize">{role}</span>
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-white/80 mb-2 uppercase">Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  placeholder="tu@email.com"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-white/80 mb-2 uppercase">Contraseña</label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
-                  placeholder="••••••••"
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  placeholder="Mínimo 6 caracteres"
                   required
                 />
               </div>
-            )}
 
-            {/* Role selector (solo en signup con password) */}
-            {authMethod === 'password' && isSignUp && (
               <div>
-                <label className="block text-xs font-semibold text-white/80 mb-3 uppercase tracking-wide">
-                  Tipo de cuenta
-                </label>
-                <div className="flex gap-4">
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      value="host"
-                      checked={role === 'host'}
-                      onChange={(e) => setRole(e.target.value as 'host' | 'guest')}
-                      className="mr-2 w-4 h-4"
-                    />
-                    <span className="text-white/80 text-sm">Host</span>
-                  </label>
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      value="guest"
-                      checked={role === 'guest'}
-                      onChange={(e) => setRole(e.target.value as 'host' | 'guest')}
-                      className="mr-2 w-4 h-4"
-                    />
-                    <span className="text-white/80 text-sm">Guest</span>
-                  </label>
-                </div>
+                <label className="block text-xs font-semibold text-white/80 mb-2 uppercase">Confirmar Contraseña</label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  placeholder="Confirma tu contraseña"
+                  required
+                />
               </div>
-            )}
 
-            {/* Error message */}
-            {error && <p className="text-red-300 text-sm">{error}</p>}
+              {error && <p className="text-red-300 text-sm">{error}</p>}
 
-            {/* Success message with magic link */}
-            {successMessage && (
-              <div className="p-4 bg-green-900/30 border border-green-400/50 rounded-lg">
-                <p className="text-green-300 text-sm mb-3">{successMessage}</p>
-                {magicLinkUrl && (
-                  <div className="space-y-2">
-                    <a
-                      href={magicLinkUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block w-full bg-yellow-400 text-black text-sm font-semibold py-2 rounded text-center hover:bg-yellow-500 transition"
-                    >
-                      Abre tu enlace
-                    </a>
-                    <p className="text-white/60 text-xs break-all p-2 bg-white/5 rounded">
-                      {magicLinkUrl}
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        navigator.clipboard.writeText(magicLinkUrl)
-                        alert('¡Enlace copiado al portapapeles!')
-                      }}
-                      className="text-green-300 text-xs hover:text-green-200 transition"
-                    >
-                      Copiar enlace
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-semibold py-3 rounded-lg transition disabled:opacity-50"
+              >
+                {loading ? 'Creando cuenta...' : 'Registrarse'}
+              </button>
 
-            {/* Submit button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-semibold py-3 rounded-lg transition duration-300 disabled:opacity-50 mt-6"
-            >
-              {loading ? 'Cargando...' : authMethod === 'magic-link' ? 'Enviar Magic Link' : isSignUp ? 'Registrarse' : 'Entrar'}
-            </button>
-          </form>
+              <button
+                type="button"
+                onClick={() => setStep('role-select')}
+                className="w-full text-white/80 text-sm hover:text-white transition"
+              >
+                ← Volver
+              </button>
+            </form>
+          )}
 
-              {/* Toggle signup/login (solo para password auth) */}
-              {authMethod === 'password' && (
-                <button
-                  type="button"
-                  onClick={() => setIsSignUp(!isSignUp)}
-                  className="w-full mt-6 text-white/80 text-sm hover:text-white transition"
-                >
-                  {isSignUp ? '¿Ya tienes cuenta? Entrar' : '¿No tienes cuenta? Registrarse'}
-                </button>
-              )}
+          {/* STEP 3: Confirmation */}
+          {step === 'confirmation' && (
+            <div className="text-center space-y-4">
+              <div className="text-4xl">✓</div>
+              <p className="text-green-300 font-semibold">{successMessage}</p>
+              <p className="text-white/60 text-sm">Redirigiendo al onboarding en unos segundos...</p>
             </div>
+          )}
+
+          {/* STEP 4: Login */}
+          {step === 'login' && (
+            <form onSubmit={handleLogin} className="space-y-5">
+              <div>
+                <label className="block text-xs font-semibold text-white/80 mb-2 uppercase">Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  placeholder="tu@email.com"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-white/80 mb-2 uppercase">Contraseña</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  placeholder="Tu contraseña"
+                  required
+                />
+              </div>
+
+              {error && <p className="text-red-300 text-sm">{error}</p>}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-semibold py-3 rounded-lg transition disabled:opacity-50"
+              >
+                {loading ? 'Ingresando...' : 'Entrar'}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setStep('role-select')}
+                className="w-full text-white/80 text-sm hover:text-white transition"
+              >
+                ← Volver
+              </button>
+            </form>
           )}
         </div>
       </div>
 
-      {/* Indicadores de imágenes */}
+      {/* Image indicators */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 flex gap-2">
         {CITY_IMAGES.map((_, idx) => (
           <button

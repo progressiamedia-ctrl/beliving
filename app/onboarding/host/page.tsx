@@ -2,8 +2,9 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { Header } from '@/components/Header'
 
 type Step = 'propertyType' | 'location' | 'price' | 'occupancy' | 'goals' | 'done'
 
@@ -18,13 +19,20 @@ export default function HostOnboarding() {
     goals: [] as string[],
   })
 
+  useEffect(() => {
+    const userId = localStorage.getItem('userId')
+    if (!userId) {
+      router.push('/')
+    }
+  }, [router])
+
   const handleNext = () => {
     const steps: Step[] = ['propertyType', 'location', 'price', 'occupancy', 'goals', 'done']
     const currentIndex = steps.indexOf(step)
     if (currentIndex < steps.length - 1) {
       setStep(steps[currentIndex + 1])
     } else {
-      localStorage.setItem('hostOnboardingData', JSON.stringify(responses))
+      localStorage.setItem('hostOnboarding', JSON.stringify(responses))
       router.push('/host/dashboard')
     }
   }
@@ -40,18 +48,26 @@ export default function HostOnboarding() {
   const stepNumber = ['propertyType', 'location', 'price', 'occupancy', 'goals'].indexOf(step) + 1
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl">
-        {/* Barra de progreso */}
-        <div className="mb-12">
-          <div className="h-1 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-black dark:bg-white transition-all duration-300"
-              style={{ width: `${(stepNumber / 5) * 100}%` }}
-            />
+    <div className="min-h-screen bg-white dark:bg-black">
+      <Header title="Completa tu perfil - Be Living" showThemeToggle={true} />
+
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
+        <div className="w-full max-w-2xl">
+          {/* Progress bar */}
+          <div className="mb-12">
+            <div className="flex justify-between items-center mb-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Pregunta {stepNumber} de 5
+              </p>
+              <p className="text-sm font-medium text-gray-900 dark:text-white">{Math.round((stepNumber / 5) * 100)}%</p>
+            </div>
+            <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2">
+              <div
+                className="bg-black dark:bg-white h-2 rounded-full transition-all duration-300"
+                style={{ width: `${(stepNumber / 5) * 100}%` }}
+              />
+            </div>
           </div>
-          <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Paso {stepNumber} de 5</p>
-        </div>
 
         {/* Pregunta 1: Tipo de propiedad */}
         {step === 'propertyType' && (
@@ -207,20 +223,23 @@ export default function HostOnboarding() {
           </div>
         )}
 
-        {/* Botones */}
-        <div className="flex gap-4 mt-12">
-          <button
-            onClick={handleBack}
-            className="flex-1 px-6 py-3 border-2 border-black dark:border-white text-black dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition"
-          >
-            Atrás
-          </button>
-          <button
-            onClick={handleNext}
-            className="flex-1 px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition"
-          >
-            {step === 'goals' ? 'Comenzar' : 'Siguiente'}
-          </button>
+          {/* Botones */}
+          <div className="flex gap-4 mt-12">
+            {stepNumber > 1 && (
+              <button
+                onClick={handleBack}
+                className="flex-1 px-6 py-3 border-2 border-gray-300 dark:border-gray-700 text-black dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition"
+              >
+                ← Atrás
+              </button>
+            )}
+            <button
+              onClick={handleNext}
+              className="flex-1 px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition font-medium"
+            >
+              {step === 'goals' ? '¡Comenzar!' : 'Siguiente →'}
+            </button>
+          </div>
         </div>
       </div>
     </div>
