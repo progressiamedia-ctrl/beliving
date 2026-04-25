@@ -131,39 +131,64 @@ export function AuthForm() {
         backgroundPosition: 'center',
       }}
     >
-      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/40 to-black/50" />
 
       <div className="relative z-10 w-full max-w-md px-6">
-        <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 shadow-2xl">
+        <div className="backdrop-blur-xl bg-white/[0.08] border border-white/20 rounded-3xl p-10 shadow-2xl">
           {/* Logo */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-light text-white mb-2">Be Living</h1>
-            <p className="text-white/80 text-sm">Access the global stay network</p>
+          <div className="mb-10 text-center">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-500 mb-4 mx-auto">
+              <span className="text-2xl">🏠</span>
+            </div>
+            <h1 className="text-5xl font-bold text-white mb-2 tracking-tight">Be Living</h1>
+            <p className="text-white/70 text-base font-medium">El futuro del alojamiento global</p>
           </div>
 
           {/* STEP 1: Role Selection */}
           {step === 'role-select' && (
-            <div className="space-y-4">
-              <p className="text-white text-center mb-6">¿Qué tipo de cuenta deseas?</p>
-              <button
-                onClick={() => handleRoleSelect('guest')}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 rounded-lg transition"
-              >
-                🏠 Buscar Hospedajes (Guest)
-              </button>
-              <button
-                onClick={() => handleRoleSelect('host')}
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition"
-              >
-                🔑 Listar Propiedades (Host)
-              </button>
+            <div className="space-y-6">
+              <p className="text-white text-center text-lg font-medium">¿Cuál es tu rol?</p>
 
-              <div className="relative my-4">
+              <div className="space-y-3">
+                <button
+                  onClick={() => handleRoleSelect('guest')}
+                  className="w-full group relative overflow-hidden rounded-2xl p-px"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 opacity-100 group-hover:opacity-100 transition duration-300" />
+                  <div className="relative bg-black rounded-[14px] px-6 py-4 group-hover:bg-black/80 transition duration-300">
+                    <div className="flex items-center justify-center gap-3">
+                      <span className="text-2xl">🏠</span>
+                      <div className="text-left">
+                        <p className="text-white font-bold text-sm">Viajero</p>
+                        <p className="text-white/60 text-xs">Buscar hospedajes</p>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => handleRoleSelect('host')}
+                  className="w-full group relative overflow-hidden rounded-2xl p-px"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-100 group-hover:opacity-100 transition duration-300" />
+                  <div className="relative bg-black rounded-[14px] px-6 py-4 group-hover:bg-black/80 transition duration-300">
+                    <div className="flex items-center justify-center gap-3">
+                      <span className="text-2xl">🔑</span>
+                      <div className="text-left">
+                        <p className="text-white font-bold text-sm">Anfitrión</p>
+                        <p className="text-white/60 text-xs">Listar propiedades</p>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+
+              <div className="relative my-8">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-white/20"></div>
+                  <div className="w-full border-t border-white/10"></div>
                 </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white/10 text-white/60">¿Ya tienes cuenta?</span>
+                <div className="relative flex justify-center">
+                  <span className="px-3 bg-white/5 text-white/50 text-xs font-medium">¿Ya tienes cuenta?</span>
                 </div>
               </div>
 
@@ -173,7 +198,7 @@ export function AuthForm() {
                   setIsSignUp(false)
                   setError('')
                 }}
-                className="w-full border border-white/20 text-white py-2 rounded-lg hover:bg-white/5 transition"
+                className="w-full px-6 py-3 border border-white/20 text-white font-medium rounded-2xl hover:bg-white/5 hover:border-white/40 transition duration-300"
               >
                 Ingresar
               </button>
@@ -182,121 +207,132 @@ export function AuthForm() {
 
           {/* STEP 2: Registration Form */}
           {step === 'registration' && isSignUp && (
-            <form onSubmit={handleRegistration} className="space-y-5">
+            <form onSubmit={handleRegistration} className="space-y-6">
               <div>
-                <p className="text-white/80 text-sm mb-4">
-                  Registrarse como <span className="font-semibold capitalize">{role}</span>
+                <p className="text-white/80 text-base mb-2">
+                  Crear cuenta como <span className="font-bold capitalize text-white">{role === 'guest' ? 'Viajero' : 'Anfitrión'}</span>
                 </p>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-white/80 mb-2 uppercase">Email</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                  placeholder="tu@email.com"
-                  required
-                />
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-2">Correo electrónico</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition"
+                    placeholder="tu@email.com"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-2">Contraseña</label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition"
+                    placeholder="Mínimo 6 caracteres"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-2">Confirmar contraseña</label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition"
+                    placeholder="Confirma tu contraseña"
+                    required
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-white/80 mb-2 uppercase">Contraseña</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                  placeholder="Mínimo 6 caracteres"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-white/80 mb-2 uppercase">Confirmar Contraseña</label>
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                  placeholder="Confirma tu contraseña"
-                  required
-                />
-              </div>
-
-              {error && <p className="text-red-300 text-sm">{error}</p>}
+              {error && <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-xl text-red-200 text-sm">{error}</div>}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-semibold py-3 rounded-lg transition disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 disabled:from-yellow-400/50 disabled:to-yellow-500/50 text-black font-bold py-3 rounded-xl transition duration-300 disabled:cursor-not-allowed"
               >
-                {loading ? 'Creando cuenta...' : 'Registrarse'}
+                {loading ? 'Creando cuenta...' : 'Crear cuenta'}
               </button>
 
               <button
                 type="button"
                 onClick={() => setStep('role-select')}
-                className="w-full text-white/80 text-sm hover:text-white transition"
+                className="w-full text-white/70 text-sm hover:text-white transition font-medium"
               >
-                ← Volver
+                ← Volver atrás
               </button>
             </form>
           )}
 
           {/* STEP 3: Confirmation */}
           {step === 'confirmation' && (
-            <div className="text-center space-y-4">
-              <div className="text-4xl">✓</div>
-              <p className="text-green-300 font-semibold">{successMessage}</p>
-              <p className="text-white/60 text-sm">Redirigiendo al onboarding en unos segundos...</p>
+            <div className="text-center space-y-6 py-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 animate-bounce">
+                <span className="text-3xl">✓</span>
+              </div>
+              <div>
+                <p className="text-green-300 font-bold text-lg mb-2">{successMessage}</p>
+                <p className="text-white/60 text-sm">Te llevaremos al siguiente paso en unos momentos...</p>
+              </div>
+              <div className="w-full bg-white/10 rounded-full h-1 overflow-hidden">
+                <div className="h-full bg-green-400 animate-pulse" style={{ width: '100%' }} />
+              </div>
             </div>
           )}
 
           {/* STEP 4: Login */}
           {step === 'login' && (
-            <form onSubmit={handleLogin} className="space-y-5">
-              <div>
-                <label className="block text-xs font-semibold text-white/80 mb-2 uppercase">Email</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                  placeholder="tu@email.com"
-                  required
-                />
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-2">Correo electrónico</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition"
+                    placeholder="tu@email.com"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-2">Contraseña</label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition"
+                    placeholder="Tu contraseña"
+                    required
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-white/80 mb-2 uppercase">Contraseña</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                  placeholder="Tu contraseña"
-                  required
-                />
-              </div>
-
-              {error && <p className="text-red-300 text-sm">{error}</p>}
+              {error && <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-xl text-red-200 text-sm">{error}</div>}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-semibold py-3 rounded-lg transition disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 disabled:from-yellow-400/50 disabled:to-yellow-500/50 text-black font-bold py-3 rounded-xl transition duration-300 disabled:cursor-not-allowed"
               >
-                {loading ? 'Ingresando...' : 'Entrar'}
+                {loading ? 'Ingresando...' : 'Ingresar'}
               </button>
 
               <button
                 type="button"
                 onClick={() => setStep('role-select')}
-                className="w-full text-white/80 text-sm hover:text-white transition"
+                className="w-full text-white/70 text-sm hover:text-white transition font-medium"
               >
-                ← Volver
+                ← Volver atrás
               </button>
             </form>
           )}
@@ -304,14 +340,15 @@ export function AuthForm() {
       </div>
 
       {/* Image indicators */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 flex gap-2">
+      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10 flex gap-2">
         {CITY_IMAGES.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setBgIndex(idx)}
-            className={`w-2 h-2 rounded-full transition ${
-              idx === bgIndex ? 'bg-yellow-400 w-6' : 'bg-white/50 hover:bg-white/80'
+            className={`transition-all duration-300 rounded-full ${
+              idx === bgIndex ? 'bg-yellow-400 w-8 h-3' : 'bg-white/40 w-2 h-2 hover:bg-white/60'
             }`}
+            aria-label={`Go to image ${idx + 1}`}
           />
         ))}
       </div>
