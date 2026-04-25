@@ -42,6 +42,32 @@ CREATE TABLE IF NOT EXISTS ratings (
   CONSTRAINT unique_booking_rating UNIQUE (booking_id)
 );
 
+-- Conversations Table
+CREATE TABLE IF NOT EXISTS conversations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  booking_id UUID NOT NULL UNIQUE,
+  guest_id UUID NOT NULL,
+  host_id UUID NOT NULL,
+  guest_name VARCHAR NOT NULL,
+  host_name VARCHAR NOT NULL,
+  guest_email VARCHAR NOT NULL,
+  host_email VARCHAR NOT NULL,
+  property_id VARCHAR NOT NULL,
+  property_title VARCHAR NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Messages Table
+CREATE TABLE IF NOT EXISTS messages (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  conversation_id UUID NOT NULL,
+  sender_id UUID NOT NULL,
+  sender_name VARCHAR NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
 -- Indexes for performance
 CREATE INDEX idx_bookings_guest_id ON bookings(guest_id);
 CREATE INDEX idx_bookings_host_id ON bookings(host_id);
@@ -52,3 +78,8 @@ CREATE INDEX idx_magic_links_email ON magic_links(email);
 CREATE INDEX idx_ratings_property_id ON ratings(property_id);
 CREATE INDEX idx_ratings_guest_id ON ratings(guest_id);
 CREATE INDEX idx_ratings_booking_id ON ratings(booking_id);
+CREATE INDEX idx_conversations_guest_id ON conversations(guest_id);
+CREATE INDEX idx_conversations_host_id ON conversations(host_id);
+CREATE INDEX idx_conversations_booking_id ON conversations(booking_id);
+CREATE INDEX idx_messages_conversation_id ON messages(conversation_id);
+CREATE INDEX idx_messages_sender_id ON messages(sender_id);
