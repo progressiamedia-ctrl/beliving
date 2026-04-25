@@ -69,13 +69,13 @@ export function AuthForm() {
 
           const { data, error } = await supabase
             .from('users')
-            .insert([{ email, password: hashedPassword, role }])
+            .insert([{ email, password_hash: hashedPassword, user_type: role }])
             .select()
             .single()
 
           if (error) throw error
           localStorage.setItem('userId', data.id)
-          localStorage.setItem('userRole', data.role)
+          localStorage.setItem('userRole', data.user_type)
           localStorage.setItem('userEmail', data.email)
           router.push(`/onboarding/${role}`)
         } else {
@@ -84,9 +84,9 @@ export function AuthForm() {
           const user = await signIn(email, password)
 
           localStorage.setItem('userId', user.id)
-          localStorage.setItem('userRole', user.role)
+          localStorage.setItem('userRole', user.user_type)
           localStorage.setItem('userEmail', user.email)
-          router.push(user.role === 'host' ? '/host/dashboard' : '/properties')
+          router.push(user.user_type === 'host' ? '/host/dashboard' : '/properties')
         }
       }
     } catch (err) {

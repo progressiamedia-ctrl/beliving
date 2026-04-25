@@ -77,11 +77,11 @@ export function verifyToken(token: string): { sub: string } | null {
 }
 
 // Sign up with hashed password
-export async function signUp(email: string, password: string, role: 'host' | 'guest') {
+export async function signUp(email: string, password: string, user_type: 'host' | 'guest') {
   const hashedPassword = await hashPassword(password)
   const { data, error } = await supabase
     .from('users')
-    .insert([{ email, password: hashedPassword, role }])
+    .insert([{ email, password_hash: hashedPassword, user_type }])
     .select()
 
   if (error) throw error
@@ -98,7 +98,7 @@ export async function signIn(email: string, password: string) {
 
   if (error || !data) throw new Error('Usuario no encontrado')
 
-  const isValid = await verifyPassword(password, data.password)
+  const isValid = await verifyPassword(password, data.password_hash)
   if (!isValid) throw new Error('Contraseña incorrecta')
 
   return data
