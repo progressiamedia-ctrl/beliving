@@ -24,6 +24,7 @@ export function AuthForm() {
   const [successMessage, setSuccessMessage] = useState('')
   const [magicLinkUrl, setMagicLinkUrl] = useState('')
   const [bgIndex, setBgIndex] = useState(0)
+  const [showForm, setShowForm] = useState(false)
   const router = useRouter()
 
   // Rotar imagen de fondo cada 5 segundos
@@ -33,6 +34,55 @@ export function AuthForm() {
     }, 5000)
     return () => clearInterval(interval)
   }, [])
+
+  const handleQuickTest = async (testRole: 'guest' | 'host') => {
+    setLoading(true)
+    setError('')
+    try {
+      const testEmail = testRole === 'guest' ? 'guest@test.com' : 'host@test.com'
+      const testPassword = 'test123'
+
+      // Try to sign in first
+      const { signIn } = await import('@/lib/auth')
+      try {
+        const user = await signIn(testEmail, testPassword)
+        localStorage.setItem('userId', user.id)
+        localStorage.setItem('userRole', user.user_type)
+        localStorage.setItem('userEmail', user.email)
+        router.push(user.user_type === 'host' ? '/host/dashboard' : '/properties')
+        return
+      } catch {
+        // User doesn't exist, create it
+      }
+
+      // Create test user if it doesn't exist
+      const { hashPassword } = await import('@/lib/auth')
+      const hashedPassword = await hashPassword(testPassword)
+
+      const { data, error: insertError } = await supabase
+        .from('users')
+        .insert([{
+          email: testEmail,
+          password_hash: hashedPassword,
+          user_type: testRole,
+          first_name: testRole === 'guest' ? 'Guest' : 'Host',
+          last_name: 'Test'
+        }])
+        .select()
+        .single()
+
+      if (insertError) throw insertError
+
+      localStorage.setItem('userId', data.id)
+      localStorage.setItem('userRole', data.user_type)
+      localStorage.setItem('userEmail', data.email)
+      router.push(testRole === 'host' ? '/host/dashboard' : '/properties')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al acceder')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -117,8 +167,53 @@ export function AuthForm() {
             <p className="text-white/80 text-sm">Access the global stay network</p>
           </div>
 
-          {/* Auth Method Tabs */}
-          <div className="flex gap-2 mb-6">
+          {!showForm ? (
+            <div className="space-y-4">
+              <button
+                onClick={() => handleQuickTest('guest')}
+                disabled={loading}
+                className="w-full bg-yellow-400 hover:bg-yellow-500 disabled:bg-yellow-300 text-black font-semibold py-3 rounded-lg transition"
+              >
+                {loading ? 'Accediendo...' : '🏠 Entrar como Guest'}
+              </button>
+
+              <button
+                onClick={() => handleQuickTest('host')}
+                disabled={loading}
+                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white font-semibold py-3 rounded-lg transition"
+              >
+                {loading ? 'Accediendo...' : '🔑 Entrar como Host'}
+              </button>
+
+              {error && <p className="text-red-300 text-sm text-center">{error}</p>}
+
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-white/20"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white/10 text-white/60">O usa tu propia cuenta</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setShowForm(true)}
+                className="w-full border border-white/20 text-white py-2 rounded-lg hover:bg-white/5 transition"
+              >
+                Ingresar con credenciales
+              </button>
+            </div>
+          ) : (
+            <div>
+              <button
+                onClick={() => setShowForm(false)}
+                className="text-white/60 hover:text-white text-sm mb-4"
+              >
+                ← Volver
+              </button>
+
+              {/* Auth Method Tabs */}
+              <div className="flex gap-2 mb-6">
             <button
               type="button"
               onClick={() => {
@@ -263,15 +358,17 @@ export function AuthForm() {
             </button>
           </form>
 
-          {/* Toggle signup/login (solo para password auth) */}
-          {authMethod === 'password' && (
-            <button
-              type="button"
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="w-full mt-6 text-white/80 text-sm hover:text-white transition"
-            >
-              {isSignUp ? '¿Ya tienes cuenta? Entrar' : '¿No tienes cuenta? Registrarse'}
-            </button>
+              {/* Toggle signup/login (solo para password auth) */}
+              {authMethod === 'password' && (
+                <button
+                  type="button"
+                  onClick={() => setIsSignUp(!isSignUp)}
+                  className="w-full mt-6 text-white/80 text-sm hover:text-white transition"
+                >
+                  {isSignUp ? '¿Ya tienes cuenta? Entrar' : '¿No tienes cuenta? Registrarse'}
+                </button>
+              )}
+            </div>
           )}
         </div>
       </div>
