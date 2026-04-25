@@ -38,10 +38,10 @@ export default function RegisterWithMagicLinkPage() {
       if (existingUser) {
         // User already exists, just log them in
         localStorage.setItem('userId', existingUser.id)
-        localStorage.setItem('userRole', existingUser.role)
+        localStorage.setItem('userRole', existingUser.user_type)
         localStorage.setItem('userEmail', existingUser.email)
         sessionStorage.removeItem('pendingMagicLinkEmail')
-        router.push(existingUser.role === 'host' ? '/host/dashboard' : '/properties')
+        router.push(existingUser.user_type === 'host' ? '/host/dashboard' : '/properties')
         return
       }
 
@@ -51,8 +51,8 @@ export default function RegisterWithMagicLinkPage() {
         .insert([
           {
             email,
-            role,
-            password: null, // No password for magic link users
+            user_type: role,
+            password_hash: null, // No password for magic link users
           },
         ])
         .select()
@@ -61,7 +61,7 @@ export default function RegisterWithMagicLinkPage() {
       if (insertError) throw insertError
 
       localStorage.setItem('userId', data.id)
-      localStorage.setItem('userRole', data.role)
+      localStorage.setItem('userRole', data.user_type)
       localStorage.setItem('userEmail', data.email)
       sessionStorage.removeItem('pendingMagicLinkEmail')
 

@@ -55,14 +55,14 @@ function MagicLinkContent() {
 
       // User exists, log them in
       localStorage.setItem('userId', user.id)
-      localStorage.setItem('userRole', user.role)
+      localStorage.setItem('userRole', user.user_type)
       localStorage.setItem('userEmail', user.email)
 
       setStatus('success')
       setMessage('¡Bienvenido! Redirigiendo...')
 
       setTimeout(() => {
-        router.push(user.role === 'host' ? '/host/dashboard' : '/properties')
+        router.push(user.user_type === 'host' ? '/host/dashboard' : '/properties')
       }, 1500)
     } catch (err) {
       setStatus('error')
