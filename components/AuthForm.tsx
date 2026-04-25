@@ -38,29 +38,34 @@ export function AuthForm() {
 
     try {
       if (isSignUp) {
+        // Validar email
+        if (!email.includes('@')) throw new Error('Email inválido')
+        if (password.length < 6) throw new Error('Contraseña debe tener al menos 6 caracteres')
+
+        // Import auth functions
+        const { hashPassword } = await import('@/lib/auth')
+        const hashedPassword = await hashPassword(password)
+
         const { data, error } = await supabase
           .from('users')
-          .insert([{ email, password, role }])
+          .insert([{ email, password: hashedPassword, role }])
           .select()
           .single()
 
         if (error) throw error
         localStorage.setItem('userId', data.id)
         localStorage.setItem('userRole', data.role)
+        localStorage.setItem('userEmail', data.email)
         router.push(`/onboarding/${role}`)
       } else {
-        const { data, error } = await supabase
-          .from('users')
-          .select('*')
-          .eq('email', email)
-          .single()
+        // Import auth functions
+        const { signIn } = await import('@/lib/auth')
+        const user = await signIn(email, password)
 
-        if (error || !data) throw new Error('Usuario no encontrado')
-        if (password !== data.password) throw new Error('Contraseña incorrecta')
-
-        localStorage.setItem('userId', data.id)
-        localStorage.setItem('userRole', data.role)
-        router.push(data.role === 'host' ? '/host/dashboard' : '/properties')
+        localStorage.setItem('userId', user.id)
+        localStorage.setItem('userRole', user.role)
+        localStorage.setItem('userEmail', user.email)
+        router.push(user.role === 'host' ? '/host/dashboard' : '/properties')
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error en autenticación')
