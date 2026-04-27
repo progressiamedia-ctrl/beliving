@@ -6,8 +6,8 @@ import "./globals.css";
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Be Living Property",
-  description: "Premium luxury rental platform",
+  title: "Be Living - Premium Properties",
+  description: "Premium luxury rental platform with modern design",
 };
 
 export default function RootLayout({
