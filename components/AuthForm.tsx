@@ -215,7 +215,7 @@ export function AuthForm() {
             </div>
             <h1 className={`text-5xl font-bold mb-2 tracking-tight ${
               theme === 'dark' ? 'text-white' : 'text-gray-900'
-            }`}>Be Living</h1>
+            }`}>🏠 Be Living</h1>
             <p className={`text-base font-medium ${
               theme === 'dark' ? 'text-white/70' : 'text-gray-600'
             }`}>El futuro del alojamiento global</p>
