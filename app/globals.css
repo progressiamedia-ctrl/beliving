@@ -17,6 +17,7 @@ html.dark {
   --font-mono: var(--font-geist-mono);
 }
 
+/* Updated design with improved dark/light mode support */
 body {
   background: var(--background);
   color: var(--foreground);
