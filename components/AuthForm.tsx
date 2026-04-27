@@ -79,31 +79,22 @@ export function AuthForm() {
       if (password !== confirmPassword) throw new Error('Las contraseñas no coinciden')
       if (!role) throw new Error('Debes seleccionar un tipo de cuenta')
 
-      const { hashPassword } = await import('@/lib/auth')
-      const hashedPassword = await hashPassword(password)
-
-      // Check if user already exists
-      const { data: existingUser } = await supabase
-        .from('users')
-        .select('id')
-        .eq('email', email)
-        .single()
-
-      if (existingUser) throw new Error('Este email ya está registrado')
-
-      // Create new user
-      const { data, error: insertError } = await supabase
-        .from('users')
-        .insert([{
+      // Call the API endpoint instead of directly accessing Supabase
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           email,
-          password_hash: hashedPassword,
-          user_type: role,
-          verified: false
-        }])
-        .select()
-        .single()
+          password,
+          user_type: role
+        })
+      })
 
-      if (insertError) throw insertError
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Error al registrarse')
+      }
 
       // Save to localStorage
       localStorage.setItem('userId', data.id)
@@ -133,8 +124,21 @@ export function AuthForm() {
       if (!email.includes('@')) throw new Error('Email inválido')
       if (!password) throw new Error('Ingresa tu contraseña')
 
-      const { signIn } = await import('@/lib/auth')
-      const user = await signIn(email, password)
+      // Call the API endpoint instead of directly accessing Supabase
+      const response = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          password
+        })
+      })
+
+      const user = await response.json()
+
+      if (!response.ok) {
+        throw new Error(user.error || 'Error al ingresar')
+      }
 
       localStorage.setItem('userId', user.id)
       localStorage.setItem('userRole', user.user_type)
