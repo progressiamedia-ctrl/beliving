@@ -55,8 +55,15 @@ export function Header({ showThemeToggle = true, title = 'Be Living' }: HeaderPr
 
   return (
     <header className="sticky top-0 z-40 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800">
-      <div className="max-w-full px-6 py-4 flex items-center justify-between">
-        <h1 className="text-2xl font-light text-black dark:text-white">{title}</h1>
+      <div className="max-w-full px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <img
+            src="/logo.png"
+            alt="Be Living"
+            className="h-10 w-auto"
+          />
+          <h1 className="text-xl font-light text-black dark:text-white hidden sm:block">{title}</h1>
+        </div>
         {showThemeToggle && <ThemeToggleButton />}
       </div>
     </header>

@@ -8,9 +8,13 @@ const CITY_IMAGES = [
   'https://images.unsplash.com/photo-1512453575128-d2f4b0e961c3?auto=format&fit=crop&w=2000&q=80', // Dubai
   'https://images.unsplash.com/photo-1583604949505-58b94304e980?auto=format&fit=crop&w=2000&q=80', // Barcelona
   'https://images.unsplash.com/photo-1543936552-5150209c26d6?auto=format&fit=crop&w=2000&q=80', // Madrid
-  'https://images.unsplash.com/photo-1537996051842-4e406c6f2cf9?auto=format&fit=crop&w=2000&q=80', // Bali
-  'https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=2000&q=80', // Cancun
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2000&q=80', // Cancún
+  'https://images.unsplash.com/photo-1537996051842-4e406c6f2cf9?auto=format&fit=crop&w=2000&q=80', // Punta Cana
   'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=80', // Viña del Mar
+  'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=2000&q=80', // París
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2000&q=80', // Melbourne
+  'https://images.unsplash.com/photo-1518391846015-55a9cc003b25?auto=format&fit=crop&w=2000&q=80', // Bogotá
+  'https://images.unsplash.com/photo-1514306688772-cfb6f51353ad?auto=format&fit=crop&w=2000&q=80', // Ciudad de México
 ]
 
 type Step = 'role-select' | 'registration' | 'confirmation' | 'login'
@@ -214,12 +218,14 @@ export function AuthForm() {
         }`}>
           {/* Logo */}
           <div className="mb-10 text-center">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-500 mb-4 mx-auto">
-              <span className="text-2xl">🏠</span>
-            </div>
-            <h1 className={`text-5xl font-bold mb-2 tracking-tight ${
+            <img
+              src="/logo.png"
+              alt="Be Living"
+              className="h-16 w-auto mx-auto mb-4"
+            />
+            <h1 className={`text-3xl font-bold mb-2 tracking-tight ${
               theme === 'dark' ? 'text-white' : 'text-gray-900'
-            }`}>🏠 Be Living</h1>
+            }`}>Be Living</h1>
             <p className={`text-base font-medium ${
               theme === 'dark' ? 'text-white/70' : 'text-gray-600'
             }`}>El futuro del alojamiento global</p>

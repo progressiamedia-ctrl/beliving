@@ -49,13 +49,13 @@ export default function PropertyDetailPage() {
           <div className="lg:col-span-2">
             {/* Title and Rating */}
             <div className="mb-8">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h1 className="text-4xl font-bold text-white mb-2">{property.title}</h1>
-                  <p className="text-gray-400 text-lg">{property.location}</p>
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <div className="flex-1">
+                  <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">{property.title}</h1>
+                  <p className="text-gray-400 text-base sm:text-lg">{property.location}</p>
                 </div>
                 {property.verified && (
-                  <div className="bg-yellow-400 text-black px-4 py-2 rounded-lg text-sm font-bold">
+                  <div className="bg-yellow-400 text-black px-3 py-1 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-bold whitespace-nowrap">
                     ✓ Verificado
                   </div>
                 )}
