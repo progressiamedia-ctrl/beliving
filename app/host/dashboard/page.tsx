@@ -50,7 +50,7 @@ export default function HostDashboard() {
       if (error) throw error
 
       // Añadir estadísticas simuladas a cada propiedad
-      const propertiesWithStats = (data || []).map(p => ({
+      const propertiesWithStats = (data || []).map((p: any) => ({
         ...p,
         occupancy_rate: Math.floor(Math.random() * 40 + 60),
         total_bookings: Math.floor(Math.random() * 20 + 5),
@@ -60,9 +60,9 @@ export default function HostDashboard() {
       setProperties(propertiesWithStats)
 
       // Calcular estadísticas generales
-      const totalRevenue = propertiesWithStats.reduce((sum, p) => sum + (p.monthly_revenue || 0), 0)
+      const totalRevenue = propertiesWithStats.reduce((sum: number, p: any) => sum + (p.monthly_revenue || 0), 0)
       const avgOccupancy = Math.round(
-        propertiesWithStats.reduce((sum, p) => sum + (p.occupancy_rate || 0), 0) /
+        propertiesWithStats.reduce((sum: number, p: any) => sum + (p.occupancy_rate || 0), 0) /
         Math.max(propertiesWithStats.length, 1)
       )
 
