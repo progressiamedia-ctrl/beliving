@@ -5,16 +5,16 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
 const CITY_IMAGES = [
-  'https://images.unsplash.com/photo-1512453575128-d2f4b0e961c3?auto=format&fit=crop&w=2000&q=80', // Dubai
-  'https://images.unsplash.com/photo-1583604949505-58b94304e980?auto=format&fit=crop&w=2000&q=80', // Barcelona
-  'https://images.unsplash.com/photo-1543936552-5150209c26d6?auto=format&fit=crop&w=2000&q=80', // Madrid
-  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2000&q=80', // Cancún
-  'https://images.unsplash.com/photo-1537996051842-4e406c6f2cf9?auto=format&fit=crop&w=2000&q=80', // Punta Cana
-  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=80', // Viña del Mar
-  'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=2000&q=80', // París
-  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2000&q=80', // Melbourne
-  'https://images.unsplash.com/photo-1518391846015-55a9cc003b25?auto=format&fit=crop&w=2000&q=80', // Bogotá
-  'https://images.unsplash.com/photo-1514306688772-cfb6f51353ad?auto=format&fit=crop&w=2000&q=80', // Ciudad de México
+  'https://images.unsplash.com/photo-1512453575128-d2f4b0e961c3?w=1920&h=1080&fit=crop&q=85', // Dubai
+  'https://images.unsplash.com/photo-1562883714-47a98a3c3872?w=1920&h=1080&fit=crop&q=85', // Barcelona
+  'https://images.unsplash.com/photo-1543936552-5150209c26d6?w=1920&h=1080&fit=crop&q=85', // Madrid
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop&q=85', // Cancún
+  'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&h=1080&fit=crop&q=85', // Punta Cana
+  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&h=1080&fit=crop&q=85', // Viña del Mar
+  'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1920&h=1080&fit=crop&q=85', // París
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop&q=85', // Melbourne
+  'https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=1920&h=1080&fit=crop&q=85', // Bogotá
+  'https://images.unsplash.com/photo-1532619675605-1ede6c2e5ddb?w=1920&h=1080&fit=crop&q=85', // Ciudad de México
 ]
 
 type Step = 'role-select' | 'registration' | 'confirmation' | 'login'
@@ -165,20 +165,19 @@ export function AuthForm() {
   }
 
   return (
-    <div
-      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden transition-all duration-1000 dark:bg-black bg-white"
-      style={
-        theme === 'dark'
-          ? {
+    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-black">
+      {theme === 'dark' && (
+        <>
+          <div
+            className="absolute inset-0 transition-opacity duration-1000"
+            style={{
               backgroundImage: `url(${CITY_IMAGES[bgIndex]})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-            }
-          : {}
-      }
-    >
-      {theme === 'dark' && (
-        <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/40 to-black/50" />
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/50 to-black/60" />
+        </>
       )}
 
       {/* Theme Toggle Button */}
