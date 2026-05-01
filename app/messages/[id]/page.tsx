@@ -95,7 +95,7 @@ export default function ConversationPage() {
   if (error || !conversation) {
     return (
       <div className="min-h-screen bg-white dark:bg-black">
-        <Header title="Mensajes - Be Living" showThemeToggle={true} />
+        <Header title="Mensajes - Be Living" />
 
         <div className="max-w-4xl mx-auto px-6 py-12">
           <p className="text-red-600 dark:text-red-400 mb-6" role="alert">{error || 'Conversación no encontrada'}</p>
@@ -112,7 +112,7 @@ export default function ConversationPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <Header title={`Chat - ${conversation.property_title}`} showThemeToggle={true} />
+      <Header title={`Chat - ${conversation.property_title}`} />
 
       <div className="border-b border-gray-200 dark:border-gray-800 sticky top-16 z-40 bg-white dark:bg-black">
         <div className="max-w-4xl mx-auto px-6 py-4">

@@ -127,7 +127,7 @@ export default function HostDashboard() {
   if (loading) {
     return (
       <div className="min-h-screen bg-white dark:bg-black">
-        <Header title="Be Living - Host" showThemeToggle={true} />
+        <Header title="Be Living - Host" />
         <div className="flex items-center justify-center min-h-[60vh]">
           <p className="text-gray-600 dark:text-gray-400">Cargando dashboard...</p>
         </div>
@@ -137,7 +137,7 @@ export default function HostDashboard() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <Header title="Be Living - Host" showThemeToggle={true} />
+      <Header title="Be Living - Host" />
 
       {/* Sticky nav */}
       <nav className="sticky top-16 z-40 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 px-6 py-3 flex items-center justify-between gap-4" aria-label="Acciones del dashboard">

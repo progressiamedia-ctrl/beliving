@@ -109,7 +109,7 @@ export default function BookingDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-white dark:bg-black">
-        <Header showThemeToggle={true} />
+        <Header />
         <div className="max-w-2xl mx-auto px-6 py-12 mt-16">
           <p className="text-gray-600 dark:text-gray-400">Cargando reserva...</p>
         </div>
@@ -120,7 +120,7 @@ export default function BookingDetailPage() {
   if (!booking || error) {
     return (
       <div className="min-h-screen bg-white dark:bg-black">
-        <Header showThemeToggle={true} />
+        <Header />
         <div className="max-w-2xl mx-auto px-6 py-12 mt-16">
           <Link href="/guest/bookings" className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white text-sm mb-8 inline-block">
             ← Volver a mis reservas
@@ -140,7 +140,7 @@ export default function BookingDetailPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <Header showThemeToggle={true} />
+      <Header />
 
       {/* Back Nav */}
       <div className="sticky top-16 z-40 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 px-6 py-3">

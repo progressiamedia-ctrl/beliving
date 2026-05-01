@@ -83,7 +83,7 @@ export default function RegisterWithMagicLinkPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <Header title="Completar Registro - Be Living" showThemeToggle={true} />
+      <Header title="Completar Registro - Be Living" />
 
       <div className="max-w-md mx-auto px-6 py-12 mt-16">
         <h1 className="text-3xl font-light text-black dark:text-white mb-2">Completa tu registro</h1>

@@ -103,7 +103,7 @@ export default function HostProfilePage() {
   if (error || !host) {
     return (
       <div className="min-h-screen bg-white dark:bg-black">
-        <Header title="Anfitrión - Be Living" showThemeToggle={true} />
+        <Header title="Anfitrión - Be Living" />
 
         <div className="max-w-4xl mx-auto px-6 py-12">
           <p className="text-red-600 dark:text-red-400 mb-6" role="alert">{error || 'Anfitrión no encontrado'}</p>
@@ -123,7 +123,7 @@ export default function HostProfilePage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <Header title={`${hostName} - Be Living`} showThemeToggle={true} />
+      <Header title={`${hostName} - Be Living`} />
 
       <div className="border-b border-gray-200 dark:border-gray-800 sticky top-16 z-40 bg-white dark:bg-black">
         <div className="max-w-4xl mx-auto px-6 py-3">

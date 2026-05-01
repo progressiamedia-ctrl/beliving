@@ -158,7 +158,7 @@ export default function PropertyDetailPage() {
   if (property === undefined) {
     return (
       <div className="min-h-screen bg-white dark:bg-black">
-        <Header title="Cargando..." showThemeToggle={true} />
+        <Header title="Cargando..." />
         <div className="max-w-4xl mx-auto px-6 py-12 mt-16">
           <p className="text-gray-600 dark:text-gray-400">Cargando propiedad...</p>
         </div>
@@ -169,7 +169,7 @@ export default function PropertyDetailPage() {
   if (!property) {
     return (
       <div className="min-h-screen bg-white dark:bg-black">
-        <Header title="Propiedad no encontrada" showThemeToggle={true} />
+        <Header title="Propiedad no encontrada" />
         <div className="max-w-4xl mx-auto px-6 py-12 mt-16">
           <p className="text-gray-900 dark:text-white mb-6">La propiedad que buscas no existe.</p>
           <Link href="/properties" className="text-yellow-500 dark:text-yellow-400 hover:text-yellow-600 dark:hover:text-yellow-500">
@@ -182,7 +182,7 @@ export default function PropertyDetailPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <Header title={property.title} showThemeToggle={false} />
+      <Header title={property.title} />
 
       <div className="max-w-4xl mx-auto px-6 py-12 mt-16">
         {/* Back button */}

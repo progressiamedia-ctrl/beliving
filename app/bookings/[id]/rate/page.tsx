@@ -125,7 +125,7 @@ export default function RateBookingPage() {
   if (alreadyRated) {
     return (
       <div className="min-h-screen bg-white dark:bg-black">
-        <Header title="Ya Calificado - Be Living" showThemeToggle={true} />
+        <Header title="Ya Calificado - Be Living" />
 
         <div className="max-w-2xl mx-auto px-6 py-12">
           <div className="text-center space-y-4">
@@ -143,7 +143,7 @@ export default function RateBookingPage() {
   if (error || !booking || !propertyData) {
     return (
       <div className="min-h-screen bg-white dark:bg-black">
-        <Header title="Calificar - Be Living" showThemeToggle={true} />
+        <Header title="Calificar - Be Living" />
 
         <div className="max-w-2xl mx-auto px-6 py-12">
           <p className="text-red-600 dark:text-red-400 mb-6" role="alert">{error || 'Reserva no encontrada'}</p>
@@ -157,7 +157,7 @@ export default function RateBookingPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <Header title="Calificar - Be Living" showThemeToggle={true} />
+      <Header title="Calificar - Be Living" />
 
       <div className="border-b border-gray-200 dark:border-gray-800 sticky top-16 z-40 bg-white dark:bg-black">
         <div className="max-w-2xl mx-auto px-6 py-3">

@@ -159,7 +159,7 @@ export default function PropertiesPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black pb-24">
-      <Header title="Be Living" showThemeToggle={true} />
+      <Header title="Be Living" />
 
       {/* Search Bar */}
       <div className="sticky top-16 z-30 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 px-6 py-6">

@@ -122,7 +122,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <Header title="Perfil - Be Living" showThemeToggle={true} />
+      <Header title="Perfil - Be Living" />
 
       <div className="sticky top-16 z-40 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 px-6 py-2">
         <button
