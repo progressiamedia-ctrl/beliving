@@ -17,7 +17,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className="h-full">
-      <body className={`${montserrat.className} min-h-full bg-white dark:bg-black text-black dark:text-white`}>
+      <head>
+        <script dangerouslySetInnerHTML={{
+          __html: `document.documentElement.classList.remove('dark'); localStorage.removeItem('theme');`
+        }} />
+      </head>
+      <body className={`${montserrat.className} min-h-full bg-white text-black`}>
         <LayoutClient>{children}</LayoutClient>
       </body>
     </html>
