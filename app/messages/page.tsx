@@ -60,7 +60,7 @@ export default function MessagesPage() {
         <h1 className="text-4xl font-light text-black dark:text-white mb-8">Mensajes</h1>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-red-700 dark:text-red-400">
+          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-red-700 dark:text-red-400" role="alert">
             {error}
           </div>
         )}
@@ -78,6 +78,7 @@ export default function MessagesPage() {
               <Link
                 key={conv.id}
                 href={`/messages/${conv.id}`}
+                aria-label={`Abrir conversación sobre ${conv.property_title}`}
                 className="block border border-gray-200 dark:border-gray-800 rounded-lg p-4 hover:border-black dark:hover:border-white transition"
               >
                 <div className="flex items-start justify-between">

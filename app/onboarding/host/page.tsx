@@ -54,14 +54,14 @@ export default function HostOnboarding() {
       <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
         <div className="w-full max-w-2xl">
           {/* Progress bar */}
-          <div className="mb-12">
+          <div className="mb-12" role="group" aria-label="Progreso del cuestionario">
             <div className="flex justify-between items-center mb-4">
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Pregunta {stepNumber} de 5
               </p>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">{Math.round((stepNumber / 5) * 100)}%</p>
+              <p className="text-sm font-medium text-gray-900 dark:text-white" aria-live="polite">{Math.round((stepNumber / 5) * 100)}%</p>
             </div>
-            <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2">
+            <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2" role="progressbar" aria-valuenow={stepNumber} aria-valuemin={1} aria-valuemax={5}>
               <div
                 className="bg-black dark:bg-white h-2 rounded-full transition-all duration-300"
                 style={{ width: `${(stepNumber / 5) * 100}%` }}
@@ -79,7 +79,7 @@ export default function HostOnboarding() {
               <p className="text-gray-600 dark:text-gray-400">Selecciona la categoría que mejor describe tu propiedad</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4" role="group" aria-label="Opciones de tipo de propiedad">
               {['Villa', 'Apartment', 'House', 'Condo', 'Resort', 'Boutique Hotel'].map(
                 (type) => (
                   <button
@@ -90,6 +90,8 @@ export default function HostOnboarding() {
                         ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
                         : 'border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
                     }`}
+                    aria-pressed={responses.propertyType === type}
+                    aria-label={`Seleccionar ${type} como tipo de propiedad`}
                   >
                     {type}
                   </button>
@@ -109,7 +111,7 @@ export default function HostOnboarding() {
               <p className="text-gray-600 dark:text-gray-400">Elige la ciudad o región</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4" role="group" aria-label="Opciones de ubicación">
               {['Dubai', 'Barcelona', 'Madrid', 'Viña del Mar', 'Bali', 'Cancun', 'Other'].map(
                 (location) => (
                   <button
@@ -120,6 +122,8 @@ export default function HostOnboarding() {
                         ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
                         : 'border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
                     }`}
+                    aria-pressed={responses.location === location}
+                    aria-label={`Seleccionar ${location} como ubicación`}
                   >
                     {location}
                   </button>
@@ -139,7 +143,7 @@ export default function HostOnboarding() {
               <p className="text-gray-600 dark:text-gray-400">En dólares USD</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4" role="group" aria-label="Opciones de precio">
               {['< $200', '$200-$400', '$400-$700', '> $700'].map((price) => (
                 <button
                   key={price}
@@ -149,6 +153,8 @@ export default function HostOnboarding() {
                       ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
                       : 'border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
                   }`}
+                  aria-pressed={responses.price === price}
+                  aria-label={`Seleccionar ${price} como precio promedio`}
                 >
                   {price}
                 </button>
@@ -167,7 +173,7 @@ export default function HostOnboarding() {
               <p className="text-gray-600 dark:text-gray-400">Porcentaje de reservas al año</p>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-3" role="group" aria-label="Opciones de nivel de ocupación">
               {['< 30%', '30-50%', '50-70%', '> 70%'].map((occupancy) => (
                 <button
                   key={occupancy}
@@ -177,6 +183,8 @@ export default function HostOnboarding() {
                       ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
                       : 'border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
                   }`}
+                  aria-pressed={responses.occupancy === occupancy}
+                  aria-label={`Seleccionar ${occupancy} como nivel de ocupación`}
                 >
                   {occupancy}
                 </button>
@@ -195,7 +203,7 @@ export default function HostOnboarding() {
               <p className="text-gray-600 dark:text-gray-400">Selecciona uno o más</p>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-3" role="group" aria-label="Opciones de objetivos">
               {['More Bookings', 'Higher Pricing', 'International Exposure', 'Brand Building'].map(
                 (goal) => (
                   <button
@@ -214,6 +222,8 @@ export default function HostOnboarding() {
                         ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
                         : 'border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
                     }`}
+                    aria-pressed={responses.goals.includes(goal)}
+                    aria-label={`${responses.goals.includes(goal) ? 'Deseleccionar' : 'Seleccionar'} ${goal} como objetivo`}
                   >
                     {goal}
                   </button>
@@ -229,6 +239,7 @@ export default function HostOnboarding() {
               <button
                 onClick={handleBack}
                 className="flex-1 px-6 py-3 border-2 border-gray-300 dark:border-gray-700 text-black dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition"
+                aria-label="Ir a la pregunta anterior"
               >
                 ← Atrás
               </button>
@@ -236,6 +247,7 @@ export default function HostOnboarding() {
             <button
               onClick={handleNext}
               className="flex-1 px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition font-medium"
+              aria-label={step === 'goals' ? 'Completar cuestionario y comenzar' : 'Ir a la siguiente pregunta'}
             >
               {step === 'goals' ? '¡Comenzar!' : 'Siguiente →'}
             </button>

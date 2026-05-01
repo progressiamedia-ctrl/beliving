@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { Header } from '@/components/Header'
 import { ChatWindow } from '@/components/ChatWindow'
 import { getConversation, getMessages, sendMessage, Message, Conversation } from '@/lib/chat-utils'
+import { supabase } from '@/lib/supabase'
 
 export default function ConversationPage() {
   const params = useParams()
@@ -27,9 +28,24 @@ export default function ConversationPage() {
     }
 
     loadData()
-    // Poll for new messages every 2 seconds
-    const interval = setInterval(loadMessages, 2000)
-    return () => clearInterval(interval)
+
+    // Subscribe to new messages via Supabase Realtime
+    const channel = supabase
+      .channel(`messages:${conversationId}`)
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'messages',
+        filter: `conversation_id=eq.${conversationId}`,
+      }, (payload: any) => {
+        const newMsg = payload.new as Message
+        setMessages(prev =>
+          prev.some(m => m.id === newMsg.id) ? prev : [...prev, newMsg]
+        )
+      })
+      .subscribe()
+
+    return () => { supabase.removeChannel(channel) }
   }, [userId, conversationId, router])
 
   const loadData = async () => {
@@ -82,8 +98,8 @@ export default function ConversationPage() {
         <Header title="Mensajes - Be Living" showThemeToggle={true} />
 
         <div className="max-w-4xl mx-auto px-6 py-12">
-          <p className="text-red-600 dark:text-red-400 mb-6">{error || 'Conversación no encontrada'}</p>
-          <Link href="/messages" className="text-black dark:text-white underline">
+          <p className="text-red-600 dark:text-red-400 mb-6" role="alert">{error || 'Conversación no encontrada'}</p>
+          <Link href="/messages" className="text-black dark:text-white underline" aria-label="Volver a la lista de mensajes">
             Volver a mensajes
           </Link>
         </div>

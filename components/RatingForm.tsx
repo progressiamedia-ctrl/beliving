@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
 
 interface RatingFormProps {
   onSubmit: (rating: number, comment: string) => Promise<void>
@@ -85,22 +87,18 @@ export function RatingForm({ onSubmit, isLoading, propertyTitle }: RatingFormPro
       </div>
 
       {/* Comment */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Comparte tu experiencia
-        </label>
-        <textarea
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          placeholder="¿Qué te pareció? ¿Algo especial que quieras destacar o mejorar?"
-          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
-          rows={4}
-          required
-        />
-        <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
-          {comment.length}/300 caracteres
-        </p>
-      </div>
+      <Input
+        label="Comparte tu experiencia"
+        as="textarea"
+        rows={4}
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+        placeholder="¿Qué te pareció? ¿Algo especial que quieras destacar o mejorar?"
+        required
+      />
+      <p className="text-xs text-gray-600 dark:text-gray-400">
+        {comment.length}/300 caracteres
+      </p>
 
       {/* Error */}
       {error && (
@@ -110,15 +108,14 @@ export function RatingForm({ onSubmit, isLoading, propertyTitle }: RatingFormPro
       )}
 
       {/* Submit */}
-      <div className="flex gap-3 pt-4">
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="flex-1 bg-black dark:bg-white text-white dark:text-black py-3 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition disabled:opacity-50"
-        >
-          {isLoading ? 'Enviando...' : 'Enviar Rating'}
-        </button>
-      </div>
+      <Button
+        type="submit"
+        variant="regular"
+        fullWidth
+        isLoading={isLoading}
+      >
+        {isLoading ? 'Enviando...' : 'Enviar Rating'}
+      </Button>
     </form>
   )
 }

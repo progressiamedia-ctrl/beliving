@@ -11,6 +11,7 @@ export interface Property {
   verified: boolean
   images: string[]
   description: string
+  premium?: boolean
 }
 
 export const properties: Property[] = [
@@ -56,6 +57,7 @@ export const properties: Property[] = [
     verified: true,
     images: ['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80'],
     description: 'Villa de lujo con playa privada.',
+    premium: true,
   },
   {
     id: '4',
@@ -98,6 +100,7 @@ export const properties: Property[] = [
     verified: true,
     images: ['https://images.unsplash.com/photo-1570129477492-45a003537e1f?auto=format&fit=crop&w=800&q=80'],
     description: 'Mansión de ensueño en la zona más exclusiva.',
+    premium: true,
   },
 
   // Barcelona (5)
@@ -314,6 +317,7 @@ export const properties: Property[] = [
     verified: true,
     images: ['https://images.unsplash.com/photo-1570129477492-45a003537e1f?auto=format&fit=crop&w=800&q=80'],
     description: 'Villa con playa privada y vistas espectaculares.',
+    premium: true,
   },
 
   // Bali (5)

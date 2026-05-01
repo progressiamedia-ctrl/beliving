@@ -67,11 +67,11 @@ function GuestBookingsContent() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'confirmed':
-        return <span className="px-3 py-1 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 text-sm rounded-full">✓ Confirmada</span>
+        return <span className="px-3 py-1 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 text-sm rounded-full" aria-label="Reserva confirmada">✓ Confirmada</span>
       case 'pending':
-        return <span className="px-3 py-1 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 text-sm rounded-full">⏳ Pendiente</span>
+        return <span className="px-3 py-1 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 text-sm rounded-full" aria-label="Reserva pendiente de confirmación">⏳ Pendiente</span>
       case 'cancelled':
-        return <span className="px-3 py-1 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-sm rounded-full">✗ Cancelada</span>
+        return <span className="px-3 py-1 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-sm rounded-full" aria-label="Reserva cancelada">✗ Cancelada</span>
       default:
         return null
     }
@@ -108,13 +108,13 @@ function GuestBookingsContent() {
         <h1 className="text-4xl font-light text-black dark:text-white mb-8">Mis Reservas</h1>
 
         {successMessage && (
-          <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg text-green-700 dark:text-green-400">
+          <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg text-green-700 dark:text-green-400" role="status">
             {successMessage}
           </div>
         )}
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-red-700 dark:text-red-400">
+          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-red-700 dark:text-red-400" role="alert">
             {error}
           </div>
         )}
@@ -152,6 +152,7 @@ function GuestBookingsContent() {
                     {booking.status === 'pending' && (
                       <button
                         onClick={() => handleCancelBooking(booking.id)}
+                        aria-label={`Cancelar reserva de ${getPropertyTitle(booking.property_id)}`}
                         className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition"
                       >
                         Cancelar
@@ -160,6 +161,7 @@ function GuestBookingsContent() {
                     {booking.status === 'confirmed' && isCheckoutPassed(booking.check_out) && (
                       <Link
                         href={`/bookings/${booking.id}/rate`}
+                        aria-label={`Calificar estancia en ${getPropertyTitle(booking.property_id)}`}
                         className="text-sm bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 hover:bg-yellow-100 dark:hover:bg-yellow-900/40 px-3 py-1 rounded transition"
                       >
                         Calificar
@@ -168,6 +170,7 @@ function GuestBookingsContent() {
                     {booking.status !== 'cancelled' && (
                       <Link
                         href={`/guest/bookings/${booking.id}`}
+                        aria-label={`Ver detalles de reserva en ${getPropertyTitle(booking.property_id)}`}
                         className="text-sm text-black dark:text-white hover:underline transition"
                       >
                         Ver detalles →

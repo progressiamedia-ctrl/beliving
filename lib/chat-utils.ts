@@ -78,7 +78,31 @@ export async function getConversations(userId: string) {
     .order('updated_at', { ascending: false })
 
   if (error) throw error
-  return (data as Conversation[]) || []
+  const conversations = (data as Conversation[]) || []
+
+  if (conversations.length === 0) return conversations
+
+  // Fetch last message for each conversation
+  const ids = conversations.map(c => c.id)
+  const { data: msgs } = await supabase
+    .from('messages')
+    .select('conversation_id, content, created_at')
+    .in('conversation_id', ids)
+    .order('created_at', { ascending: false })
+
+  // Build map: first message per conversation = latest (already ordered desc)
+  const lastMsgMap: Record<string, { content: string; created_at: string }> = {}
+  for (const msg of msgs || []) {
+    if (!lastMsgMap[msg.conversation_id]) {
+      lastMsgMap[msg.conversation_id] = { content: msg.content, created_at: msg.created_at }
+    }
+  }
+
+  return conversations.map(c => ({
+    ...c,
+    last_message: lastMsgMap[c.id]?.content,
+    last_message_at: lastMsgMap[c.id]?.created_at,
+  }))
 }
 
 export async function getConversation(conversationId: string) {

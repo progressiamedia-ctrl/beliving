@@ -2,13 +2,16 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useId } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { Header } from '@/components/Header'
 
 export default function RegisterWithMagicLinkPage() {
   const router = useRouter()
+  const emailInputId = useId()
+  const hostRadioId = useId()
+  const guestRadioId = useId()
   const [email, setEmail] = useState('')
   const [role, setRole] = useState<'host' | 'guest'>('guest')
   const [loading, setLoading] = useState(false)
@@ -87,23 +90,24 @@ export default function RegisterWithMagicLinkPage() {
         <p className="text-gray-600 dark:text-gray-400 mb-8">Selecciona el tipo de cuenta para continuar</p>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-red-700 dark:text-red-400 text-sm">
+          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-red-700 dark:text-red-400 text-sm" role="alert">
             {error}
           </div>
         )}
 
         {success && (
-          <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg text-green-700 dark:text-green-400 text-sm">
+          <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg text-green-700 dark:text-green-400 text-sm" role="status">
             ¡Registro exitoso! Redirigiendo...
           </div>
         )}
 
         <form onSubmit={handleRegister} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label htmlFor={emailInputId} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Email
             </label>
             <input
+              id={emailInputId}
               type="email"
               value={email}
               disabled
@@ -112,31 +116,35 @@ export default function RegisterWithMagicLinkPage() {
             <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Verificado con Magic Link</p>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+          <div role="group" aria-labelledby="account-type-label">
+            <label id="account-type-label" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
               Tipo de cuenta
             </label>
             <div className="flex gap-4">
-              <label className="flex items-center cursor-pointer flex-1">
+              <label htmlFor={hostRadioId} className="flex items-center cursor-pointer flex-1">
                 <input
+                  id={hostRadioId}
                   type="radio"
                   value="host"
                   checked={role === 'host'}
                   onChange={(e) => setRole(e.target.value as 'host' | 'guest')}
                   className="mr-3 w-4 h-4"
+                  aria-label="Registrarse como anfitrión"
                 />
                 <div>
                   <span className="text-black dark:text-white font-medium">Anfitrión</span>
                   <p className="text-xs text-gray-600 dark:text-gray-400">Alquila tus propiedades</p>
                 </div>
               </label>
-              <label className="flex items-center cursor-pointer flex-1">
+              <label htmlFor={guestRadioId} className="flex items-center cursor-pointer flex-1">
                 <input
+                  id={guestRadioId}
                   type="radio"
                   value="guest"
                   checked={role === 'guest'}
                   onChange={(e) => setRole(e.target.value as 'host' | 'guest')}
                   className="mr-3 w-4 h-4"
+                  aria-label="Registrarse como huésped"
                 />
                 <div>
                   <span className="text-black dark:text-white font-medium">Huésped</span>
@@ -150,6 +158,8 @@ export default function RegisterWithMagicLinkPage() {
             type="submit"
             disabled={loading}
             className="w-full bg-black dark:bg-white text-white dark:text-black py-3 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition disabled:opacity-50"
+            aria-label="Continuar con el registro"
+            aria-busy={loading}
           >
             {loading ? 'Procesando...' : 'Continuar'}
           </button>

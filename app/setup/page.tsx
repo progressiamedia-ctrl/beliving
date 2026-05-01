@@ -143,9 +143,9 @@ CREATE INDEX IF NOT EXISTS idx_messages_created_at ON messages(created_at);`
         <div className="space-y-6 mb-8">
           <div className="bg-gray-900 p-6 rounded-xl border border-gray-800">
             <h2 className="text-lg font-semibold text-white mb-3">📋 Pasos:</h2>
-            <ol className="text-gray-300 space-y-2 list-decimal list-inside">
+            <ol className="text-gray-300 space-y-2 list-decimal list-inside" role="region" aria-label="Instrucciones de configuración">
               <li>Copia el SQL abajo (botón "Copiar SQL")</li>
-              <li>Abre <a href="https://app.supabase.com/projects" target="_blank" rel="noopener noreferrer" className="text-yellow-400 hover:text-yellow-300">Supabase Dashboard</a></li>
+              <li>Abre <a href="https://app.supabase.com/projects" target="_blank" rel="noopener noreferrer" className="text-yellow-400 hover:text-yellow-300" aria-label="Abrir Supabase Dashboard en nueva pestaña">Supabase Dashboard</a></li>
               <li>Ve a tu proyecto → <strong>SQL Editor</strong></li>
               <li>Haz clic en <strong>+ New Query</strong></li>
               <li>Pega el SQL</li>
@@ -157,12 +157,13 @@ CREATE INDEX IF NOT EXISTS idx_messages_created_at ON messages(created_at);`
           {/* SQL Editor */}
           <div className="bg-gray-900 p-6 rounded-xl border border-gray-800">
             <h2 className="text-lg font-semibold text-white mb-3">📝 SQL para ejecutar:</h2>
-            <div className="bg-black p-4 rounded-lg overflow-x-auto max-h-96 overflow-y-auto">
+            <div className="bg-black p-4 rounded-lg overflow-x-auto max-h-96 overflow-y-auto" role="region" aria-label="Contenido SQL para copiar">
               <pre className="text-gray-300 text-sm font-mono">{sqlContent}</pre>
             </div>
             <button
               onClick={handleCopy}
               className="mt-4 w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-4 rounded-lg transition"
+              aria-label="Copiar el contenido SQL al portapapeles"
             >
               📋 Copiar SQL
             </button>
@@ -176,6 +177,8 @@ CREATE INDEX IF NOT EXISTS idx_messages_created_at ON messages(created_at);`
               onClick={handleVerify}
               disabled={status === 'checking'}
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-lg transition"
+              aria-label="Verificar la configuración de las tablas de base de datos"
+              aria-busy={status === 'checking'}
             >
               {status === 'checking' ? '⏳ Verificando...' : '🔍 Verificar Tablas'}
             </button>
@@ -187,7 +190,9 @@ CREATE INDEX IF NOT EXISTS idx_messages_created_at ON messages(created_at);`
                   : status === 'error'
                   ? 'bg-red-900/30 text-red-300'
                   : 'bg-blue-900/30 text-blue-300'
-              }`}>
+              }`}
+              role={status === 'success' ? 'status' : status === 'error' ? 'alert' : 'status'}
+              >
                 {message}
               </p>
             )}
@@ -195,10 +200,10 @@ CREATE INDEX IF NOT EXISTS idx_messages_created_at ON messages(created_at);`
 
           {/* Status */}
           {status === 'success' && (
-            <div className="bg-green-900/30 border border-green-700 p-6 rounded-xl">
+            <div className="bg-green-900/30 border border-green-700 p-6 rounded-xl" role="status">
               <h3 className="text-lg font-semibold text-green-300 mb-2">🎉 ¡Listo!</h3>
               <p className="text-green-200">Las tablas están creadas. La plataforma está completamente funcional.</p>
-              <p className="text-green-200 mt-2"><a href="/properties" className="text-yellow-400 hover:text-yellow-300 font-semibold">Ir a la plataforma →</a></p>
+              <p className="text-green-200 mt-2"><a href="/properties" className="text-yellow-400 hover:text-yellow-300 font-semibold" aria-label="Ir a la plataforma de propiedades">Ir a la plataforma →</a></p>
             </div>
           )}
         </div>

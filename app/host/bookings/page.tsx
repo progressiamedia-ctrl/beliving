@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { Header } from '@/components/Header'
 import { getBookingsByHost, confirmBooking, cancelBooking, Booking } from '@/lib/booking-utils'
 import { properties } from '@/lib/properties-data'
+import { supabase } from '@/lib/supabase'
 
 export default function HostBookingsPage() {
   const router = useRouter()
@@ -15,6 +16,7 @@ export default function HostBookingsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'confirmed' | 'cancelled'>('all')
+  const [conversationMap, setConversationMap] = useState<Record<string, string>>({})
   const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null
   const userRole = typeof window !== 'undefined' ? localStorage.getItem('userRole') : null
 
@@ -33,6 +35,21 @@ export default function HostBookingsPage() {
       // For demo, we'll show all bookings. In real app, filter by host_id
       const data = await getBookingsByHost(userId)
       setBookings(data)
+
+      // Load conversations for these bookings
+      const bookingIds = data.map(b => b.id)
+      if (bookingIds.length > 0) {
+        const { data: convs } = await supabase
+          .from('conversations')
+          .select('id, booking_id')
+          .in('booking_id', bookingIds)
+
+        const map: Record<string, string> = {}
+        for (const c of convs || []) {
+          map[c.booking_id] = c.id
+        }
+        setConversationMap(map)
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al cargar reservas')
     } finally {
@@ -78,11 +95,11 @@ export default function HostBookingsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'confirmed':
-        return <span className="px-3 py-1 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 text-sm rounded-full">✓ Confirmada</span>
+        return <span className="px-3 py-1 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 text-sm rounded-full" aria-label="Reserva confirmada">✓ Confirmada</span>
       case 'pending':
-        return <span className="px-3 py-1 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 text-sm rounded-full">⏳ Pendiente</span>
+        return <span className="px-3 py-1 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 text-sm rounded-full" aria-label="Reserva pendiente de confirmación">⏳ Pendiente</span>
       case 'cancelled':
-        return <span className="px-3 py-1 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-sm rounded-full">✗ Rechazada</span>
+        return <span className="px-3 py-1 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-sm rounded-full" aria-label="Reserva rechazada">✗ Rechazada</span>
       default:
         return null
     }
@@ -113,32 +130,33 @@ export default function HostBookingsPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4">
+          <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4" aria-label={`Reservas pendientes: ${stats.pending}`}>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Pendientes</p>
             <p className="text-3xl font-light text-black dark:text-white">{stats.pending}</p>
           </div>
-          <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4">
+          <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4" aria-label={`Reservas confirmadas: ${stats.confirmed}`}>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Confirmadas</p>
             <p className="text-3xl font-light text-black dark:text-white">{stats.confirmed}</p>
           </div>
-          <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4">
+          <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4" aria-label={`Ingresos totales: ${stats.totalRevenue.toFixed(0)} dólares`}>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Ingresos</p>
             <p className="text-3xl font-light text-black dark:text-white">${stats.totalRevenue.toFixed(0)}</p>
           </div>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-red-700 dark:text-red-400">
+          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-red-700 dark:text-red-400" role="alert">
             {error}
           </div>
         )}
 
         {/* Filter */}
-        <div className="mb-6 flex gap-2">
+        <div className="mb-6 flex gap-2" role="group" aria-label="Filtrar reservas por estado">
           {(['all', 'pending', 'confirmed', 'cancelled'] as const).map((status) => (
             <button
               key={status}
               onClick={() => setFilterStatus(status)}
+              aria-current={filterStatus === status ? 'true' : undefined}
               className={`px-4 py-2 text-sm rounded-lg transition ${
                 filterStatus === status
                   ? 'bg-black dark:bg-white text-white dark:text-black'
@@ -182,22 +200,35 @@ export default function HostBookingsPage() {
 
                   <div className="flex flex-col items-start md:items-end gap-3">
                     {getStatusBadge(booking.status)}
-                    {booking.status === 'pending' && (
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleConfirmBooking(booking.id)}
-                          className="text-sm bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/40 px-3 py-1 rounded transition"
+                    <div className="flex gap-2 flex-wrap justify-start md:justify-end">
+                      {conversationMap[booking.id] && (
+                        <Link
+                          href={`/messages/${conversationMap[booking.id]}`}
+                          aria-label={`Chatear con huésped ${booking.guest_name} sobre ${getPropertyTitle(booking.property_id)}`}
+                          className="text-sm px-3 py-1 border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-black dark:hover:border-white rounded transition"
                         >
-                          Aceptar
-                        </button>
-                        <button
-                          onClick={() => handleCancelBooking(booking.id)}
-                          className="text-sm bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 px-3 py-1 rounded transition"
-                        >
-                          Rechazar
-                        </button>
-                      </div>
-                    )}
+                          💬 Chat
+                        </Link>
+                      )}
+                      {booking.status === 'pending' && (
+                        <>
+                          <button
+                            onClick={() => handleConfirmBooking(booking.id)}
+                            aria-label={`Aceptar reserva de ${booking.guest_name} en ${getPropertyTitle(booking.property_id)}`}
+                            className="text-sm bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/40 px-3 py-1 rounded transition"
+                          >
+                            Aceptar
+                          </button>
+                          <button
+                            onClick={() => handleCancelBooking(booking.id)}
+                            aria-label={`Rechazar reserva de ${booking.guest_name} en ${getPropertyTitle(booking.property_id)}`}
+                            className="text-sm bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 px-3 py-1 rounded transition"
+                          >
+                            Rechazar
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

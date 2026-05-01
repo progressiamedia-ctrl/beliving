@@ -59,23 +59,23 @@ function MagicLinkContent() {
       <div className="max-w-md mx-auto px-6 text-center">
         {status === 'loading' && (
           <>
-            <p className="text-xl text-black dark:text-white mb-4">Verificando tu enlace...</p>
+            <p className="text-xl text-black dark:text-white mb-4" role="status">Verificando tu enlace...</p>
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-black dark:border-white border-t-transparent"></div>
           </>
         )}
 
         {status === 'success' && (
           <>
-            <p className="text-2xl text-green-600 dark:text-green-400 mb-2">✓</p>
-            <p className="text-xl text-black dark:text-white mb-4">{message}</p>
+            <p className="text-2xl text-green-600 dark:text-green-400 mb-2" role="img" aria-label="Verificación exitosa">✓</p>
+            <p className="text-xl text-black dark:text-white mb-4" role="status">{message}</p>
           </>
         )}
 
         {status === 'error' && (
           <>
-            <p className="text-2xl text-red-600 dark:text-red-400 mb-2">✗</p>
-            <p className="text-xl text-black dark:text-white mb-6">{message}</p>
-            <a href="/" className="text-black dark:text-white underline">
+            <p className="text-2xl text-red-600 dark:text-red-400 mb-2" role="img" aria-label="Error">✗</p>
+            <p className="text-xl text-black dark:text-white mb-6" role="alert">{message}</p>
+            <a href="/" className="text-black dark:text-white underline" aria-label="Volver a la página de inicio">
               Volver al inicio
             </a>
           </>

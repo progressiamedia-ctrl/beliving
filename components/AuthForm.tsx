@@ -72,15 +72,36 @@ export function AuthForm() {
     setError('')
   }
 
+  const validateEmail = (emailStr: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(emailStr)
+  }
+
+  const validatePassword = (pwd: string): string | null => {
+    if (!pwd) return 'La contraseña es requerida'
+    if (pwd.length < 6) return 'La contraseña debe tener al menos 6 caracteres'
+    if (pwd.length > 128) return 'La contraseña no puede exceder 128 caracteres'
+    return null
+  }
+
   const handleRegistration = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError('')
 
     try {
-      if (!email.includes('@')) throw new Error('Email inválido')
-      if (password.length < 6) throw new Error('Contraseña debe tener al menos 6 caracteres')
+      // Validate email
+      if (!email.trim()) throw new Error('El email es requerido')
+      if (!validateEmail(email)) throw new Error('Por favor ingresa un email válido (ej: usuario@ejemplo.com)')
+
+      // Validate password
+      const passwordError = validatePassword(password)
+      if (passwordError) throw new Error(passwordError)
+
+      // Validate password confirmation
+      if (!confirmPassword) throw new Error('Debes confirmar tu contraseña')
       if (password !== confirmPassword) throw new Error('Las contraseñas no coinciden')
+
       if (!role) throw new Error('Debes seleccionar un tipo de cuenta')
 
       // Call the API endpoint instead of directly accessing Supabase
@@ -125,8 +146,12 @@ export function AuthForm() {
     setError('')
 
     try {
-      if (!email.includes('@')) throw new Error('Email inválido')
-      if (!password) throw new Error('Ingresa tu contraseña')
+      // Validate email
+      if (!email.trim()) throw new Error('El email es requerido')
+      if (!validateEmail(email)) throw new Error('Por favor ingresa un email válido')
+
+      // Validate password
+      if (!password) throw new Error('La contraseña es requerida')
 
       // Call the API endpoint instead of directly accessing Supabase
       const response = await fetch('/api/auth/signin', {
@@ -183,6 +208,7 @@ export function AuthForm() {
       {/* Theme Toggle Button */}
       <button
         onClick={toggleTheme}
+        aria-label={`Cambiar a modo ${theme === 'dark' ? 'claro' : 'oscuro'}`}
         className="absolute top-6 right-6 z-50 p-3 rounded-full transition-all duration-300 dark:bg-white/10 dark:hover:bg-white/20 bg-black/10 hover:bg-black/20 backdrop-blur-sm border dark:border-white/20 border-black/20"
         title={`Cambiar a modo ${theme === 'dark' ? 'claro' : 'oscuro'}`}
       >
@@ -240,6 +266,7 @@ export function AuthForm() {
               <div className="space-y-3">
                 <button
                   onClick={() => handleRoleSelect('guest')}
+                  aria-label="Registrarse como viajero"
                   className="w-full group relative overflow-hidden rounded-2xl p-px"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 opacity-100 group-hover:opacity-100 transition duration-300" />
@@ -264,6 +291,7 @@ export function AuthForm() {
 
                 <button
                   onClick={() => handleRoleSelect('host')}
+                  aria-label="Registrarse como anfitrión"
                   className="w-full group relative overflow-hidden rounded-2xl p-px"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-100 group-hover:opacity-100 transition duration-300" />
@@ -308,6 +336,7 @@ export function AuthForm() {
                   setIsSignUp(false)
                   setError('')
                 }}
+                aria-label="Ir a iniciar sesión"
                 className={`w-full px-6 py-3 border font-medium rounded-2xl transition duration-300 ${
                   theme === 'dark'
                     ? 'border-white/20 text-white hover:bg-white/5 hover:border-white/40'
@@ -334,10 +363,11 @@ export function AuthForm() {
 
               <div className="space-y-3">
                 <div>
-                  <label className={`block text-sm font-semibold mb-2 ${
+                  <label htmlFor="auth-email" className={`block text-sm font-semibold mb-2 ${
                     theme === 'dark' ? 'text-white' : 'text-gray-900'
                   }`}>Correo electrónico</label>
                   <input
+                    id="auth-email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -352,10 +382,11 @@ export function AuthForm() {
                 </div>
 
                 <div>
-                  <label className={`block text-sm font-semibold mb-2 ${
+                  <label htmlFor="auth-password" className={`block text-sm font-semibold mb-2 ${
                     theme === 'dark' ? 'text-white' : 'text-gray-900'
                   }`}>Contraseña</label>
                   <input
+                    id="auth-password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -370,10 +401,11 @@ export function AuthForm() {
                 </div>
 
                 <div>
-                  <label className={`block text-sm font-semibold mb-2 ${
+                  <label htmlFor="auth-confirm-password" className={`block text-sm font-semibold mb-2 ${
                     theme === 'dark' ? 'text-white' : 'text-gray-900'
                   }`}>Confirmar contraseña</label>
                   <input
+                    id="auth-confirm-password"
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
@@ -389,7 +421,7 @@ export function AuthForm() {
               </div>
 
               {error && (
-                <div className={`p-3 border rounded-xl text-sm ${
+                <div role="alert" className={`p-3 border rounded-xl text-sm ${
                   theme === 'dark'
                     ? 'bg-red-500/20 border-red-500/50 text-red-200'
                     : 'bg-red-50 border-red-300 text-red-700'
@@ -445,10 +477,11 @@ export function AuthForm() {
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-3">
                 <div>
-                  <label className={`block text-sm font-semibold mb-2 ${
+                  <label htmlFor="login-email" className={`block text-sm font-semibold mb-2 ${
                     theme === 'dark' ? 'text-white' : 'text-gray-900'
                   }`}>Correo electrónico</label>
                   <input
+                    id="login-email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -463,10 +496,11 @@ export function AuthForm() {
                 </div>
 
                 <div>
-                  <label className={`block text-sm font-semibold mb-2 ${
+                  <label htmlFor="login-password" className={`block text-sm font-semibold mb-2 ${
                     theme === 'dark' ? 'text-white' : 'text-gray-900'
                   }`}>Contraseña</label>
                   <input
+                    id="login-password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -482,7 +516,7 @@ export function AuthForm() {
               </div>
 
               {error && (
-                <div className={`p-3 border rounded-xl text-sm ${
+                <div role="alert" className={`p-3 border rounded-xl text-sm ${
                   theme === 'dark'
                     ? 'bg-red-500/20 border-red-500/50 text-red-200'
                     : 'bg-red-50 border-red-300 text-red-700'

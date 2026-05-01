@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Button } from '@/components/ui/Button'
 
 export interface FilterValues {
   priceMin: number
@@ -123,13 +124,15 @@ export function AdvancedFilters({
   return (
     <div className="space-y-4">
       {/* Filter Toggle Button */}
-      <button
+      <Button
+        variant="regular"
+        fullWidth
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between bg-black dark:bg-white text-white dark:text-black px-4 py-3 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition"
+        className="flex items-center justify-between"
       >
         <span>🔍 Filtros Avanzados {activeFilterCount > 0 && `(${activeFilterCount})`}</span>
         <span>{isOpen ? '▼' : '▶'}</span>
-      </button>
+      </Button>
 
       {/* Filters Panel */}
       {isOpen && (

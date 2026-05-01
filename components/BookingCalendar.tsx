@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Button } from '@/components/ui/Button'
 
 interface BookingCalendarProps {
   propertyId: string
@@ -215,13 +216,14 @@ export function BookingCalendar({ propertyId, nightlyPrice, bookedDates, onConfi
             </div>
           </div>
 
-          <button
+          <Button
+            variant="regular"
+            fullWidth
             onClick={handleConfirm}
-            disabled={isLoading}
-            className="w-full bg-black dark:bg-white text-white dark:text-black py-3 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition disabled:opacity-50"
+            isLoading={isLoading}
           >
             {isLoading ? 'Procesando...' : 'Confirmar Reserva'}
-          </button>
+          </Button>
         </div>
       )}
 

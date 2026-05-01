@@ -10,7 +10,7 @@ export default function NewProperty() {
   return (
     <div className="min-h-screen bg-white p-8">
       <div className="max-w-2xl mx-auto">
-        <Link href="/host/dashboard" className="text-black underline text-sm mb-8 inline-block">
+        <Link href="/host/dashboard" className="text-black underline text-sm mb-8 inline-block" aria-label="Volver al dashboard">
           ← Volver
         </Link>
 
