@@ -32,7 +32,7 @@ export function AuthForm() {
   const [bgIndex, setBgIndex] = useState(0)
   const [imagesLoaded, setImagesLoaded] = useState<Set<number>>(new Set())
   const [mounted, setMounted] = useState(false)
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark')
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
   const router = useRouter()
 
   useEffect(() => {
