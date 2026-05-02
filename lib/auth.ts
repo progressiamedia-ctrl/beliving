@@ -26,55 +26,10 @@ export async function verifyPassword(password: string, hashedPassword: string): 
   }
 }
 
-// Generate JWT token
-export function generateToken(userId: string): string {
-  const header = {
-    alg: 'HS256',
-    typ: 'JWT',
-  }
-
-  const payload = {
-    sub: userId,
-    iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60,
-  }
-
-  const secret = 'beliving-secret-key-2024'
-  const encodedHeader = Buffer.from(JSON.stringify(header)).toString('base64url')
-  const encodedPayload = Buffer.from(JSON.stringify(payload)).toString('base64url')
-
-  const signature = crypto
-    .createHmac('sha256', secret)
-    .update(`${encodedHeader}.${encodedPayload}`)
-    .digest('base64url')
-
-  return `${encodedHeader}.${encodedPayload}.${signature}`
-}
-
-// Verify JWT token
-export function verifyToken(token: string): { sub: string } | null {
-  try {
-    const secret = 'beliving-secret-key-2024'
-    const [encodedHeader, encodedPayload, signature] = token.split('.')
-
-    if (!encodedHeader || !encodedPayload || !signature) return null
-
-    const expectedSignature = crypto
-      .createHmac('sha256', secret)
-      .update(`${encodedHeader}.${encodedPayload}`)
-      .digest('base64url')
-
-    if (signature !== expectedSignature) return null
-
-    const payload = JSON.parse(Buffer.from(encodedPayload, 'base64url').toString())
-
-    if (payload.exp < Math.floor(Date.now() / 1000)) return null
-
-    return { sub: payload.sub }
-  } catch {
-    return null
-  }
-}
+// DEPRECATED: Removed generateToken and verifyToken functions
+// - These functions had hardcoded secrets which pose a security risk
+// - They are not used anywhere in the application
+// - Use Supabase Auth or implement proper JWT signing with env variables instead
 
 // Sign up with hashed password
 export async function signUp(email: string, password: string, user_type: 'host' | 'guest') {
