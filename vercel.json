@@ -1,4 +1,5 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": ".next"
+  "outputDirectory": ".next",
+  "crons": [{ "path": "/api/cron/check-tier-eligibility", "schedule": "0 0 * * *" }, { "path": "/api/cron/unfreeze-commissions", "schedule": "0 0 * * *" }]
 }
