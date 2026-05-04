@@ -14,11 +14,13 @@ const CITY_IMAGES = [
   'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1920&h=1080&fit=crop&q=85', // París
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop&q=85', // Melbourne
   'https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=1920&h=1080&fit=crop&q=85', // Bogotá
-  'https://images.unsplash.com/photo-1532619675605-1ede6c2e5ddb?w=1920&h=1080&fit=crop&q=85', // Ciudad de México
+  'https://images.unsplash.com/photo-1532619675605-1ede6c2e5ddb?w=1920&h=1080&fit=crop&q=85', // Tailandia
+  'https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=1920&h=1080&fit=crop&q=85', // Santorini
+  'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920&h=1080&fit=crop&q=85', // Bora Bora
 ]
 
 type Step = 'role-select' | 'registration' | 'confirmation' | 'login'
-type UserRole = 'host' | 'guest' | 'agent' | 'admin'
+type UserRole = 'host' | 'guest' | 'agent'
 
 export function AuthForm() {
   const [step, setStep] = useState<Step>('role-select')
@@ -31,10 +33,20 @@ export function AuthForm() {
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const [mounted, setMounted] = useState(false)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const router = useRouter()
 
   useEffect(() => {
     setMounted(true)
+    const randomIndex = Math.floor(Math.random() * CITY_IMAGES.length)
+    setCurrentImageIndex(randomIndex)
+  }, [])
+
+  useEffect(() => {
+    const imageInterval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % CITY_IMAGES.length)
+    }, 8000)
+    return () => clearInterval(imageInterval)
   }, [])
 
 
@@ -179,11 +191,23 @@ export function AuthForm() {
   }
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-black">
-
+    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
+      {/* Fondo con imagen de país turístico */}
+      <div
+        className="absolute inset-0 transition-all duration-1000 ease-in-out"
+        style={{
+          backgroundImage: `url(${CITY_IMAGES[currentImageIndex]})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* Overlay oscuro para mejorar legibilidad */}
+        <div className="absolute inset-0 bg-black/40"></div>
+      </div>
 
       <div className="relative z-10 w-full max-w-md px-6">
-        <div className="backdrop-blur-xl rounded-3xl p-10 shadow-2xl border transition-colors duration-300 bg-white/90 border-gray-200">
+        <div className="backdrop-blur-2xl rounded-3xl p-10 shadow-2xl border transition-colors duration-300 bg-white/95 border-white/30 backdrop-saturate-150">
           {/* Logo */}
           <div className="mb-10 text-center">
             <img
@@ -251,23 +275,6 @@ export function AuthForm() {
                     </div>
                   </div>
                 </button>
-
-                <button
-                  onClick={() => handleRoleSelect('admin')}
-                  aria-label="Acceso administrador"
-                  className="w-full group relative overflow-hidden rounded-2xl p-px"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-pink-600 opacity-100 group-hover:opacity-100 transition duration-300" />
-                  <div className="relative rounded-[14px] px-6 py-4 transition duration-300 bg-white group-hover:bg-gray-50">
-                    <div className="flex items-center justify-center gap-3">
-                      <span className="text-2xl">👨‍💼</span>
-                      <div className="text-left">
-                        <p className="font-bold text-sm text-gray-900">Admin</p>
-                        <p className="text-xs text-gray-600">Gestionar plataforma</p>
-                      </div>
-                    </div>
-                  </div>
-                </button>
               </div>
 
               <div className="relative my-8">
@@ -299,7 +306,7 @@ export function AuthForm() {
               <div>
                 <p className="text-base mb-2 text-gray-700">
                   Crear cuenta como <span className="font-bold capitalize text-gray-900">
-                    {role === 'guest' ? 'Viajero' : role === 'host' ? 'Anfitrión' : role === 'agent' ? 'Agente' : 'Administrador'}
+                    {role === 'guest' ? 'Viajero' : role === 'host' ? 'Anfitrión' : 'Agente'}
                   </span>
                 </p>
               </div>
@@ -438,7 +445,17 @@ export function AuthForm() {
         </div>
       </div>
 
-      {/* Image indicators */}
+      {/* Indicadores de imagen */}
+      <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2 z-20">
+        {CITY_IMAGES.map((_, index) => (
+          <div
+            key={index}
+            className={`h-2 rounded-full transition-all duration-500 ${
+              index === currentImageIndex ? 'w-8 bg-white' : 'w-2 bg-white/40'
+            }`}
+          />
+        ))}
+      </div>
     </div>
   )
 }
