@@ -101,54 +101,9 @@ export async function POST(request: NextRequest) {
                 .eq('id', agentId)
             }
 
-            // 6. Procesar sub-afiliados si agente es Tier 4+
-            if (agent.agent_tier >= 4) {
-              const { data: subAffiliates } = await supabase
-                .from('agent_sub_affiliates')
-                .select('*')
-                .eq('referrer_agent_id', agentId)
-                .eq('is_active', true) as any
-
-              if (subAffiliates && subAffiliates.length > 0) {
-                for (const subAff of subAffiliates) {
-                  const subAffCommissionAmount =
-                    (commissionAmount * subAff.sub_affiliate_commission_pct) / 100
-
-                  // Crear comisión de sub-afiliado
-                  const { error: subAffError } = await supabase
-                    .from('sub_affiliate_commissions')
-                    .insert([
-                      {
-                        sub_affiliate_id: subAff.id,
-                        referrer_agent_id: agentId,
-                        referred_agent_id: subAff.referred_agent_id,
-                        original_commission_id: commission.id,
-                        amount: subAffCommissionAmount,
-                        commission_pct: subAff.sub_affiliate_commission_pct,
-                        status: 'earned',
-                        earned_at: new Date().toISOString()
-                      }
-                    ])
-
-                  if (!subAffError) {
-                    // Actualizar comisión lifetime del sub-afiliado
-                    await supabase
-                      .from('agent_sub_affiliates')
-                      .update({
-                        lifetime_commission_earned: (subAff.lifetime_commission_earned || 0) + subAffCommissionAmount
-                      })
-                      .eq('id', subAff.id)
-
-                    commissionsCreated.push({
-                      agentId: subAff.referred_agent_id,
-                      amount: subAffCommissionAmount,
-                      type: 'sub_affiliate',
-                      fromAgent: agentId
-                    })
-                  }
-                }
-              }
-            }
+            // TODO: Sub-affiliate commission logic needs to be restructured
+            // Should trigger when referred AGENTS earn commissions, not when recruiters do
+            // Currently disabled to prevent inverted payment direction
           }
         }
       }

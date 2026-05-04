@@ -1,10 +1,61 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Header } from '@/components/Header'
 
 type AgentTab = 'resumen' | 'desafios' | 'subaff' | 'earnings' | 'config'
+
+interface CommissionRates {
+  tier: number
+  subs_monthly_pct: number
+  subs_annual_pct: number
+  reservation_pct: number
+  sub_affiliate_pct: number
+}
+
+interface MonthlyMetrics {
+  subs_new: number
+  subs_active: number
+  reservations_count: number
+  commission_earned: number
+  commission_paid: number
+  sub_affiliate_commission: number
+  bonus_commission: number
+  total_earnings: number
+}
+
+interface Challenge {
+  id: string
+  challenge_id: string
+  subs_count: number
+  reservations_count: number
+  interactions_count: number
+  completed: boolean
+  prize_amount: number
+  challenge: {
+    challenge_type: string
+    challenge_name: string
+    challenge_description: string
+  }
+}
+
+interface Bonus {
+  id: string
+  bonus_type: string
+  bonus_label: string
+  bonus_pct_subs: number
+  bonus_pct_reservations: number
+  expires_at: string
+}
+
+interface SubAffiliate {
+  id: string
+  referred_agent_id: string
+  referred: { email: string }
+  lifetime_commission_earned: number
+  is_active: boolean
+}
 
 interface DashboardData {
   agent: {
@@ -18,8 +69,8 @@ interface DashboardData {
     reservationsThisMonth: number
     mrrResidual: number
   }
-  commissionRates: any
-  monthlyMetrics: any
+  commissionRates: CommissionRates | null
+  monthlyMetrics: MonthlyMetrics
   earnings: {
     frozen: number
     earned: number
@@ -33,10 +84,17 @@ interface DashboardData {
     reservationsProgress: number
     reservationsRequired: number
   }
-  challenges: any[]
-  activeBonuses: any[]
-  subAffiliates: any[]
-  nextTierInfo: any
+  challenges: Challenge[]
+  activeBonuses: Bonus[]
+  subAffiliates: SubAffiliate[]
+  nextTierInfo: {
+    tier: number
+    requirements: {
+      tier: number
+      min_subs_cumulative: number
+      min_reservations_per_month: number
+    }
+  } | null
 }
 
 const TIER_INFO = {
@@ -53,22 +111,8 @@ export default function AgentDashboard() {
   const [activeTab, setActiveTab] = useState<AgentTab>('resumen')
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<DashboardData | null>(null)
-  const [userId, setUserId] = useState<string>('')
 
-  useEffect(() => {
-    const role = localStorage.getItem('userRole')
-    const storedUserId = localStorage.getItem('userId')
-
-    if (role !== 'agent' || !storedUserId) {
-      router.push('/')
-      return
-    }
-
-    setUserId(storedUserId)
-    fetchDashboard(storedUserId)
-  }, [router])
-
-  const fetchDashboard = async (agentId: string) => {
+  const fetchDashboard = useCallback(async (agentId: string) => {
     try {
       setLoading(true)
       const res = await fetch(`/api/agent/dashboard?agent_id=${agentId}`, {
@@ -80,12 +124,22 @@ export default function AgentDashboard() {
         const dashboardData = await res.json()
         setData(dashboardData)
       }
-    } catch (error) {
-      // Error already logged
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    const role = localStorage.getItem('userRole')
+    const storedUserId = localStorage.getItem('userId')
+
+    if (role !== 'agent' || !storedUserId) {
+      router.push('/')
+      return
+    }
+
+    fetchDashboard(storedUserId)
+  }, [router, fetchDashboard])
 
   if (loading || !data) {
     return (
@@ -104,8 +158,8 @@ export default function AgentDashboard() {
   const nextTier = data.nextTierInfo?.tier || 5
   const nextTierData = TIER_INFO[nextTier as keyof typeof TIER_INFO]
 
-  const subsProgress = (data.tierProgress.subsProgress / data.tierProgress.subsRequired) * 100
-  const resProgress = (data.tierProgress.reservationsProgress / data.tierProgress.reservationsRequired) * 100
+  const subsProgress = data.tierProgress.subsRequired > 0 ? (data.tierProgress.subsProgress / data.tierProgress.subsRequired) * 100 : 0
+  const resProgress = data.tierProgress.reservationsRequired > 0 ? (data.tierProgress.reservationsProgress / data.tierProgress.reservationsRequired) * 100 : 0
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white">

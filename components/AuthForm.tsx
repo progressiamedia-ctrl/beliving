@@ -76,6 +76,10 @@ export function AuthForm() {
 
       if (!role) throw new Error('Debes seleccionar un tipo de cuenta')
 
+      // Get referral code from localStorage if available
+      const referralCode = typeof window !== 'undefined' ? localStorage.getItem('agentReferralCode') : null
+      const referralType = typeof window !== 'undefined' ? localStorage.getItem('agentReferralType') : null
+
       // Call the API endpoint instead of directly accessing Supabase
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
@@ -83,7 +87,8 @@ export function AuthForm() {
         body: JSON.stringify({
           email,
           password,
-          user_type: role
+          user_type: role,
+          ...(referralCode && referralType && { referral_code: referralCode, referral_type: referralType })
         })
       })
 
@@ -97,6 +102,10 @@ export function AuthForm() {
       localStorage.setItem('userId', data.id)
       localStorage.setItem('userRole', data.user_type)
       localStorage.setItem('userEmail', data.email)
+
+      // Clear referral codes from localStorage
+      localStorage.removeItem('agentReferralCode')
+      localStorage.removeItem('agentReferralType')
 
       setStep('confirmation')
       setSuccessMessage(`¡Cuenta creada! Te hemos enviado un email de confirmación a ${email}`)

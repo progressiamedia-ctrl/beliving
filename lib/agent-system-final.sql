@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS tier_requirements (
   min_monthly_pace_required BOOLEAN,
   grace_period_days INT DEFAULT 30,
   created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
   FOREIGN KEY (tier) REFERENCES tier_commission_rates(tier)
 );
 
@@ -281,22 +282,8 @@ CREATE TABLE IF NOT EXISTS leaderboard_monthly (
 CREATE INDEX idx_leaderboard_month ON leaderboard_monthly(month_year);
 CREATE INDEX idx_leaderboard_agent ON leaderboard_monthly(agent_id);
 
--- ============================================
--- FUNCIÓN PARA DESCONGELAR COMISIONES
--- ============================================
-
-CREATE OR REPLACE FUNCTION unfreeze_earned_commissions()
-RETURNS void AS $$
-BEGIN
-  UPDATE frozen_commissions
-  SET status = 'earned', earned_at = NOW(), updated_at = NOW()
-  WHERE status = 'frozen' AND NOW() >= freeze_until;
-
-  UPDATE commission_history
-  SET status = 'earned'
-  WHERE status = 'frozen' AND created_at <= (NOW() - INTERVAL '7 days' || NOW() - INTERVAL '15 days');
-END;
-$$ LANGUAGE plpgsql;
+-- NOTE: Unfreeze logic is handled by cron job in app/api/cron/unfreeze-commissions/route.ts
+-- This provides better control over freeze periods and prevents database-level race conditions
 
 -- ============================================
 -- FUNCIÓN PARA AUTO TIER UP/DOWN
