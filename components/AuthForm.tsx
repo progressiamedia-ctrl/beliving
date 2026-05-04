@@ -18,10 +18,11 @@ const CITY_IMAGES = [
 ]
 
 type Step = 'role-select' | 'registration' | 'confirmation' | 'login'
+type UserRole = 'host' | 'guest' | 'agent' | 'admin'
 
 export function AuthForm() {
   const [step, setStep] = useState<Step>('role-select')
-  const [role, setRole] = useState<'host' | 'guest' | null>(null)
+  const [role, setRole] = useState<UserRole | null>(null)
   const [isSignUp, setIsSignUp] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -37,7 +38,7 @@ export function AuthForm() {
   }, [])
 
 
-  const handleRoleSelect = (selectedRole: 'guest' | 'host') => {
+  const handleRoleSelect = (selectedRole: UserRole) => {
     setRole(selectedRole)
     setStep('registration')
     setIsSignUp(true)
@@ -154,7 +155,14 @@ export function AuthForm() {
       localStorage.setItem('userRole', user.user_type)
       localStorage.setItem('userEmail', user.email)
 
-      router.push(user.user_type === 'host' ? '/host/dashboard' : '/properties')
+      // Redirect based on user type
+      const redirectMap: Record<string, string> = {
+        'host': '/host/dashboard',
+        'guest': '/properties',
+        'agent': '/agent',
+        'admin': '/admin'
+      }
+      router.push(redirectMap[user.user_type] || '/properties')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al ingresar')
     } finally {
@@ -201,7 +209,7 @@ export function AuthForm() {
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 opacity-100 group-hover:opacity-100 transition duration-300" />
                   <div className="relative rounded-[14px] px-6 py-4 transition duration-300 bg-white group-hover:bg-gray-50">
                     <div className="flex items-center justify-center gap-3">
-                      <span className="text-2xl">🏠</span>
+                      <span className="text-2xl">✈️</span>
                       <div className="text-left">
                         <p className="font-bold text-sm text-gray-900">Viajero</p>
                         <p className="text-xs text-gray-600">Buscar hospedajes</p>
@@ -222,6 +230,40 @@ export function AuthForm() {
                       <div className="text-left">
                         <p className="font-bold text-sm text-gray-900">Anfitrión</p>
                         <p className="text-xs text-gray-600">Listar propiedades</p>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => handleRoleSelect('agent')}
+                  aria-label="Registrarse como agente"
+                  className="w-full group relative overflow-hidden rounded-2xl p-px"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-600 opacity-100 group-hover:opacity-100 transition duration-300" />
+                  <div className="relative rounded-[14px] px-6 py-4 transition duration-300 bg-white group-hover:bg-gray-50">
+                    <div className="flex items-center justify-center gap-3">
+                      <span className="text-2xl">💰</span>
+                      <div className="text-left">
+                        <p className="font-bold text-sm text-gray-900">Agente</p>
+                        <p className="text-xs text-gray-600">Referir y ganar comisiones</p>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => handleRoleSelect('admin')}
+                  aria-label="Acceso administrador"
+                  className="w-full group relative overflow-hidden rounded-2xl p-px"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-pink-600 opacity-100 group-hover:opacity-100 transition duration-300" />
+                  <div className="relative rounded-[14px] px-6 py-4 transition duration-300 bg-white group-hover:bg-gray-50">
+                    <div className="flex items-center justify-center gap-3">
+                      <span className="text-2xl">👨‍💼</span>
+                      <div className="text-left">
+                        <p className="font-bold text-sm text-gray-900">Admin</p>
+                        <p className="text-xs text-gray-600">Gestionar plataforma</p>
                       </div>
                     </div>
                   </div>
@@ -256,7 +298,9 @@ export function AuthForm() {
             <form onSubmit={handleRegistration} className="space-y-6">
               <div>
                 <p className="text-base mb-2 text-gray-700">
-                  Crear cuenta como <span className="font-bold capitalize text-gray-900">{role === 'guest' ? 'Viajero' : 'Anfitrión'}</span>
+                  Crear cuenta como <span className="font-bold capitalize text-gray-900">
+                    {role === 'guest' ? 'Viajero' : role === 'host' ? 'Anfitrión' : role === 'agent' ? 'Agente' : 'Administrador'}
+                  </span>
                 </p>
               </div>
 
