@@ -31,8 +31,8 @@ export default function AdminOnboarding() {
             <span className="text-3xl">👨‍💼</span>
           </div>
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">¡Bienvenido Administrador!</h1>
-        <p className="text-lg text-gray-600 mb-4">Inicializando panel de control...</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">¡Bienvenido, Admin!</h1>
+        <p className="text-lg text-gray-600 mb-4">Activando tu panel de administración...</p>
         <div className="inline-block">
           <div className="w-8 h-8 border-4 border-red-200 border-t-red-600 rounded-full animate-spin"></div>
         </div>
