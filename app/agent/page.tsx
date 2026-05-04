@@ -71,13 +71,17 @@ export default function AgentDashboard() {
   const fetchDashboard = async (agentId: string) => {
     try {
       setLoading(true)
-      const res = await fetch(`/api/agent/dashboard?agent_id=${agentId}`)
+      const res = await fetch(`/api/agent/dashboard?agent_id=${agentId}`, {
+        headers: {
+          'Authorization': `Bearer ${agentId}`
+        }
+      })
       if (res.ok) {
         const dashboardData = await res.json()
         setData(dashboardData)
       }
     } catch (error) {
-      console.error('Error fetching dashboard:', error)
+      // Error already logged
     } finally {
       setLoading(false)
     }

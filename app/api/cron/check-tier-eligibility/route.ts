@@ -1,14 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { requireCronSecret } from '@/lib/request-auth'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-// Cron job que corre diariamente para verificar tier eligibility
-
 export async function POST(request: NextRequest) {
+  if (!requireCronSecret(request)) {
+    return NextResponse.json(
+      { error: 'Unauthorized' },
+      { status: 401 }
+    )
+  }
+
   try {
     const tiersUpdated: any[] = []
     const tiersDowngraded: any[] = []

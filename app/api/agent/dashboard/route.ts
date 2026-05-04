@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { requireAuth } from '@/lib/request-auth'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -13,6 +14,11 @@ export async function GET(request: NextRequest) {
 
     if (!userId) {
       return NextResponse.json({ error: 'agent_id required' }, { status: 400 })
+    }
+
+    const auth = requireAuth(request, userId)
+    if (auth instanceof NextResponse) {
+      return auth
     }
 
     // 1. Obtener datos del agente
