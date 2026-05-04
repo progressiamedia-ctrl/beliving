@@ -28,11 +28,11 @@ export default function AgentOnboarding() {
       <div className="text-center">
         <div className="mb-6">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 animate-pulse">
-            <span className="text-3xl">💰</span>
+            <span className="text-3xl">🤝</span>
           </div>
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">¡Bienvenido Agente!</h1>
-        <p className="text-lg text-gray-600 mb-4">Configurando tu cuenta profesional...</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">¡Bienvenido, Agente!</h1>
+        <p className="text-lg text-gray-600 mb-4">Iniciando tu panel de comisiones...</p>
         <div className="inline-block">
           <div className="w-8 h-8 border-4 border-green-200 border-t-green-500 rounded-full animate-spin"></div>
         </div>
