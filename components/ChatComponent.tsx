@@ -53,15 +53,15 @@ export function ChatComponent({ conversationId, userId, userName }: ChatComponen
   };
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-lg border border-gray-200">
+    <div className="flex flex-col h-full backdrop-blur-[40px] bg-white/20 dark:bg-white/10 rounded-2xl border border-white/40 shadow-lg">
       {/* Messages Container */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {loading && messages.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-gray-500">
+          <div className="flex items-center justify-center h-full text-gray-600 dark:text-gray-400">
             Cargando mensajes...
           </div>
         ) : messages.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-gray-500">
+          <div className="flex items-center justify-center h-full text-gray-600 dark:text-gray-400">
             No hay mensajes aún. ¡Empieza la conversación!
           </div>
         ) : (
@@ -71,10 +71,10 @@ export function ChatComponent({ conversationId, userId, userName }: ChatComponen
               className={`flex ${message.sender_id === userId ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-xs px-4 py-2 rounded-lg ${
+                className={`max-w-xs px-4 py-2 rounded-2xl backdrop-blur-[30px] border ${
                   message.sender_id === userId
-                    ? 'bg-black text-white'
-                    : 'bg-gray-100 text-black'
+                    ? 'bg-yellow-400/80 border-yellow-500/50 text-gray-900'
+                    : 'bg-white/20 dark:bg-white/15 border-white/40 text-gray-900 dark:text-white shadow-lg'
                 }`}
               >
                 {message.sender_id !== userId && (
@@ -92,7 +92,7 @@ export function ChatComponent({ conversationId, userId, userName }: ChatComponen
       </div>
 
       {/* Input Area */}
-      <form onSubmit={handleSendMessage} className="border-t border-gray-200 p-4 bg-white">
+      <form onSubmit={handleSendMessage} className="border-t border-white/20 p-4 backdrop-blur-[30px] bg-white/5">
         <div className="flex gap-2">
           <input
             type="text"
@@ -100,12 +100,12 @@ export function ChatComponent({ conversationId, userId, userName }: ChatComponen
             onChange={(e) => setMessageText(e.target.value)}
             placeholder="Escribe un mensaje..."
             disabled={isSending}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black"
+            className="flex-1 px-4 py-2 backdrop-blur-[20px] border border-white/40 bg-white/20 dark:bg-white/15 rounded-xl focus:ring-2 focus:ring-yellow-400 text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400"
           />
           <button
             type="submit"
             disabled={isSending || !messageText.trim()}
-            className="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 disabled:opacity-50"
+            className="backdrop-blur-[20px] bg-yellow-400/80 hover:bg-yellow-400 border border-yellow-500/50 text-gray-900 px-6 py-2 rounded-xl font-medium transition disabled:opacity-50"
           >
             {isSending ? '...' : 'Enviar'}
           </button>

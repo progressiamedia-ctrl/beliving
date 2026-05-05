@@ -44,8 +44,8 @@ export function ConversationsList({ userId }: ConversationsListProps) {
   }
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex-1 overflow-y-auto border-r border-gray-200">
+    <div className="h-full flex flex-col backdrop-blur-[40px] bg-white/20 dark:bg-white/10 rounded-2xl border border-white/40 shadow-lg">
+      <div className="flex-1 overflow-y-auto border-r border-white/30">
         {conversations.map((conversation) => (
           <Link
             key={conversation.id}
@@ -53,20 +53,22 @@ export function ConversationsList({ userId }: ConversationsListProps) {
           >
             <div
               onClick={() => setSelectedConversationId(conversation.id)}
-              className={`p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition ${
-                selectedConversationId === conversation.id ? 'bg-gray-100' : ''
+              className={`p-4 border-b border-white/20 cursor-pointer transition ${
+                selectedConversationId === conversation.id
+                  ? 'backdrop-blur-[30px] bg-yellow-400/30 border-yellow-300/50'
+                  : 'hover:bg-white/20 dark:hover:bg-white/15'
               }`}
             >
               <div className="flex items-start justify-between mb-1">
-                <h3 className="font-semibold text-gray-900 line-clamp-1">
+                <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-1">
                   {conversation.property_title}
                 </h3>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-600 dark:text-gray-400">
                   {new Date(conversation.created_at).toLocaleDateString()}
                 </span>
               </div>
 
-              <p className="text-sm text-gray-600 line-clamp-1">
+              <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-1">
                 Con: {conversation.guest_id === userId ? conversation.host_name : conversation.guest_name}
               </p>
             </div>
