@@ -21,7 +21,7 @@ export function LogoutButton() {
     <button
       onClick={handleLogout}
       disabled={isLoading}
-      className="p-2 rounded-lg hover:bg-white/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+      className="p-2 rounded-lg hover:bg-gray-100 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 hover:text-gray-900"
       title="Cerrar sesión"
       aria-label="Cerrar sesión"
     >
