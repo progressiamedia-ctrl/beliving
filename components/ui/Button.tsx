@@ -3,7 +3,7 @@
 import React from 'react'
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'premium' | 'regular' | 'ghost' | 'text'
+  variant?: 'premium' | 'regular' | 'ghost' | 'text' | 'glass'
   size?: 'sm' | 'md' | 'lg'
   fullWidth?: boolean
   isLoading?: boolean
@@ -14,6 +14,7 @@ const variantClasses = {
   regular: 'bg-black hover:bg-gray-800 active:bg-gray-900 text-white dark:bg-white dark:hover:bg-gray-100 dark:active:bg-gray-200 dark:text-black shadow-md hover:shadow-lg',
   ghost: 'border-2 border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900 active:bg-gray-100 dark:active:bg-gray-800 text-black dark:text-white hover:border-gray-400 dark:hover:border-gray-600',
   text: 'text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white underline hover:no-underline active:underline',
+  glass: 'backdrop-blur-[30px] bg-white/20 border border-white/40 text-black dark:text-white hover:bg-white/30 active:bg-white/25 shadow-lg',
 }
 
 const sizeClasses = {
@@ -27,6 +28,7 @@ const focusClasses = {
   regular: 'focus:ring-gray-800 dark:focus:ring-gray-200',
   ghost: 'focus:ring-gray-300 dark:focus:ring-gray-700',
   text: 'focus:ring-gray-500',
+  glass: 'focus:ring-yellow-400 dark:focus:ring-yellow-400',
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

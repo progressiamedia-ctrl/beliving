@@ -136,13 +136,13 @@ export function AdvancedFilters({
 
       {/* Filters Panel */}
       {isOpen && (
-        <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-6 space-y-6">
+        <div className="backdrop-blur-[40px] bg-white/20 dark:bg-white/10 border border-white/40 rounded-2xl p-6 space-y-6 shadow-lg">
           {/* Price Range */}
           <div>
             <h3 className="font-medium text-black dark:text-white mb-4">Rango de Precio</h3>
             <div className="space-y-3">
               <div>
-                <label className="text-sm text-gray-600 dark:text-gray-400">
+                <label className="text-sm text-gray-700 dark:text-gray-300">
                   Mínimo: ${priceMin}
                 </label>
                 <input
@@ -151,11 +151,11 @@ export function AdvancedFilters({
                   max="3000"
                   value={priceMin}
                   onChange={handlePriceMinChange}
-                  className="w-full"
+                  className="w-full accent-yellow-400"
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-600 dark:text-gray-400">
+                <label className="text-sm text-gray-700 dark:text-gray-300">
                   Máximo: ${priceMax}
                 </label>
                 <input
@@ -164,7 +164,7 @@ export function AdvancedFilters({
                   max="3000"
                   value={priceMax}
                   onChange={handlePriceMaxChange}
-                  className="w-full"
+                  className="w-full accent-yellow-400"
                 />
               </div>
             </div>
@@ -178,10 +178,10 @@ export function AdvancedFilters({
                 <button
                   key={val}
                   onClick={() => handleRatingChange(val)}
-                  className={`px-3 py-2 rounded-lg text-sm transition ${
+                  className={`px-3 py-2 rounded-xl text-sm transition backdrop-blur-[20px] ${
                     ratingMin === val
-                      ? 'bg-black dark:bg-white text-white dark:text-black'
-                      : 'border border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
+                      ? 'bg-yellow-400/80 border border-yellow-500/50 text-gray-900'
+                      : 'border border-white/40 bg-white/20 text-black dark:text-white hover:bg-white/30'
                   }`}
                 >
                   {val === 0 ? 'Todas' : `${val}⭐+`}
@@ -201,7 +201,7 @@ export function AdvancedFilters({
                       type="checkbox"
                       checked={selectedCities.includes(city)}
                       onChange={() => handleCityToggle(city)}
-                      className="mr-3 w-4 h-4"
+                      className="mr-3 w-4 h-4 accent-yellow-400"
                     />
                     <span className="text-black dark:text-white">{city}</span>
                   </label>
@@ -218,10 +218,10 @@ export function AdvancedFilters({
                 <button
                   key={amenity}
                   onClick={() => handleAmenityToggle(amenity)}
-                  className={`px-3 py-2 rounded-lg text-sm transition text-left ${
+                  className={`px-3 py-2 rounded-xl text-sm transition text-left backdrop-blur-[20px] ${
                     selectedAmenities.includes(amenity)
-                      ? 'bg-black dark:bg-white text-white dark:text-black'
-                      : 'border border-gray-300 dark:border-gray-700 text-black dark:text-white hover:border-black dark:hover:border-white'
+                      ? 'bg-yellow-400/80 border border-yellow-500/50 text-gray-900'
+                      : 'border border-white/40 bg-white/20 text-black dark:text-white hover:bg-white/30'
                   }`}
                 >
                   {AMENITY_ICONS[amenity]} {amenity}
@@ -234,7 +234,7 @@ export function AdvancedFilters({
           {activeFilterCount > 0 && (
             <button
               onClick={resetFilters}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 text-black dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition"
+              className="w-full px-4 py-2 backdrop-blur-[20px] border border-white/40 bg-white/20 text-black dark:text-white rounded-xl hover:bg-white/30 transition"
             >
               Limpiar Filtros
             </button>

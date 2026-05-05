@@ -26,10 +26,10 @@ export const Input = React.forwardRef<HTMLInputElement & HTMLTextAreaElement, In
     const inputId = useId()
     const errorId = useId()
 
-    const baseClasses = 'w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition'
+    const baseClasses = 'w-full px-4 py-3 backdrop-blur-[30px] bg-white/20 dark:bg-white/15 border rounded-2xl text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition shadow-lg'
     const borderClasses = error
-      ? 'border-red-500 dark:border-red-400 focus:ring-red-400'
-      : 'border-gray-300 dark:border-gray-700 focus:ring-yellow-400'
+      ? 'border-red-400 dark:border-red-400 focus:ring-red-400'
+      : 'border-white/40 dark:border-white/30 focus:ring-yellow-400 focus:border-transparent'
 
     const allClasses = `${baseClasses} ${borderClasses} ${className}`.trim()
 

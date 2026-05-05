@@ -54,7 +54,7 @@ export function PropertyGrid({ city, limit = 12 }: PropertyGridProps) {
           href={`/properties/${property.id}`}
           className="group"
         >
-          <div className="bg-white rounded-lg overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow">
+          <div className="backdrop-blur-[40px] bg-white/20 dark:bg-white/10 rounded-2xl overflow-hidden border border-white/40 hover:shadow-2xl transition-shadow shadow-lg">
             {/* Image */}
             <div className="relative w-full h-48 bg-gray-200 overflow-hidden">
               {property.images && property.images.length > 0 ? (
@@ -75,7 +75,7 @@ export function PropertyGrid({ city, limit = 12 }: PropertyGridProps) {
                   e.preventDefault();
                   toggleFavorite(property.id);
                 }}
-                className="absolute top-3 right-3 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg"
+                className="absolute top-3 right-3 backdrop-blur-[20px] bg-white/20 border border-white/40 rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-white/30"
               >
                 <span className="text-xl">
                   {favorites.has(property.id) ? '❤️' : '🤍'}
@@ -83,7 +83,7 @@ export function PropertyGrid({ city, limit = 12 }: PropertyGridProps) {
               </button>
 
               {/* Price Badge */}
-              <div className="absolute bottom-3 left-3 bg-black text-white px-3 py-1 rounded-full text-sm font-semibold">
+              <div className="absolute bottom-3 left-3 backdrop-blur-[20px] bg-black/40 text-white px-3 py-1 rounded-full text-sm font-semibold border border-white/30">
                 ${property.price}/noche
               </div>
             </div>
@@ -91,19 +91,19 @@ export function PropertyGrid({ city, limit = 12 }: PropertyGridProps) {
             {/* Content */}
             <div className="p-4 space-y-3">
               <div>
-                <h3 className="font-semibold text-lg line-clamp-2 group-hover:text-black">
+                <h3 className="font-semibold text-lg line-clamp-2 text-gray-900 dark:text-white group-hover:text-yellow-400">
                   {property.title}
                 </h3>
-                <p className="text-gray-600 text-sm">{property.city}</p>
+                <p className="text-gray-700 dark:text-gray-300 text-sm">{property.city}</p>
               </div>
 
               {/* Description */}
-              <p className="text-gray-600 text-sm line-clamp-2">
+              <p className="text-gray-700 dark:text-gray-300 text-sm line-clamp-2">
                 {property.description || 'Sin descripción'}
               </p>
 
               {/* Details */}
-              <div className="flex gap-4 text-sm text-gray-600">
+              <div className="flex gap-4 text-sm text-gray-700 dark:text-gray-300">
                 <span>🛏️ {property.bedrooms} recámara{property.bedrooms !== 1 ? 's' : ''}</span>
                 <span>🚿 {property.bathrooms} baño{property.bathrooms !== 1 ? 's' : ''}</span>
                 <span>👥 {property.max_guests} huéspedes</span>
@@ -118,7 +118,7 @@ export function PropertyGrid({ city, limit = 12 }: PropertyGridProps) {
                     </span>
                   ))}
                 </div>
-                <span className="text-sm text-gray-600">{property.rating.toFixed(1)}</span>
+                <span className="text-sm text-gray-700 dark:text-gray-300">{property.rating.toFixed(1)}</span>
               </div>
 
               {/* Amenities */}
@@ -126,13 +126,13 @@ export function PropertyGrid({ city, limit = 12 }: PropertyGridProps) {
                 {property.amenities && property.amenities.slice(0, 3).map((amenity, idx) => (
                   <span
                     key={idx}
-                    className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
+                    className="px-2 py-1 backdrop-blur-[15px] bg-white/20 text-gray-900 dark:text-white text-xs rounded-full border border-white/30"
                   >
                     {amenity}
                   </span>
                 ))}
                 {property.amenities && property.amenities.length > 3 && (
-                  <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
+                  <span className="px-2 py-1 backdrop-blur-[15px] bg-white/20 text-gray-900 dark:text-white text-xs rounded-full border border-white/30">
                     +{property.amenities.length - 3}
                   </span>
                 )}
