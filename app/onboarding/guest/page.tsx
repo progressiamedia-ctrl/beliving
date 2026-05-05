@@ -72,9 +72,19 @@ export default function GuestOnboarding() {
 
   if (step === 'done') {
     return (
-      <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white">
+      <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden"
+        style={{
+          backgroundImage: `url(${CITY_IMAGES[currentImageIndex]})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/35 via-black/30 to-black/40"></div>
+
         {/* Fuegos artificiales */}
-        <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 pointer-events-none z-5">
           <style>{`
             @keyframes firework {
               0% {
@@ -116,22 +126,39 @@ export default function GuestOnboarding() {
         </div>
 
         {/* Card de bienvenida */}
-        <div className="relative z-10 w-full px-6 flex items-center justify-center">
-          <div className="w-full max-w-md backdrop-blur-[80px] rounded-[32px] p-8 shadow-2xl border transition-all duration-300 bg-white/90 border-gray-200">
-            <div className="text-center space-y-6">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-500 animate-pulse">
-                <span className="text-3xl">✨</span>
+        <div className="relative z-10 w-full px-6 py-12 flex items-center justify-center">
+          <div className="border border-white/40 bg-white/15 backdrop-blur-xl w-full" style={{ maxWidth: '380px', padding: '42px 32px', borderRadius: '20px', fontFamily: 'Montserrat, sans-serif', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)', textAlign: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center' }}>
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full" style={{ backgroundImage: 'linear-gradient(to bottom right, rgb(250, 204, 21), rgb(250, 193, 21))', animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}>
+                <span style={{ fontSize: '28px' }}>✨</span>
               </div>
 
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">¡Bienvenido a Be Living!</h1>
-                <p className="text-lg text-gray-700 mb-6">Tu perfil está completo. Ahora explora increíbles propiedades alrededor del mundo.</p>
+                <h1 className="font-bold text-white" style={{ fontSize: '20px', fontFamily: 'Montserrat, sans-serif', marginBottom: '12px', letterSpacing: '0.2px' }}>¡Bienvenido a Be Living!</h1>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)', fontFamily: 'Montserrat, sans-serif', lineHeight: '1.5' }}>Tu perfil está completo. Ahora explora increíbles propiedades alrededor del mundo.</p>
               </div>
 
-              <div className="space-y-3 pt-4">
+              <div style={{ marginTop: '12px', width: '100%' }}>
                 <button
                   onClick={() => router.push('/properties')}
-                  className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold py-3 rounded-2xl transition duration-300 shadow-lg"
+                  style={{
+                    width: '100%',
+                    padding: '12px 18px',
+                    height: '44px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: 'rgb(250, 204, 21)',
+                    color: 'rgb(17, 24, 39)',
+                    borderRadius: '12px',
+                    fontFamily: 'Montserrat, sans-serif',
+                    fontSize: '13px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    border: 'none',
+                    transition: 'all 0.3s ease'
+                  }}
+                  className="hover:bg-yellow-500"
                 >
                   Comenzar a explorar
                 </button>
