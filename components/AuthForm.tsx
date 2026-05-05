@@ -17,6 +17,37 @@ type Step = 'role-select' | 'auth-mode' | 'registration' | 'login' | 'confirmati
 type UserRole = 'host' | 'guest' | 'agent'
 type AuthMode = 'signup' | 'signin'
 
+function InputWithIcon({
+  type,
+  value,
+  onChange,
+  placeholder,
+  icon,
+  required = false
+}: {
+  type: string
+  value: string
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  placeholder: string
+  icon: string
+  required?: boolean
+}) {
+  return (
+    <div style={{ position: 'relative' }}>
+      <input
+        type={type}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className="w-full rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
+        style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', height: '44px', paddingLeft: '44px', paddingRight: '20px' }}
+        required={required}
+      />
+      <span aria-hidden="true" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontSize: '18px', pointerEvents: 'none' }}>{icon}</span>
+    </div>
+  )
+}
+
 export function AuthForm() {
   const [step, setStep] = useState<Step>('role-select')
   const [role, setRole] = useState<UserRole | null>(null)
@@ -290,44 +321,32 @@ export function AuthForm() {
             <h2 className="font-semibold text-gray-800 text-center" style={{ fontSize: '16px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px', marginBottom: '28px' }}>Crear Cuenta</h2>
 
             <form onSubmit={handleRegistration} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ position: 'relative' }}>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="tu@email.com"
-                  className="w-full rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
-                  style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', height: '44px', paddingLeft: '44px', paddingRight: '20px' }}
-                  required
-                />
-                <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontSize: '18px', pointerEvents: 'none' }}>📧</span>
-              </div>
+              <InputWithIcon
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="tu@email.com"
+                icon="📧"
+                required
+              />
 
-              <div style={{ position: 'relative' }}>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Contraseña"
-                  className="w-full rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
-                  style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', height: '44px', paddingLeft: '44px', paddingRight: '20px' }}
-                  required
-                />
-                <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontSize: '18px', pointerEvents: 'none' }}>🔒</span>
-              </div>
+              <InputWithIcon
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Contraseña"
+                icon="🔒"
+                required
+              />
 
-              <div style={{ position: 'relative' }}>
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Confirmar contraseña"
-                  className="w-full rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
-                  style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', height: '44px', paddingLeft: '44px', paddingRight: '20px' }}
-                  required
-                />
-                <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontSize: '18px', pointerEvents: 'none' }}>🔐</span>
-              </div>
+              <InputWithIcon
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirmar contraseña"
+                icon="🔐"
+                required
+              />
 
               {error && <div className="p-3 rounded-lg bg-red-500/40 border border-red-400/80 text-white text-xs" style={{ fontFamily: 'Montserrat, sans-serif', marginTop: '8px' }}>{error}</div>}
 
@@ -359,31 +378,23 @@ export function AuthForm() {
             <h2 className="font-semibold text-gray-800 text-center" style={{ fontSize: '16px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px', marginBottom: '28px' }}>Ingresar</h2>
 
             <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ position: 'relative' }}>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="tu@email.com"
-                  className="w-full rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
-                  style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', height: '44px', paddingLeft: '44px', paddingRight: '20px' }}
-                  required
-                />
-                <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontSize: '18px', pointerEvents: 'none' }}>📧</span>
-              </div>
+              <InputWithIcon
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="tu@email.com"
+                icon="📧"
+                required
+              />
 
-              <div style={{ position: 'relative' }}>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Contraseña"
-                  className="w-full rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
-                  style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', height: '44px', paddingLeft: '44px', paddingRight: '20px' }}
-                  required
-                />
-                <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontSize: '18px', pointerEvents: 'none' }}>🔒</span>
-              </div>
+              <InputWithIcon
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Contraseña"
+                icon="🔒"
+                required
+              />
 
               {error && <div className="p-3 rounded-lg bg-red-500/40 border border-red-400/80 text-white text-xs" style={{ fontFamily: 'Montserrat, sans-serif', marginTop: '8px' }}>{error}</div>}
 
