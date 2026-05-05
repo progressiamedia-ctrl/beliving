@@ -181,63 +181,63 @@ export function AuthForm() {
     >
       <div className="absolute inset-0 bg-gradient-to-br from-black/35 via-black/25 to-black/35"></div>
 
-      <div className="relative z-10 w-full max-w-2xl px-6 flex flex-col items-center justify-center gap-8">
+      <div className="relative z-10 w-full px-6 flex flex-col items-center justify-center gap-6">
         {step === 'role-select' && (
           <div className="text-center">
-            <h1 className="text-white text-5xl font-bold drop-shadow-lg mb-1">BELIVING</h1>
-            <p className="text-white text-xs drop-shadow-lg mb-2">PROPERTY</p>
-            <p className="text-white text-sm drop-shadow-lg">Una nueva forma de vivir</p>
+            <h1 className="text-white font-bold drop-shadow-lg mb-1" style={{ fontSize: '48px', fontWeight: 'bold' }}>BELIVING</h1>
+            <p className="text-white drop-shadow-lg mb-1" style={{ fontSize: '11px', letterSpacing: '2px' }}>PROPERTY</p>
+            <p className="text-white text-sm drop-shadow-lg" style={{ fontSize: '13px' }}>Una nueva forma de vivir</p>
           </div>
         )}
 
         {step === 'role-select' && (
-          <div className="rounded-3xl p-5 border border-white/20 bg-amber-100/25 backdrop-blur-xl w-full max-w-xs">
-            <h2 className="text-base font-bold text-gray-800 text-center mb-3" style={{ fontSize: '13px' }}>¿Cuál es tu rol?</h2>
+          <div className="rounded-3xl border border-white/30 bg-amber-100/20 backdrop-blur-sm" style={{ padding: '24px 20px', maxWidth: '380px', width: '100%' }}>
+            <h2 className="font-bold text-gray-800 text-center mb-3" style={{ fontSize: '14px' }}>¿Cuál es tu rol?</h2>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <button
                 onClick={() => handleRoleSelect('guest')}
-                style={{ padding: '4px 12px', borderRadius: '999px', lineHeight: '1' }}
-                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold transition flex items-center justify-between"
+                style={{ padding: '8px 16px', borderRadius: '20px', lineHeight: '1.2', width: '100%' }}
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold transition flex items-center justify-between"
               >
-                <div className="flex items-center" style={{ gap: '6px' }}>
-                  <span style={{ fontSize: '14px' }}>✈️</span>
+                <div className="flex items-center" style={{ gap: '10px', flex: 1 }}>
+                  <span style={{ fontSize: '18px', flexShrink: 0 }}>✈️</span>
                   <div className="text-left">
-                    <p className="font-bold" style={{ fontSize: '10px', lineHeight: '1', margin: '0' }}>Viajero</p>
-                    <p style={{ fontSize: '9px', opacity: 0.95, lineHeight: '1', margin: '0' }}>Buscar hospedajes</p>
+                    <p className="font-bold" style={{ fontSize: '12px', lineHeight: '1.1', margin: '0' }}>Viajero</p>
+                    <p style={{ fontSize: '10px', opacity: 0.9, lineHeight: '1.1', margin: '0' }}>Buscar hospedajes</p>
                   </div>
                 </div>
-                <span className="text-sm">→</span>
+                <span style={{ fontSize: '16px', marginLeft: '8px' }}>→</span>
               </button>
 
               <button
                 onClick={() => handleRoleSelect('host')}
-                style={{ padding: '4px 12px', borderRadius: '999px', lineHeight: '1' }}
-                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold transition flex items-center justify-between"
+                style={{ padding: '8px 16px', borderRadius: '20px', lineHeight: '1.2', width: '100%' }}
+                className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold transition flex items-center justify-between"
               >
-                <div className="flex items-center" style={{ gap: '6px' }}>
-                  <span style={{ fontSize: '14px' }}>🔑</span>
+                <div className="flex items-center" style={{ gap: '10px', flex: 1 }}>
+                  <span style={{ fontSize: '18px', flexShrink: 0 }}>🔑</span>
                   <div className="text-left">
-                    <p className="font-bold" style={{ fontSize: '10px', lineHeight: '1', margin: '0' }}>Anfitrión</p>
-                    <p style={{ fontSize: '9px', opacity: 0.95, lineHeight: '1', margin: '0' }}>Listar propiedades</p>
+                    <p className="font-bold" style={{ fontSize: '12px', lineHeight: '1.1', margin: '0' }}>Anfitrión</p>
+                    <p style={{ fontSize: '10px', opacity: 0.9, lineHeight: '1.1', margin: '0' }}>Listar propiedades</p>
                   </div>
                 </div>
-                <span className="text-sm">→</span>
+                <span style={{ fontSize: '16px', marginLeft: '8px' }}>→</span>
               </button>
 
               <button
                 onClick={() => handleRoleSelect('agent')}
-                style={{ padding: '4px 12px', borderRadius: '999px', lineHeight: '1' }}
-                className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold transition flex items-center justify-between"
+                style={{ padding: '8px 16px', borderRadius: '20px', lineHeight: '1.2', width: '100%' }}
+                className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold transition flex items-center justify-between"
               >
-                <div className="flex items-center" style={{ gap: '6px' }}>
-                  <span style={{ fontSize: '14px' }}>💎</span>
+                <div className="flex items-center" style={{ gap: '10px', flex: 1 }}>
+                  <span style={{ fontSize: '18px', flexShrink: 0 }}>💎</span>
                   <div className="text-left">
-                    <p className="font-bold" style={{ fontSize: '10px', lineHeight: '1', margin: '0' }}>Agente</p>
-                    <p style={{ fontSize: '9px', opacity: 0.95, lineHeight: '1', margin: '0' }}>Ganar comisiones</p>
+                    <p className="font-bold" style={{ fontSize: '12px', lineHeight: '1.1', margin: '0' }}>Agente</p>
+                    <p style={{ fontSize: '10px', opacity: 0.9, lineHeight: '1.1', margin: '0' }}>Ganar comisiones</p>
                   </div>
                 </div>
-                <span className="text-sm">→</span>
+                <span style={{ fontSize: '16px', marginLeft: '8px' }}>→</span>
               </button>
             </div>
 
@@ -249,7 +249,8 @@ export function AuthForm() {
                 setRole(null)
                 setError('')
               }}
-              className="w-full text-gray-700 hover:text-gray-800 text-xs font-medium mt-3 py-1"
+              className="w-full text-gray-700 hover:text-gray-800 font-medium mt-3"
+              style={{ fontSize: '12px', padding: '8px' }}
             >
               {authMode === 'signup' ? 'Ingresar' : 'Registrarse'}
             </button>
