@@ -192,49 +192,49 @@ export function AuthForm() {
 
         {step === 'role-select' && (
           <div className="rounded-3xl p-6 border border-white/20 bg-amber-100/25 backdrop-blur-xl w-full max-w-xs">
-            <h2 className="text-lg font-bold text-gray-800 text-center mb-4">TEST CAMBIO VERCEL 2026</h2>
+            <h2 className="text-lg font-bold text-gray-800 text-center mb-4">¿Cuál es tu rol?</h2>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <button
                 onClick={() => handleRoleSelect('guest')}
-                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-2 px-4 rounded-2xl transition flex items-center justify-between"
+                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-1.5 px-3 rounded-full transition flex items-center justify-between"
               >
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">✈️</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base">✈️</span>
                   <div className="text-left">
-                    <p className="font-bold text-xs">Viajero</p>
-                    <p className="text-xs opacity-95">Buscar hospedajes</p>
+                    <p className="font-bold text-xs leading-tight">Viajero</p>
+                    <p className="text-xs opacity-95 leading-tight">Buscar hospedajes</p>
                   </div>
                 </div>
-                <span className="text-base">→</span>
+                <span className="text-sm">→</span>
               </button>
 
               <button
                 onClick={() => handleRoleSelect('host')}
-                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold py-2 px-4 rounded-2xl transition flex items-center justify-between"
+                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold py-1.5 px-3 rounded-full transition flex items-center justify-between"
               >
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">🔑</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base">🔑</span>
                   <div className="text-left">
-                    <p className="font-bold text-xs">Anfitrión</p>
-                    <p className="text-xs opacity-95">Listar propiedades</p>
+                    <p className="font-bold text-xs leading-tight">Anfitrión</p>
+                    <p className="text-xs opacity-95 leading-tight">Listar propiedades</p>
                   </div>
                 </div>
-                <span className="text-base">→</span>
+                <span className="text-sm">→</span>
               </button>
 
               <button
                 onClick={() => handleRoleSelect('agent')}
-                className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-2 px-4 rounded-2xl transition flex items-center justify-between"
+                className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-1.5 px-3 rounded-full transition flex items-center justify-between"
               >
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">💎</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base">💎</span>
                   <div className="text-left">
-                    <p className="font-bold text-xs">Agente</p>
-                    <p className="text-xs opacity-95">Ganar comisiones</p>
+                    <p className="font-bold text-xs leading-tight">Agente</p>
+                    <p className="text-xs opacity-95 leading-tight">Ganar comisiones</p>
                   </div>
                 </div>
-                <span className="text-base">→</span>
+                <span className="text-sm">→</span>
               </button>
             </div>
 
