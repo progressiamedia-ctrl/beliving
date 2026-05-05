@@ -192,7 +192,7 @@ export function AuthForm() {
 
         {step === 'role-select' && (
           <div className="rounded-3xl p-6 border border-white/20 bg-amber-100/25 backdrop-blur-xl w-full max-w-xs">
-            <h2 className="text-lg font-bold text-gray-800 text-center mb-4">¿Cuál es tu rol?</h2>
+            <h2 className="text-lg font-bold text-gray-800 text-center mb-4">TEST CAMBIO VERCEL 2026</h2>
 
             <div className="space-y-2">
               <button
