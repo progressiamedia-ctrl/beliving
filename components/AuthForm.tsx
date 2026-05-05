@@ -227,21 +227,11 @@ export function AuthForm() {
         )}
 
         {/* Card Principal - Login/Registro */}
-        <div className="w-full max-w-md backdrop-blur-[50px] rounded-[32px] p-8 shadow-2xl border transition-all duration-300 bg-white/95 border-white/50 backdrop-saturate-150">
-          {/* Logo */}
-          <div className="mb-10 text-center">
-            <img
-              src="/logo.png"
-              alt="Be Living"
-              className="h-16 w-auto mx-auto mb-4"
-            />
-            <p className="text-base font-medium text-gray-600">Una nueva forma de vivir</p>
-          </div>
-
+        <div className="w-full max-w-md backdrop-blur-[60px] rounded-[32px] p-8 shadow-2xl border transition-all duration-300 bg-white/90 border-white/60 backdrop-saturate-200 hover:border-white/70 hover:bg-white/95">
           {/* STEP 1: Role Selection */}
           {step === 'role-select' && (
             <div className="space-y-4">
-              <p className="text-center text-xl font-bold text-gray-900 mb-6">
+              <p className="text-center text-xl font-bold text-gray-900 mb-4">
                 {authMode === 'signup' ? 'Cual es tu rol?' : 'Elige tu perfil'}
               </p>
 
