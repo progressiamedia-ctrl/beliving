@@ -185,65 +185,65 @@ export function AuthForm() {
         fontFamily: 'Montserrat, sans-serif'
       }}
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-black/35 via-black/25 to-black/35"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-black/40"></div>
 
-      <div className="relative z-10 w-full px-6 flex flex-col items-center justify-center" style={{ gap: '28px' }}>
+      <div className="relative z-10 w-full px-6 flex flex-col items-center justify-center" style={{ gap: '32px' }}>
         {step === 'role-select' && (
-          <div className="text-center" style={{ marginTop: '30px' }}>
-            <img src="/logo.png" alt="BELIVING" style={{ maxWidth: '260px', height: 'auto', marginBottom: '12px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }} />
-            <p className="text-white drop-shadow-lg" style={{ fontSize: '16px', marginTop: '10px', fontWeight: '400', fontFamily: 'Montserrat, sans-serif' }}>Una nueva forma de vivir</p>
+          <div className="text-center" style={{ marginTop: '20px' }}>
+            <img src="/logo.png" alt="BELIVING" style={{ maxWidth: '280px', height: 'auto', marginBottom: '16px', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))' }} />
+            <p className="text-white drop-shadow-lg" style={{ fontSize: '18px', marginTop: '12px', fontWeight: '400', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.3px' }}>Una nueva forma de vivir</p>
           </div>
         )}
 
         {step === 'role-select' && (
-          <div className="border border-white/30 bg-amber-100/20 backdrop-blur-sm" style={{ padding: '32px 32px', maxWidth: '400px', width: '100%', minHeight: '380px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRadius: '20px' }}>
+          <div className="border border-white/40 bg-white/15 backdrop-blur-xl" style={{ padding: '40px 36px', maxWidth: '440px', width: '100%', minHeight: '400px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRadius: '24px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
             <div>
-              <h2 className="font-medium text-gray-800 text-center" style={{ fontSize: '16px', marginBottom: '24px', fontFamily: 'Montserrat, sans-serif' }}>¿Cuál es tu rol?</h2>
+              <h2 className="font-semibold text-gray-900 text-center" style={{ fontSize: '18px', marginBottom: '28px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px' }}>¿Cuál es tu rol?</h2>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 <button
                   onClick={() => handleRoleSelect('guest')}
-                  style={{ padding: '12px 16px', borderRadius: '12px', lineHeight: '1.2', alignSelf: 'center', width: '280px', fontFamily: 'Montserrat, sans-serif' }}
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium transition flex items-center justify-between"
+                  style={{ padding: '14px 18px', borderRadius: '14px', lineHeight: '1.3', alignSelf: 'center', width: '290px', fontFamily: 'Montserrat, sans-serif', transition: 'all 0.3s ease', boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)' }}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium flex items-center justify-between hover:shadow-lg hover:scale-105"
                 >
-                  <div className="flex items-center" style={{ gap: '12px', flex: 1 }}>
-                    <span style={{ fontSize: '20px', flexShrink: 0 }}>✈️</span>
+                  <div className="flex items-center" style={{ gap: '14px', flex: 1 }}>
+                    <span style={{ fontSize: '22px', flexShrink: 0 }}>✈️</span>
                     <div className="text-left">
-                      <p className="font-medium" style={{ fontSize: '13px', lineHeight: '1.1', margin: '0', fontFamily: 'Montserrat, sans-serif' }}>Viajero</p>
-                      <p style={{ fontSize: '11px', opacity: 0.9, lineHeight: '1.1', margin: '0', fontFamily: 'Montserrat, sans-serif' }}>Buscar hospedajes</p>
+                      <p className="font-semibold" style={{ fontSize: '14px', lineHeight: '1.2', margin: '0', fontFamily: 'Montserrat, sans-serif' }}>Viajero</p>
+                      <p style={{ fontSize: '12px', opacity: 0.95, lineHeight: '1.2', margin: '2px 0 0 0', fontFamily: 'Montserrat, sans-serif' }}>Buscar hospedajes</p>
                     </div>
                   </div>
-                  <span style={{ fontSize: '17px', marginLeft: '10px', flexShrink: 0 }}>→</span>
+                  <span style={{ fontSize: '18px', marginLeft: '12px', flexShrink: 0 }}>→</span>
                 </button>
 
                 <button
                   onClick={() => handleRoleSelect('host')}
-                  style={{ padding: '12px 16px', borderRadius: '12px', lineHeight: '1.2', alignSelf: 'center', width: '280px', fontFamily: 'Montserrat, sans-serif' }}
-                  className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-medium transition flex items-center justify-between"
+                  style={{ padding: '14px 18px', borderRadius: '14px', lineHeight: '1.3', alignSelf: 'center', width: '290px', fontFamily: 'Montserrat, sans-serif', transition: 'all 0.3s ease', boxShadow: '0 4px 12px rgba(245, 158, 11, 0.2)' }}
+                  className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-medium flex items-center justify-between hover:shadow-lg hover:scale-105"
                 >
-                  <div className="flex items-center" style={{ gap: '12px', flex: 1 }}>
-                    <span style={{ fontSize: '20px', flexShrink: 0 }}>🔑</span>
+                  <div className="flex items-center" style={{ gap: '14px', flex: 1 }}>
+                    <span style={{ fontSize: '22px', flexShrink: 0 }}>🔑</span>
                     <div className="text-left">
-                      <p className="font-medium" style={{ fontSize: '13px', lineHeight: '1.1', margin: '0', fontFamily: 'Montserrat, sans-serif' }}>Anfitrión</p>
-                      <p style={{ fontSize: '11px', opacity: 0.9, lineHeight: '1.1', margin: '0', fontFamily: 'Montserrat, sans-serif' }}>Listar propiedades</p>
+                      <p className="font-semibold" style={{ fontSize: '14px', lineHeight: '1.2', margin: '0', fontFamily: 'Montserrat, sans-serif' }}>Anfitrión</p>
+                      <p style={{ fontSize: '12px', opacity: 0.95, lineHeight: '1.2', margin: '2px 0 0 0', fontFamily: 'Montserrat, sans-serif' }}>Listar propiedades</p>
                     </div>
                   </div>
-                  <span style={{ fontSize: '17px', marginLeft: '10px', flexShrink: 0 }}>→</span>
+                  <span style={{ fontSize: '18px', marginLeft: '12px', flexShrink: 0 }}>→</span>
                 </button>
 
                 <button
                   onClick={() => handleRoleSelect('agent')}
-                  style={{ padding: '12px 16px', borderRadius: '12px', lineHeight: '1.2', alignSelf: 'center', width: '280px', fontFamily: 'Montserrat, sans-serif' }}
-                  className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-medium transition flex items-center justify-between"
+                  style={{ padding: '14px 18px', borderRadius: '14px', lineHeight: '1.3', alignSelf: 'center', width: '290px', fontFamily: 'Montserrat, sans-serif', transition: 'all 0.3s ease', boxShadow: '0 4px 12px rgba(236, 72, 153, 0.2)' }}
+                  className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-medium flex items-center justify-between hover:shadow-lg hover:scale-105"
                 >
-                  <div className="flex items-center" style={{ gap: '12px', flex: 1 }}>
-                    <span style={{ fontSize: '20px', flexShrink: 0 }}>💎</span>
+                  <div className="flex items-center" style={{ gap: '14px', flex: 1 }}>
+                    <span style={{ fontSize: '22px', flexShrink: 0 }}>💎</span>
                     <div className="text-left">
-                      <p className="font-medium" style={{ fontSize: '13px', lineHeight: '1.1', margin: '0', fontFamily: 'Montserrat, sans-serif' }}>Agente</p>
-                      <p style={{ fontSize: '11px', opacity: 0.9, lineHeight: '1.1', margin: '0', fontFamily: 'Montserrat, sans-serif' }}>Referir y ganar</p>
+                      <p className="font-semibold" style={{ fontSize: '14px', lineHeight: '1.2', margin: '0', fontFamily: 'Montserrat, sans-serif' }}>Agente</p>
+                      <p style={{ fontSize: '12px', opacity: 0.95, lineHeight: '1.2', margin: '2px 0 0 0', fontFamily: 'Montserrat, sans-serif' }}>Referir y ganar</p>
                     </div>
                   </div>
-                  <span style={{ fontSize: '17px', marginLeft: '10px', flexShrink: 0 }}>→</span>
+                  <span style={{ fontSize: '18px', marginLeft: '12px', flexShrink: 0 }}>→</span>
                 </button>
               </div>
             </div>
@@ -251,21 +251,21 @@ export function AuthForm() {
         )}
 
         {step === 'auth-mode' && (
-          <div className="border border-white/30 bg-amber-100/20 backdrop-blur-sm" style={{ padding: '40px 32px', maxWidth: '400px', width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px', borderRadius: '20px' }}>
-            <h2 className="font-medium text-gray-800 text-center" style={{ fontSize: '16px', marginBottom: '8px', fontFamily: 'Montserrat, sans-serif' }}>¿Qué deseas hacer?</h2>
+          <div className="border border-white/40 bg-white/15 backdrop-blur-xl" style={{ padding: '48px 36px', maxWidth: '440px', width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px', borderRadius: '24px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
+            <h2 className="font-semibold text-gray-900 text-center" style={{ fontSize: '18px', marginBottom: '12px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px' }}>¿Qué deseas hacer?</h2>
 
             <button
               onClick={() => handleAuthModeSelect('signup')}
-              style={{ padding: '14px 16px', borderRadius: '12px', fontFamily: 'Montserrat, sans-serif' }}
-              className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-3 transition"
+              style={{ padding: '16px 18px', borderRadius: '14px', fontFamily: 'Montserrat, sans-serif', fontSize: '15px', fontWeight: '600', transition: 'all 0.3s ease', boxShadow: '0 4px 12px rgba(250, 204, 21, 0.3)' }}
+              className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 py-3 transition hover:shadow-lg hover:scale-105"
             >
               Registrarse
             </button>
 
             <button
               onClick={() => handleAuthModeSelect('signin')}
-              style={{ padding: '14px 16px', borderRadius: '12px', fontFamily: 'Montserrat, sans-serif', border: '1px solid rgba(107, 114, 128, 0.3)' }}
-              className="w-full bg-transparent hover:bg-white/10 text-gray-700 hover:text-gray-800 font-medium py-3 transition"
+              style={{ padding: '16px 18px', borderRadius: '14px', fontFamily: 'Montserrat, sans-serif', fontSize: '15px', fontWeight: '600', border: '2px solid rgba(255, 255, 255, 0.5)', transition: 'all 0.3s ease', background: 'transparent' }}
+              className="w-full text-white hover:bg-white/20 py-3 transition hover:shadow-lg hover:scale-105"
             >
               Iniciar Sesión
             </button>
@@ -277,17 +277,17 @@ export function AuthForm() {
                 setStep('role-select')
                 setError('')
               }}
-              className="w-full text-gray-700 hover:text-gray-800 text-xs font-medium py-2"
+              className="w-full text-white/80 hover:text-white text-sm font-medium py-3 transition"
               style={{ fontFamily: 'Montserrat, sans-serif' }}
             >
-              Volver
+              ← Volver
             </button>
           </div>
         )}
 
         {step === 'registration' && (
-          <div className="border border-white/30 bg-amber-100/20 backdrop-blur-sm w-full max-w-xs" style={{ padding: '32px', borderRadius: '20px', fontFamily: 'Montserrat, sans-serif' }}>
-            <h2 className="font-medium text-gray-800 text-center mb-6" style={{ fontSize: '16px', fontFamily: 'Montserrat, sans-serif' }}>Crear Cuenta</h2>
+          <div className="border border-white/40 bg-white/15 backdrop-blur-xl w-full" style={{ maxWidth: '440px', padding: '40px 36px', borderRadius: '24px', fontFamily: 'Montserrat, sans-serif', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
+            <h2 className="font-semibold text-gray-900 text-center mb-8" style={{ fontSize: '18px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px' }}>Crear Cuenta</h2>
 
             <form onSubmit={handleRegistration} className="space-y-4">
               <input
@@ -295,8 +295,8 @@ export function AuthForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tu@email.com"
-                className="w-full px-4 py-3 rounded-lg bg-white/40 border border-white/30 text-gray-900 placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                style={{ fontFamily: 'Montserrat, sans-serif' }}
+                className="w-full px-4 py-3.5 rounded-xl bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
+                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px' }}
                 required
               />
 
@@ -305,8 +305,8 @@ export function AuthForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Contraseña"
-                className="w-full px-4 py-3 rounded-lg bg-white/40 border border-white/30 text-gray-900 placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                style={{ fontFamily: 'Montserrat, sans-serif' }}
+                className="w-full px-4 py-3.5 rounded-xl bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
+                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px' }}
                 required
               />
 
@@ -315,18 +315,18 @@ export function AuthForm() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirmar contraseña"
-                className="w-full px-4 py-3 rounded-lg bg-white/40 border border-white/30 text-gray-900 placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                style={{ fontFamily: 'Montserrat, sans-serif' }}
+                className="w-full px-4 py-3.5 rounded-xl bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
+                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px' }}
                 required
               />
 
-              {error && <div className="p-3 rounded-lg bg-red-500/30 border border-red-400/50 text-white text-xs" style={{ fontFamily: 'Montserrat, sans-serif' }}>{error}</div>}
+              {error && <div className="p-4 rounded-xl bg-red-500/40 border border-red-400/80 text-white text-sm" style={{ fontFamily: 'Montserrat, sans-serif' }}>{error}</div>}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-3 rounded-lg transition disabled:opacity-50"
-                style={{ fontFamily: 'Montserrat, sans-serif' }}
+                className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-3.5 rounded-xl transition disabled:opacity-50 hover:shadow-lg hover:scale-105 disabled:scale-100"
+                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '15px' }}
               >
                 {loading ? 'Creando...' : 'Crear Cuenta'}
               </button>
@@ -334,18 +334,18 @@ export function AuthForm() {
               <button
                 type="button"
                 onClick={() => setStep('auth-mode')}
-                className="w-full text-gray-700 hover:text-gray-800 text-xs font-medium py-2"
+                className="w-full text-white/80 hover:text-white text-sm font-medium py-2 transition"
                 style={{ fontFamily: 'Montserrat, sans-serif' }}
               >
-                Volver
+                ← Volver
               </button>
             </form>
           </div>
         )}
 
         {step === 'login' && (
-          <div className="border border-white/30 bg-amber-100/20 backdrop-blur-sm w-full max-w-xs" style={{ padding: '32px', borderRadius: '20px', fontFamily: 'Montserrat, sans-serif' }}>
-            <h2 className="font-medium text-gray-800 text-center mb-6" style={{ fontSize: '16px', fontFamily: 'Montserrat, sans-serif' }}>Ingresar</h2>
+          <div className="border border-white/40 bg-white/15 backdrop-blur-xl w-full" style={{ maxWidth: '440px', padding: '40px 36px', borderRadius: '24px', fontFamily: 'Montserrat, sans-serif', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
+            <h2 className="font-semibold text-gray-900 text-center mb-8" style={{ fontSize: '18px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px' }}>Ingresar</h2>
 
             <form onSubmit={handleLogin} className="space-y-4">
               <input
@@ -353,8 +353,8 @@ export function AuthForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tu@email.com"
-                className="w-full px-4 py-3 rounded-lg bg-white/40 border border-white/30 text-gray-900 placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                style={{ fontFamily: 'Montserrat, sans-serif' }}
+                className="w-full px-4 py-3.5 rounded-xl bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
+                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px' }}
                 required
               />
 
@@ -363,18 +363,18 @@ export function AuthForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Contraseña"
-                className="w-full px-4 py-3 rounded-lg bg-white/40 border border-white/30 text-gray-900 placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                style={{ fontFamily: 'Montserrat, sans-serif' }}
+                className="w-full px-4 py-3.5 rounded-xl bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
+                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px' }}
                 required
               />
 
-              {error && <div className="p-3 rounded-lg bg-red-500/30 border border-red-400/50 text-white text-xs" style={{ fontFamily: 'Montserrat, sans-serif' }}>{error}</div>}
+              {error && <div className="p-4 rounded-xl bg-red-500/40 border border-red-400/80 text-white text-sm" style={{ fontFamily: 'Montserrat, sans-serif' }}>{error}</div>}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-3 rounded-lg transition disabled:opacity-50"
-                style={{ fontFamily: 'Montserrat, sans-serif' }}
+                className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-3.5 rounded-xl transition disabled:opacity-50 hover:shadow-lg hover:scale-105 disabled:scale-100"
+                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '15px' }}
               >
                 {loading ? 'Ingresando...' : 'Ingresar'}
               </button>
@@ -382,20 +382,20 @@ export function AuthForm() {
               <button
                 type="button"
                 onClick={() => setStep('auth-mode')}
-                className="w-full text-gray-700 hover:text-gray-800 text-xs font-medium py-2"
+                className="w-full text-white/80 hover:text-white text-sm font-medium py-2 transition"
                 style={{ fontFamily: 'Montserrat, sans-serif' }}
               >
-                Volver
+                ← Volver
               </button>
             </form>
           </div>
         )}
 
         {step === 'confirmation' && (
-          <div className="border border-white/30 bg-amber-100/20 backdrop-blur-sm text-center w-full max-w-xs" style={{ padding: '32px', borderRadius: '20px', fontFamily: 'Montserrat, sans-serif' }}>
-            <div className="text-4xl mb-3">✓</div>
-            <p className="text-gray-900 font-medium mb-2 text-sm" style={{ fontFamily: 'Montserrat, sans-serif' }}>{successMessage}</p>
-            <p className="text-gray-800 text-xs" style={{ fontFamily: 'Montserrat, sans-serif' }}>Te llevaremos al siguiente paso en unos momentos...</p>
+          <div className="border border-white/40 bg-white/15 backdrop-blur-xl text-center w-full" style={{ maxWidth: '440px', padding: '40px 36px', borderRadius: '24px', fontFamily: 'Montserrat, sans-serif', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
+            <div className="text-5xl mb-4">✓</div>
+            <p className="text-white font-semibold mb-3 text-base" style={{ fontFamily: 'Montserrat, sans-serif' }}>{successMessage}</p>
+            <p className="text-white/80 text-sm" style={{ fontFamily: 'Montserrat, sans-serif' }}>Te llevaremos al siguiente paso en unos momentos...</p>
           </div>
         )}
       </div>
