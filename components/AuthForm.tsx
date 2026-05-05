@@ -200,11 +200,11 @@ export function AuthForm() {
                 style={{ padding: '4px 12px', borderRadius: '999px', lineHeight: '1' }}
                 className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold transition flex items-center justify-between"
               >
-                <div className="flex items-center gap-1.5">
-                  <span className="text-base">✈️</span>
+                <div className="flex items-center" style={{ gap: '6px' }}>
+                  <span style={{ fontSize: '14px' }}>✈️</span>
                   <div className="text-left">
-                    <p className="font-bold text-xs leading-tight">Viajero</p>
-                    <p className="text-xs opacity-95 leading-tight">Buscar hospedajes</p>
+                    <p className="font-bold" style={{ fontSize: '10px', lineHeight: '1', margin: '0' }}>Viajero</p>
+                    <p style={{ fontSize: '9px', opacity: 0.95, lineHeight: '1', margin: '0' }}>Buscar hospedajes</p>
                   </div>
                 </div>
                 <span className="text-sm">→</span>
@@ -215,11 +215,11 @@ export function AuthForm() {
                 style={{ padding: '4px 12px', borderRadius: '999px', lineHeight: '1' }}
                 className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold transition flex items-center justify-between"
               >
-                <div className="flex items-center gap-1.5">
-                  <span className="text-base">🔑</span>
+                <div className="flex items-center" style={{ gap: '6px' }}>
+                  <span style={{ fontSize: '14px' }}>🔑</span>
                   <div className="text-left">
-                    <p className="font-bold text-xs leading-tight">Anfitrión</p>
-                    <p className="text-xs opacity-95 leading-tight">Listar propiedades</p>
+                    <p className="font-bold" style={{ fontSize: '10px', lineHeight: '1', margin: '0' }}>Anfitrión</p>
+                    <p style={{ fontSize: '9px', opacity: 0.95, lineHeight: '1', margin: '0' }}>Listar propiedades</p>
                   </div>
                 </div>
                 <span className="text-sm">→</span>
@@ -230,11 +230,11 @@ export function AuthForm() {
                 style={{ padding: '4px 12px', borderRadius: '999px', lineHeight: '1' }}
                 className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold transition flex items-center justify-between"
               >
-                <div className="flex items-center gap-1.5">
-                  <span className="text-base">💎</span>
+                <div className="flex items-center" style={{ gap: '6px' }}>
+                  <span style={{ fontSize: '14px' }}>💎</span>
                   <div className="text-left">
-                    <p className="font-bold text-xs leading-tight">Agente</p>
-                    <p className="text-xs opacity-95 leading-tight">Ganar comisiones</p>
+                    <p className="font-bold" style={{ fontSize: '10px', lineHeight: '1', margin: '0' }}>Agente</p>
+                    <p style={{ fontSize: '9px', opacity: 0.95, lineHeight: '1', margin: '0' }}>Ganar comisiones</p>
                   </div>
                 </div>
                 <span className="text-sm">→</span>
