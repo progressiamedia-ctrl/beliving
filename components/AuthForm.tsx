@@ -191,10 +191,10 @@ export function AuthForm() {
         )}
 
         {step === 'role-select' && (
-          <div className="rounded-3xl p-6 border border-white/20 bg-amber-100/25 backdrop-blur-xl w-full max-w-xs">
-            <h2 className="text-lg font-bold text-gray-800 text-center mb-4">¿Cuál es tu rol?</h2>
+          <div className="rounded-3xl p-5 border border-white/20 bg-amber-100/25 backdrop-blur-xl w-full max-w-xs">
+            <h2 className="text-base font-bold text-gray-800 text-center mb-3" style={{ fontSize: '13px' }}>¿Cuál es tu rol?</h2>
 
-            <div className="space-y-1.5">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <button
                 onClick={() => handleRoleSelect('guest')}
                 style={{ padding: '4px 12px', borderRadius: '999px', lineHeight: '1' }}
