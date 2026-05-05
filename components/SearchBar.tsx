@@ -158,7 +158,7 @@ export function SearchBar({ properties, onSearch, cities }: SearchBarProps) {
   }
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-black">
+    <div className="flex flex-col h-full backdrop-blur-[40px] bg-white/10 dark:bg-black/10">
       {/* Chat messages area */}
       <div className="flex-1 overflow-y-auto p-6 space-y-4">
         {messages.length === 0 ? (
@@ -180,10 +180,10 @@ export function SearchBar({ properties, onSearch, cities }: SearchBarProps) {
                 className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-xs px-4 py-2 rounded-lg ${
+                  className={`max-w-xs px-4 py-2 rounded-2xl backdrop-blur-[30px] ${
                     msg.type === 'user'
-                      ? 'bg-black dark:bg-white text-white dark:text-black'
-                      : 'bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white'
+                      ? 'bg-black/30 dark:bg-white/20 border border-white/40 text-white dark:text-white'
+                      : 'bg-white/20 dark:bg-white/15 border border-white/30 text-gray-900 dark:text-white shadow-lg'
                   }`}
                 >
                   <p className="text-sm">{msg.text}</p>
@@ -196,15 +196,15 @@ export function SearchBar({ properties, onSearch, cities }: SearchBarProps) {
       </div>
 
       {/* Search input area */}
-      <div className="border-t border-gray-200 dark:border-gray-800 p-4 space-y-2">
+      <div className="border-t border-white/20 p-4 space-y-2 backdrop-blur-[20px] bg-white/5">
         {/* Suggestions dropdown */}
         {suggestions.length > 0 && (
-          <div className="bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-2 space-y-1 max-h-40 overflow-y-auto">
+          <div className="backdrop-blur-[30px] bg-white/20 dark:bg-white/10 rounded-2xl border border-white/30 p-2 space-y-1 max-h-40 overflow-y-auto shadow-lg">
             {suggestions.map((property) => (
               <button
                 key={property.id}
                 onClick={() => handleSuggestionClick(property)}
-                className="w-full text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                className="w-full text-left px-3 py-2 rounded-lg hover:bg-white/20 dark:hover:bg-white/15 transition"
               >
                 <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                   {property.title}
@@ -227,12 +227,12 @@ export function SearchBar({ properties, onSearch, cities }: SearchBarProps) {
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             placeholder="Ej: Villa en Dubai por menos de 500..."
-            className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+            className="flex-1 px-4 py-3 backdrop-blur-[30px] border border-white/40 rounded-2xl bg-white/20 dark:bg-white/15 text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition shadow-lg"
           />
           <button
             type="submit"
             disabled={!input.trim()}
-            className="px-4 py-3 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition disabled:opacity-50"
+            className="px-4 py-3 backdrop-blur-[30px] bg-yellow-400/80 hover:bg-yellow-400 border border-yellow-500/50 text-gray-900 rounded-2xl font-medium transition disabled:opacity-50 shadow-lg"
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10.5 1.5H3a1.5 1.5 0 00-1.5 1.5v12a1.5 1.5 0 001.5 1.5h10a1.5 1.5 0 001.5-1.5V2a.5.5 0 00-.5-.5a.5.5 0 00-.5.5v12a.5.5 0 01-.5.5H3a.5.5 0 01-.5-.5V3a.5.5 0 01.5-.5h7.5a.5.5 0 000-1z" />

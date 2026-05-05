@@ -26,7 +26,7 @@ export function PropertyCard({
       onMouseEnter={() => onMouseEnter?.(property.id)}
       onMouseLeave={onMouseLeave}
     >
-      <div className="relative mb-4 overflow-hidden rounded-3xl aspect-square bg-gray-200 dark:bg-gray-900 shadow-md hover:shadow-2xl transition-all duration-300 ease-out">
+      <div className="relative mb-4 overflow-hidden rounded-3xl aspect-square bg-gray-200 dark:bg-gray-900 shadow-2xl hover:shadow-3xl transition-all duration-300 ease-out">
         <img
           src={property.images[0] || 'https://via.placeholder.com/300x300?text=Property'}
           alt={property.title}
@@ -38,7 +38,7 @@ export function PropertyCard({
         />
 
         {property.verified && (
-          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-gray-900 px-3 py-1 rounded-full text-xs font-bold">
+          <div className="absolute top-4 left-4 backdrop-blur-[20px] bg-white/20 border border-white/40 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
             ✓ Verificado
           </div>
         )}
@@ -47,7 +47,7 @@ export function PropertyCard({
           onClick={(e) => onToggleFavorite(property.id, e)}
           aria-label={isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
           aria-pressed={isFavorite}
-          className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm flex items-center justify-center hover:scale-125 active:scale-110 transition-transform duration-200 shadow-md hover:shadow-lg dark:shadow-lg"
+          className="absolute top-4 right-4 w-10 h-10 rounded-full backdrop-blur-[30px] bg-white/20 border border-white/40 flex items-center justify-center hover:scale-125 hover:bg-white/30 active:scale-110 transition-all duration-200 shadow-lg"
         >
           <svg
             className={`w-6 h-6 transition ${
@@ -69,7 +69,7 @@ export function PropertyCard({
         </button>
       </div>
 
-      <div className="flex flex-col h-full transition-all duration-300">
+      <div className="flex flex-col h-full transition-all duration-300 backdrop-blur-[40px] bg-white/15 border border-white/30 rounded-2xl p-3 shadow-lg">
         <div className="flex-1">
           <h3 className="font-bold text-gray-900 dark:text-white mb-1 group-hover:text-yellow-400 transition-colors duration-300 line-clamp-1">
             {property.title}
