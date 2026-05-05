@@ -21,10 +21,12 @@ const CITY_IMAGES = [
 
 type Step = 'role-select' | 'registration' | 'confirmation' | 'login'
 type UserRole = 'host' | 'guest' | 'agent'
+type AuthMode = 'signup' | 'signin'
 
 export function AuthForm() {
   const [step, setStep] = useState<Step>('role-select')
   const [role, setRole] = useState<UserRole | null>(null)
+  const [authMode, setAuthMode] = useState<AuthMode>('signup')
   const [isSignUp, setIsSignUp] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -52,8 +54,13 @@ export function AuthForm() {
 
   const handleRoleSelect = (selectedRole: UserRole) => {
     setRole(selectedRole)
-    setStep('registration')
-    setIsSignUp(true)
+    if (authMode === 'signup') {
+      setStep('registration')
+      setIsSignUp(true)
+    } else {
+      setStep('login')
+      setIsSignUp(false)
+    }
     setError('')
   }
 
@@ -221,7 +228,9 @@ export function AuthForm() {
           {/* STEP 1: Role Selection */}
           {step === 'role-select' && (
             <div className="space-y-6">
-              <p className="text-center text-lg font-medium text-gray-900">¿Cuál es tu rol?</p>
+              <p className="text-center text-lg font-medium text-gray-900">
+                {authMode === 'signup' ? '¿Cuál es tu rol?' : 'Selecciona tu tipo de cuenta'}
+              </p>
 
               <div className="space-y-3">
                 <button
@@ -281,20 +290,22 @@ export function AuthForm() {
                   <div className="w-full border-t border-gray-300"></div>
                 </div>
                 <div className="relative flex justify-center">
-                  <span className="px-3 text-xs font-medium bg-gray-50 text-gray-600">¿Ya tienes cuenta?</span>
+                  <span className="px-3 text-xs font-medium bg-gray-50 text-gray-600">
+                    {authMode === 'signup' ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?'}
+                  </span>
                 </div>
               </div>
 
               <button
                 onClick={() => {
-                  setStep('login')
-                  setIsSignUp(false)
+                  setAuthMode(authMode === 'signup' ? 'signin' : 'signup')
+                  setRole(null)
                   setError('')
                 }}
-                aria-label="Ir a iniciar sesión"
+                aria-label={authMode === 'signup' ? 'Ir a iniciar sesión' : 'Ir a registrarse'}
                 className="w-full px-6 py-3 border font-medium rounded-2xl transition duration-300 border-gray-300 text-gray-900 hover:bg-gray-50 hover:border-gray-400"
               >
-                Ingresar
+                {authMode === 'signup' ? 'Ingresar' : 'Registrarse'}
               </button>
             </div>
           )}
@@ -392,6 +403,23 @@ export function AuthForm() {
           {/* STEP 4: Login */}
           {step === 'login' && (
             <form onSubmit={handleLogin} className="space-y-6">
+              <div>
+                <p className="text-base mb-1 text-gray-700">
+                  Ingresar como <span className="font-bold capitalize text-gray-900">
+                    {role === 'guest' ? 'Viajero' : role === 'host' ? 'Anfitrión' : 'Agente'}
+                  </span>
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setRole(null)
+                    setError('')
+                  }}
+                  className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  Cambiar tipo de cuenta
+                </button>
+              </div>
               <div className="space-y-3">
                 <div>
                   <label htmlFor="login-email" className="block text-sm font-semibold mb-2 text-gray-900">Correo electrónico</label>
