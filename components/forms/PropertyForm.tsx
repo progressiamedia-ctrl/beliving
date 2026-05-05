@@ -106,105 +106,105 @@ export function PropertyForm({ hostId, onSuccess }: PropertyFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl backdrop-blur-[40px] bg-white/20 dark:bg-white/10 border border-white/40 rounded-2xl p-6 shadow-lg">
       <div>
-        <label className="block text-sm font-medium mb-1">Título *</label>
+        <label className="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Título *</label>
         <input
           type="text"
           name="title"
           value={formData.title}
           onChange={handleInputChange}
           placeholder="Ej: Apartamento moderno en el centro"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black"
+          className="w-full px-4 py-3 backdrop-blur-[30px] border border-white/40 bg-white/20 dark:bg-white/15 rounded-xl focus:ring-2 focus:ring-yellow-400 text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Descripción</label>
+        <label className="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Descripción</label>
         <textarea
           name="description"
           value={formData.description}
           onChange={handleInputChange}
           placeholder="Describe tu propiedad..."
           rows={4}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black"
+          className="w-full px-4 py-3 backdrop-blur-[30px] border border-white/40 bg-white/20 dark:bg-white/15 rounded-xl focus:ring-2 focus:ring-yellow-400 text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Ubicación *</label>
+          <label className="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Ubicación *</label>
           <input
             type="text"
             name="location"
             value={formData.location}
             onChange={handleInputChange}
             placeholder="Ej: Calle Principal 123"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            className="w-full px-4 py-3 backdrop-blur-[30px] border border-white/40 bg-white/20 dark:bg-white/15 rounded-xl focus:ring-2 focus:ring-yellow-400 text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Ciudad *</label>
+          <label className="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Ciudad *</label>
           <input
             type="text"
             name="city"
             value={formData.city}
             onChange={handleInputChange}
             placeholder="Ej: Madrid"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            className="w-full px-4 py-3 backdrop-blur-[30px] border border-white/40 bg-white/20 dark:bg-white/15 rounded-xl focus:ring-2 focus:ring-yellow-400 text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Precio/noche *</label>
+          <label className="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Precio/noche *</label>
           <input
             type="number"
             name="price"
             value={formData.price}
             onChange={handleInputChange}
             placeholder="150"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            className="w-full px-4 py-3 backdrop-blur-[30px] border border-white/40 bg-white/20 dark:bg-white/15 rounded-xl focus:ring-2 focus:ring-yellow-400 text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Huéspedes máximo</label>
+          <label className="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Huéspedes máximo</label>
           <input
             type="number"
             name="maxGuests"
             value={formData.maxGuests}
             onChange={handleInputChange}
             min="1"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            className="w-full px-4 py-3 backdrop-blur-[30px] border border-white/40 bg-white/20 dark:bg-white/15 rounded-xl focus:ring-2 focus:ring-yellow-400 text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Recámaras</label>
+          <label className="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Recámaras</label>
           <input
             type="number"
             name="bedrooms"
             value={formData.bedrooms}
             onChange={handleInputChange}
             min="1"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            className="w-full px-4 py-3 backdrop-blur-[30px] border border-white/40 bg-white/20 dark:bg-white/15 rounded-xl focus:ring-2 focus:ring-yellow-400 text-gray-900 dark:text-white placeholder-gray-600 dark:placeholder-gray-400"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-2">Comodidades</label>
+        <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white">Comodidades</label>
         <div className="grid grid-cols-2 gap-2">
           {amenitiesOptions.map(amenity => (
-            <label key={amenity} className="flex items-center">
+            <label key={amenity} className="flex items-center text-gray-900 dark:text-white">
               <input
                 type="checkbox"
                 checked={formData.amenities.includes(amenity)}
                 onChange={() => handleAmenityToggle(amenity)}
-                className="mr-2"
+                className="mr-2 accent-yellow-400"
               />
               {amenity}
             </label>
@@ -213,27 +213,27 @@ export function PropertyForm({ hostId, onSuccess }: PropertyFormProps) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-2">Imágenes</label>
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+        <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white">Imágenes</label>
+        <div className="border-2 border-dashed border-white/40 backdrop-blur-[20px] bg-white/10 rounded-2xl p-4">
           <input
             type="file"
             accept="image/*"
             onChange={handleImageUpload}
             disabled={uploading}
-            className="block w-full"
+            className="block w-full text-gray-900 dark:text-white"
           />
-          {uploading && <p className="mt-2 text-sm">Subiendo... {progress}%</p>}
+          {uploading && <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">Subiendo... {progress}%</p>}
         </div>
 
         {images.length > 0 && (
           <div className="mt-4 grid grid-cols-4 gap-2">
             {images.map((img, idx) => (
               <div key={idx} className="relative">
-                <img src={img} alt="preview" className="w-full h-24 object-cover rounded" />
+                <img src={img} alt="preview" className="w-full h-24 object-cover rounded-xl" />
                 <button
                   type="button"
                   onClick={() => handleRemoveImage(idx)}
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                  className="absolute top-1 right-1 backdrop-blur-[20px] bg-red-500/80 border border-red-600/50 text-white rounded-full w-6 h-6 flex items-center justify-center"
                 >
                   ✕
                 </button>
@@ -243,12 +243,12 @@ export function PropertyForm({ hostId, onSuccess }: PropertyFormProps) {
         )}
       </div>
 
-      {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">{error}</div>}
+      {error && <div className="backdrop-blur-[20px] bg-red-500/20 border border-red-400/50 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl">{error}</div>}
 
       <button
         type="submit"
         disabled={creating || uploading}
-        className="w-full bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 disabled:opacity-50"
+        className="w-full backdrop-blur-[30px] bg-yellow-400/80 hover:bg-yellow-400 border border-yellow-500/50 text-gray-900 py-3 rounded-xl font-medium transition disabled:opacity-50"
       >
         {creating ? 'Creando...' : 'Crear Propiedad'}
       </button>
