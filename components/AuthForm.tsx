@@ -197,7 +197,7 @@ export function AuthForm() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <button
                   onClick={() => handleRoleSelect('guest')}
-                  style={{ padding: '11px 16px', borderRadius: '24px', lineHeight: '1.2', alignSelf: 'center', minWidth: '280px' }}
+                  style={{ padding: '11px 16px', borderRadius: '24px', lineHeight: '1.2', alignSelf: 'center', width: '280px' }}
                   className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold transition flex items-center justify-between"
                 >
                   <div className="flex items-center" style={{ gap: '12px', flex: 1 }}>
@@ -212,7 +212,7 @@ export function AuthForm() {
 
                 <button
                   onClick={() => handleRoleSelect('host')}
-                  style={{ padding: '11px 16px', borderRadius: '24px', lineHeight: '1.2', alignSelf: 'center', minWidth: '280px' }}
+                  style={{ padding: '11px 16px', borderRadius: '24px', lineHeight: '1.2', alignSelf: 'center', width: '280px' }}
                   className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold transition flex items-center justify-between"
                 >
                   <div className="flex items-center" style={{ gap: '12px', flex: 1 }}>
@@ -227,7 +227,7 @@ export function AuthForm() {
 
                 <button
                   onClick={() => handleRoleSelect('agent')}
-                  style={{ padding: '11px 16px', borderRadius: '24px', lineHeight: '1.2', alignSelf: 'center', minWidth: '280px' }}
+                  style={{ padding: '11px 16px', borderRadius: '24px', lineHeight: '1.2', alignSelf: 'center', width: '280px' }}
                   className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold transition flex items-center justify-between"
                 >
                   <div className="flex items-center" style={{ gap: '12px', flex: 1 }}>
