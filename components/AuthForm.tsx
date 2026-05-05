@@ -295,8 +295,8 @@ export function AuthForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tu@email.com"
-                className="w-full px-4 py-3.5 rounded-xl bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
-                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px' }}
+                className="w-full px-5 py-4 rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
+                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '15px' }}
                 required
               />
 
@@ -305,8 +305,8 @@ export function AuthForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Contraseña"
-                className="w-full px-4 py-3.5 rounded-xl bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
-                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px' }}
+                className="w-full px-5 py-4 rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
+                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '15px' }}
                 required
               />
 
@@ -315,8 +315,8 @@ export function AuthForm() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirmar contraseña"
-                className="w-full px-4 py-3.5 rounded-xl bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
-                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px' }}
+                className="w-full px-5 py-4 rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
+                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '15px' }}
                 required
               />
 
@@ -326,8 +326,8 @@ export function AuthForm() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-4 rounded-xl transition disabled:opacity-50 hover:shadow-lg hover:scale-105 disabled:scale-100"
-                  style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '15px', fontWeight: '600' }}
+                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold rounded-lg transition disabled:opacity-50 hover:shadow-lg hover:scale-105 disabled:scale-100"
+                  style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '16px', fontWeight: '600', padding: '16px 18px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 >
                   {loading ? 'Creando...' : 'Crear Cuenta'}
                 </button>
@@ -376,8 +376,8 @@ export function AuthForm() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-4 rounded-xl transition disabled:opacity-50 hover:shadow-lg hover:scale-105 disabled:scale-100"
-                  style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '15px', fontWeight: '600' }}
+                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold rounded-lg transition disabled:opacity-50 hover:shadow-lg hover:scale-105 disabled:scale-100"
+                  style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '16px', fontWeight: '600', padding: '16px 18px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 >
                   {loading ? 'Ingresando...' : 'Ingresar'}
                 </button>
