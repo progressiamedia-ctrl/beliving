@@ -191,54 +191,54 @@ export function AuthForm() {
         )}
 
         {step === 'role-select' && (
-          <div className="rounded-3xl p-7 border border-white/20 bg-amber-100/25 backdrop-blur-xl w-full max-w-sm">
-            <h2 className="text-xl font-bold text-gray-800 text-center mb-6">¿Cuál es tu rol?</h2>
+          <div className="rounded-3xl p-6 border border-white/20 bg-amber-100/25 backdrop-blur-xl w-full max-w-xs">
+            <h2 className="text-lg font-bold text-gray-800 text-center mb-4">¿Cuál es tu rol?</h2>
 
-            <div className="space-y-3">
+            <div className="space-y-2">
               <button
                 onClick={() => handleRoleSelect('guest')}
-                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 px-5 rounded-2xl transition flex items-center justify-between"
+                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-2 px-4 rounded-2xl transition flex items-center justify-between"
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-xl">✈️</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">✈️</span>
                   <div className="text-left">
-                    <p className="font-bold text-sm">Viajero</p>
+                    <p className="font-bold text-xs">Viajero</p>
                     <p className="text-xs opacity-95">Buscar hospedajes</p>
                   </div>
                 </div>
-                <span className="text-lg">→</span>
+                <span className="text-base">→</span>
               </button>
 
               <button
                 onClick={() => handleRoleSelect('host')}
-                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold py-3 px-5 rounded-2xl transition flex items-center justify-between"
+                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold py-2 px-4 rounded-2xl transition flex items-center justify-between"
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-xl">🔑</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🔑</span>
                   <div className="text-left">
-                    <p className="font-bold text-sm">Anfitrión</p>
+                    <p className="font-bold text-xs">Anfitrión</p>
                     <p className="text-xs opacity-95">Listar propiedades</p>
                   </div>
                 </div>
-                <span className="text-lg">→</span>
+                <span className="text-base">→</span>
               </button>
 
               <button
                 onClick={() => handleRoleSelect('agent')}
-                className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-3 px-5 rounded-2xl transition flex items-center justify-between"
+                className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-2 px-4 rounded-2xl transition flex items-center justify-between"
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-xl">💎</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">💎</span>
                   <div className="text-left">
-                    <p className="font-bold text-sm">Agente</p>
+                    <p className="font-bold text-xs">Agente</p>
                     <p className="text-xs opacity-95">Ganar comisiones</p>
                   </div>
                 </div>
-                <span className="text-lg">→</span>
+                <span className="text-base">→</span>
               </button>
             </div>
 
-            <div className="mt-6 border-t border-white/20"></div>
+            <div className="mt-4 border-t border-white/20"></div>
 
             <button
               onClick={() => {
@@ -246,7 +246,7 @@ export function AuthForm() {
                 setRole(null)
                 setError('')
               }}
-              className="w-full text-gray-700 hover:text-gray-800 text-xs font-medium mt-4 py-2"
+              className="w-full text-gray-700 hover:text-gray-800 text-xs font-medium mt-3 py-1"
             >
               {authMode === 'signup' ? 'Ingresar' : 'Registrarse'}
             </button>
@@ -254,8 +254,8 @@ export function AuthForm() {
         )}
 
         {step === 'registration' && (
-          <div className="rounded-3xl p-7 border border-white/20 bg-amber-100/25 backdrop-blur-xl w-full max-w-sm">
-            <h2 className="text-xl font-bold text-gray-800 text-center mb-6">Crear Cuenta</h2>
+          <div className="rounded-3xl p-6 border border-white/20 bg-amber-100/25 backdrop-blur-xl w-full max-w-xs">
+            <h2 className="text-lg font-bold text-gray-800 text-center mb-4">Crear Cuenta</h2>
 
             <form onSubmit={handleRegistration} className="space-y-4">
               <input
@@ -307,8 +307,8 @@ export function AuthForm() {
         )}
 
         {step === 'login' && (
-          <div className="rounded-3xl p-7 border border-white/20 bg-amber-100/25 backdrop-blur-xl w-full max-w-sm">
-            <h2 className="text-xl font-bold text-gray-800 text-center mb-6">Ingresar</h2>
+          <div className="rounded-3xl p-6 border border-white/20 bg-amber-100/25 backdrop-blur-xl w-full max-w-xs">
+            <h2 className="text-lg font-bold text-gray-800 text-center mb-4">Ingresar</h2>
 
             <form onSubmit={handleLogin} className="space-y-4">
               <input
@@ -351,9 +351,9 @@ export function AuthForm() {
         )}
 
         {step === 'confirmation' && (
-          <div className="rounded-3xl p-7 border border-white/20 bg-amber-100/25 backdrop-blur-xl text-center w-full max-w-sm">
-            <div className="text-5xl mb-4">✓</div>
-            <p className="text-gray-900 font-bold mb-2">{successMessage}</p>
+          <div className="rounded-3xl p-6 border border-white/20 bg-amber-100/25 backdrop-blur-xl text-center w-full max-w-xs">
+            <div className="text-4xl mb-3">✓</div>
+            <p className="text-gray-900 font-bold mb-2 text-sm">{successMessage}</p>
             <p className="text-gray-800 text-xs">Te llevaremos al siguiente paso en unos momentos...</p>
           </div>
         )}
