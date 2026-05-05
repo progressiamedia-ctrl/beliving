@@ -197,44 +197,44 @@ export function AuthForm() {
             <div className="space-y-3">
               <button
                 onClick={() => handleRoleSelect('guest')}
-                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-4 px-5 rounded-2xl transition flex items-center justify-between"
+                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 px-5 rounded-2xl transition flex items-center justify-between"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">✈️</span>
+                  <span className="text-xl">✈️</span>
                   <div className="text-left">
                     <p className="font-bold text-sm">Viajero</p>
                     <p className="text-xs opacity-95">Buscar hospedajes</p>
                   </div>
                 </div>
-                <span className="text-xl">→</span>
+                <span className="text-lg">→</span>
               </button>
 
               <button
                 onClick={() => handleRoleSelect('host')}
-                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold py-4 px-5 rounded-2xl transition flex items-center justify-between"
+                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold py-3 px-5 rounded-2xl transition flex items-center justify-between"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">🔑</span>
+                  <span className="text-xl">🔑</span>
                   <div className="text-left">
                     <p className="font-bold text-sm">Anfitrión</p>
                     <p className="text-xs opacity-95">Listar propiedades</p>
                   </div>
                 </div>
-                <span className="text-xl">→</span>
+                <span className="text-lg">→</span>
               </button>
 
               <button
                 onClick={() => handleRoleSelect('agent')}
-                className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-4 px-5 rounded-2xl transition flex items-center justify-between"
+                className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-3 px-5 rounded-2xl transition flex items-center justify-between"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">💎</span>
+                  <span className="text-xl">💎</span>
                   <div className="text-left">
                     <p className="font-bold text-sm">Agente</p>
                     <p className="text-xs opacity-95">Ganar comisiones</p>
                   </div>
                 </div>
-                <span className="text-xl">→</span>
+                <span className="text-lg">→</span>
               </button>
             </div>
 
