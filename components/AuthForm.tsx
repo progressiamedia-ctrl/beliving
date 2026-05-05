@@ -40,8 +40,7 @@ export function AuthForm() {
 
   useEffect(() => {
     setMounted(true)
-    const randomIndex = Math.floor(Math.random() * CITY_IMAGES.length)
-    setCurrentImageIndex(randomIndex)
+    setCurrentImageIndex(0)
   }, [])
 
   useEffect(() => {
@@ -232,7 +231,7 @@ export function AuthForm() {
           {step === 'role-select' && (
             <div className="space-y-4">
               <p className="text-center text-xl font-bold text-gray-900 mb-4">
-                {authMode === 'signup' ? 'Cual es tu rol?' : 'Elige tu perfil'}
+                {authMode === 'signup' ? '¿Cuál es tu rol?' : 'Elige tu perfil'}
               </p>
 
               <div className="space-y-3">
@@ -287,8 +286,8 @@ export function AuthForm() {
                   <div className="w-full border-t border-white/30"></div>
                 </div>
                 <div className="relative flex justify-center">
-                  <span className="px-3 text-xs font-medium text-white/70">
-                    {authMode === 'signup' ? 'Ya tienes cuenta?' : 'No tienes cuenta?'}
+                  <span className="px-3 text-xs font-medium text-white/80 bg-white/5">
+                    {authMode === 'signup' ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?'}
                   </span>
                 </div>
               </div>
