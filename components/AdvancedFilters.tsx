@@ -136,13 +136,13 @@ export function AdvancedFilters({
 
       {/* Filters Panel */}
       {isOpen && (
-        <div className="backdrop-blur-[40px] bg-white/20 dark:bg-white/10 border border-white/40 rounded-2xl p-6 space-y-6 shadow-lg">
+        <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 space-y-6 shadow-sm">
           {/* Price Range */}
           <div>
-            <h3 className="font-medium text-black dark:text-white mb-4">Rango de Precio</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">Rango de Precio</h3>
             <div className="space-y-3">
               <div>
-                <label className="text-sm text-gray-700 dark:text-gray-300">
+                <label className="text-sm text-gray-700">
                   Mínimo: ${priceMin}
                 </label>
                 <input
@@ -172,16 +172,16 @@ export function AdvancedFilters({
 
           {/* Rating Filter */}
           <div>
-            <h3 className="font-medium text-black dark:text-white mb-4">Calificación Mínima</h3>
+            <h3 className="font-medium text-gray-900 mb-4">Calificación Mínima</h3>
             <div className="flex gap-2">
               {[0, 1, 2, 3, 4, 5].map((val) => (
                 <button
                   key={val}
                   onClick={() => handleRatingChange(val)}
-                  className={`px-3 py-2 rounded-xl text-sm transition backdrop-blur-[20px] ${
+                  className={`px-3 py-2 rounded-xl text-sm transition  ${
                     ratingMin === val
-                      ? 'bg-yellow-400/80 border border-yellow-500/50 text-gray-900'
-                      : 'border border-white/40 bg-white/20 text-black dark:text-white hover:bg-white/30'
+                      ? 'bg-yellow-400 border border-yellow-500 text-gray-900'
+                      : 'border border-white/40 bg-white text-gray-900 border-gray-300 hover:bg-gray-50'
                   }`}
                 >
                   {val === 0 ? 'Todas' : `${val}⭐+`}
@@ -193,7 +193,7 @@ export function AdvancedFilters({
           {/* Cities Filter */}
           {availableCities.length > 0 && (
             <div>
-              <h3 className="font-medium text-black dark:text-white mb-4">Ciudades</h3>
+              <h3 className="font-medium text-gray-900 mb-4">Ciudades</h3>
               <div className="space-y-2">
                 {availableCities.map((city) => (
                   <label key={city} className="flex items-center cursor-pointer">
@@ -203,7 +203,7 @@ export function AdvancedFilters({
                       onChange={() => handleCityToggle(city)}
                       className="mr-3 w-4 h-4 accent-yellow-400"
                     />
-                    <span className="text-black dark:text-white">{city}</span>
+                    <span className="text-gray-900">{city}</span>
                   </label>
                 ))}
               </div>
@@ -212,16 +212,16 @@ export function AdvancedFilters({
 
           {/* Amenities Filter */}
           <div>
-            <h3 className="font-medium text-black dark:text-white mb-4">Amenidades</h3>
+            <h3 className="font-medium text-gray-900 mb-4">Amenidades</h3>
             <div className="grid grid-cols-2 gap-3">
               {ALL_AMENITIES.map((amenity) => (
                 <button
                   key={amenity}
                   onClick={() => handleAmenityToggle(amenity)}
-                  className={`px-3 py-2 rounded-xl text-sm transition text-left backdrop-blur-[20px] ${
+                  className={`px-3 py-2 rounded-xl text-sm transition text-left  ${
                     selectedAmenities.includes(amenity)
-                      ? 'bg-yellow-400/80 border border-yellow-500/50 text-gray-900'
-                      : 'border border-white/40 bg-white/20 text-black dark:text-white hover:bg-white/30'
+                      ? 'bg-yellow-400 border border-yellow-500 text-gray-900'
+                      : 'border border-white/40 bg-white text-gray-900 border-gray-300 hover:bg-gray-50'
                   }`}
                 >
                   {AMENITY_ICONS[amenity]} {amenity}
@@ -234,7 +234,7 @@ export function AdvancedFilters({
           {activeFilterCount > 0 && (
             <button
               onClick={resetFilters}
-              className="w-full px-4 py-2 backdrop-blur-[20px] border border-white/40 bg-white/20 text-black dark:text-white rounded-xl hover:bg-white/30 transition"
+              className="w-full px-4 py-2  border border-white/40 bg-white/20 text-gray-900 rounded-xl hover:bg-white/30 transition"
             >
               Limpiar Filtros
             </button>
