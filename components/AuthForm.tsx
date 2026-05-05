@@ -444,19 +444,6 @@ export function AuthForm() {
         </div>
       </div>
 
-      {/* Indicadores de imagen */}
-      <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2.5 z-20 backdrop-blur-md bg-black/20 py-2 px-6 rounded-full w-fit mx-auto">
-        {CITY_IMAGES.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentImageIndex(index)}
-            className={`h-2.5 rounded-full transition-all duration-500 cursor-pointer ${
-              index === currentImageIndex ? 'w-8 bg-white shadow-lg' : 'w-2.5 bg-white/50 hover:bg-white/70'
-            }`}
-            aria-label={`Image ${index + 1}`}
-          />
-        ))}
-      </div>
     </div>
   )
 }
