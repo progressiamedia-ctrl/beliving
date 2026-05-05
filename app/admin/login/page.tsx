@@ -98,11 +98,11 @@ export default function AdminLoginPage() {
           backgroundAttachment: 'fixed'
         }}
       >
-        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-black/35 via-black/30 to-black/40"></div>
       </div>
 
-      <div className="relative z-10 w-full max-w-md px-6">
-        <div className="backdrop-blur-2xl rounded-3xl p-10 shadow-2xl border bg-white/95 border-white/30 backdrop-saturate-150">
+      <div className="relative z-10 w-full max-w-md px-6 flex items-center justify-center">
+        <div className="w-full backdrop-blur-[40px] rounded-3xl p-8 shadow-2xl border transition-all duration-300 bg-gradient-to-br from-white/25 to-white/15 border-white/40 backdrop-saturate-150 hover:border-white/50">
           {/* Logo y encabezado */}
           <div className="mb-10 text-center">
             <img
@@ -191,13 +191,15 @@ export default function AdminLoginPage() {
       </div>
 
       {/* Indicadores de imagen */}
-      <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2 z-20">
+      <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2.5 z-20 backdrop-blur-md bg-black/20 py-2 px-6 rounded-full w-fit mx-auto">
         {CITY_IMAGES.map((_, index) => (
-          <div
+          <button
             key={index}
-            className={`h-2 rounded-full transition-all duration-500 ${
-              index === currentImageIndex ? 'w-8 bg-white' : 'w-white/40'
+            onClick={() => setCurrentImageIndex(index)}
+            className={`h-2.5 rounded-full transition-all duration-500 cursor-pointer ${
+              index === currentImageIndex ? 'w-8 bg-white shadow-lg' : 'w-2.5 bg-white/50 hover:bg-white/70'
             }`}
+            aria-label={`Image ${index + 1}`}
           />
         ))}
       </div>
