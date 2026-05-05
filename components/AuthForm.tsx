@@ -219,7 +219,7 @@ export function AuthForm() {
             <img
               src="/logo.png"
               alt="Be Living"
-              className="h-20 w-auto mx-auto mb-2"
+              className="h-12 w-auto mx-auto mb-2"
             />
             <p className="text-base font-medium text-white drop-shadow-lg">Una nueva forma de vivir</p>
           </div>
@@ -296,7 +296,7 @@ export function AuthForm() {
                   setError('')
                 }}
                 aria-label={authMode === 'signup' ? 'Ir a iniciar sesión' : 'Ir a registrarse'}
-                className="w-full px-6 py-3 border font-medium rounded-2xl transition duration-300 border-gray-300 text-gray-900 hover:bg-gray-50 hover:border-gray-400"
+                className="w-full px-6 py-3 backdrop-blur-[20px] border border-white/40 bg-white/20 text-white font-medium rounded-2xl transition duration-300 hover:bg-white/30"
               >
                 {authMode === 'signup' ? 'Ingresar' : 'Registrarse'}
               </button>
