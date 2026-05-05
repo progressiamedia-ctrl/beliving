@@ -96,7 +96,7 @@ export default function GuestOnboarding() {
             const tx = Math.cos(angle) * distance;
             const ty = Math.sin(angle) * distance;
             const colors = ['#FFD700', '#FFA500', '#FF6347', '#FF1493', '#00CED1', '#32CD32'];
-            const color = colors[Math.floor(Math.random() * colors.length)];
+            const color = colors[i % colors.length];
 
             return (
               <div
