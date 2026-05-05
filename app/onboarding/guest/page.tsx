@@ -159,18 +159,18 @@ export default function GuestOnboarding() {
       </div>
 
       <div className="relative z-10 w-full px-6 py-12 flex flex-col items-center justify-center">
-        <div className="w-full max-w-md backdrop-blur-[80px] rounded-[32px] p-8 shadow-2xl border transition-all duration-300 bg-white/20 border-white/40">
+        <div className="border border-white/40 bg-white/15 backdrop-blur-xl w-full" style={{ maxWidth: '380px', padding: '42px 32px', borderRadius: '20px', fontFamily: 'Montserrat, sans-serif', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
           {/* Progress bar */}
           <div className="mb-8" role="group" aria-label="Progreso del cuestionario">
             <div className="flex justify-between items-center mb-3">
-              <p className="text-sm text-white/70">
+              <p className="text-xs text-white/70" style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '12px' }}>
                 Pregunta {stepNumber} de 5
               </p>
-              <p className="text-sm font-medium text-white" aria-live="polite">{Math.round((stepNumber / 5) * 100)}%</p>
+              <p className="text-xs font-medium text-white" aria-live="polite" style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '12px' }}>{Math.round((stepNumber / 5) * 100)}%</p>
             </div>
-            <div className="w-full backdrop-blur-[20px] bg-white/20 border border-white/30 rounded-full h-2" role="progressbar" aria-valuenow={stepNumber} aria-valuemin={1} aria-valuemax={5}>
+            <div className="w-full bg-white/20 border border-white/30 rounded-full h-2" role="progressbar" aria-valuenow={stepNumber} aria-valuemin={1} aria-valuemax={5}>
               <div
-                className="bg-gradient-to-r from-yellow-400 to-yellow-500 h-2 rounded-full transition-all duration-300"
+                className="bg-yellow-400 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${(stepNumber / 5) * 100}%` }}
               />
             </div>
@@ -178,25 +178,33 @@ export default function GuestOnboarding() {
 
           {/* Pregunta 1: Destino */}
           {step === 'destination' && (
-            <div className="space-y-6">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-2">
+                <h2 className="font-semibold text-gray-800" style={{ fontSize: '16px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px', marginBottom: '8px' }}>
                   ¿Dónde quieres viajar?
                 </h2>
-                <p className="text-white/70 text-sm">Selecciona tu destino favorito</p>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', fontFamily: 'Montserrat, sans-serif' }}>Selecciona tu destino favorito</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3" role="group" aria-label="Opciones de destino">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }} role="group" aria-label="Opciones de destino">
                 {['Dubai', 'Barcelona', 'Madrid', 'Viña del Mar', 'Bali', 'Cancun'].map(
                   (city) => (
                     <button
                       key={city}
                       onClick={() => setResponses({ ...responses, destination: city })}
-                      className={`p-3 rounded-xl text-sm transition backdrop-blur-[20px] border ${
-                        responses.destination === city
-                          ? 'bg-yellow-400/80 border-yellow-500/50 text-gray-900 font-semibold'
-                          : 'border-white/40 bg-white/20 text-white hover:bg-white/30'
-                      }`}
+                      style={{
+                        padding: '12px 16px',
+                        borderRadius: '12px',
+                        fontSize: '13px',
+                        border: responses.destination === city ? '2px solid rgba(250, 204, 21, 0.6)' : '1px solid rgba(255,255,255,0.3)',
+                        backgroundColor: responses.destination === city ? 'rgba(250, 204, 21, 0.2)' : 'rgba(255,255,255,0.1)',
+                        color: responses.destination === city ? 'rgb(250, 204, 21)' : 'white',
+                        fontWeight: responses.destination === city ? '600' : '400',
+                        fontFamily: 'Montserrat, sans-serif',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease'
+                      }}
+                      className="hover:bg-white/20"
                       aria-pressed={responses.destination === city}
                       aria-label={`Seleccionar ${city} como destino`}
                     >
@@ -210,25 +218,35 @@ export default function GuestOnboarding() {
 
           {/* Pregunta 2: Tipo de propiedad */}
           {step === 'type' && (
-            <div className="space-y-6">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-2">
+                <h2 className="font-semibold text-gray-800" style={{ fontSize: '16px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px', marginBottom: '8px' }}>
                   ¿Qué tipo de alojamiento prefieres?
                 </h2>
-                <p className="text-white/70 text-sm">Elige tu estilo de estancia</p>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', fontFamily: 'Montserrat, sans-serif' }}>Elige tu estilo de estancia</p>
               </div>
 
-              <div className="space-y-2" role="group" aria-label="Opciones de tipo de alojamiento">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }} role="group" aria-label="Opciones de tipo de alojamiento">
                 {['Luxury Villa', 'Modern Apartment', 'Beachfront', 'Mountain Retreat', 'Urban Loft'].map(
                   (type) => (
                     <button
                       key={type}
                       onClick={() => setResponses({ ...responses, type })}
-                      className={`w-full p-3 rounded-xl text-left text-sm transition backdrop-blur-[20px] border ${
-                        responses.type === type
-                          ? 'bg-yellow-400/80 border-yellow-500/50 text-gray-900 font-semibold'
-                          : 'border-white/40 bg-white/20 text-white hover:bg-white/30'
-                      }`}
+                      style={{
+                        width: '100%',
+                        padding: '12px 16px',
+                        borderRadius: '12px',
+                        fontSize: '13px',
+                        border: responses.type === type ? '2px solid rgba(250, 204, 21, 0.6)' : '1px solid rgba(255,255,255,0.3)',
+                        backgroundColor: responses.type === type ? 'rgba(250, 204, 21, 0.2)' : 'rgba(255,255,255,0.1)',
+                        color: responses.type === type ? 'rgb(250, 204, 21)' : 'white',
+                        fontWeight: responses.type === type ? '600' : '400',
+                        fontFamily: 'Montserrat, sans-serif',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                        textAlign: 'left'
+                      }}
+                      className="hover:bg-white/20"
                       aria-pressed={responses.type === type}
                       aria-label={`Seleccionar ${type} como tipo de alojamiento`}
                     >
@@ -242,24 +260,32 @@ export default function GuestOnboarding() {
 
           {/* Pregunta 3: Presupuesto */}
           {step === 'budget' && (
-            <div className="space-y-6">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-2">
+                <h2 className="font-semibold text-gray-800" style={{ fontSize: '16px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px', marginBottom: '8px' }}>
                   ¿Cuál es tu presupuesto por noche?
                 </h2>
-                <p className="text-white/70 text-sm">En dólares USD</p>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', fontFamily: 'Montserrat, sans-serif' }}>En dólares USD</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3" role="group" aria-label="Opciones de presupuesto">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }} role="group" aria-label="Opciones de presupuesto">
                 {['< $300', '$300-$500', '$500-$1000', '> $1000'].map((budget) => (
                   <button
                     key={budget}
                     onClick={() => setResponses({ ...responses, budget })}
-                    className={`p-3 rounded-xl text-sm transition backdrop-blur-[20px] border ${
-                      responses.budget === budget
-                        ? 'bg-yellow-400/80 border-yellow-500/50 text-gray-900 font-semibold'
-                        : 'border-white/40 bg-white/20 text-white hover:bg-white/30'
-                    }`}
+                    style={{
+                      padding: '12px 16px',
+                      borderRadius: '12px',
+                      fontSize: '13px',
+                      border: responses.budget === budget ? '2px solid rgba(250, 204, 21, 0.6)' : '1px solid rgba(255,255,255,0.3)',
+                      backgroundColor: responses.budget === budget ? 'rgba(250, 204, 21, 0.2)' : 'rgba(255,255,255,0.1)',
+                      color: responses.budget === budget ? 'rgb(250, 204, 21)' : 'white',
+                      fontWeight: responses.budget === budget ? '600' : '400',
+                      fontFamily: 'Montserrat, sans-serif',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                    className="hover:bg-white/20"
                     aria-pressed={responses.budget === budget}
                     aria-label={`Seleccionar presupuesto ${budget}`}
                   >
@@ -272,25 +298,35 @@ export default function GuestOnboarding() {
 
           {/* Pregunta 4: Propósito */}
           {step === 'purpose' && (
-            <div className="space-y-6">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-2">
+                <h2 className="font-semibold text-gray-800" style={{ fontSize: '16px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px', marginBottom: '8px' }}>
                   ¿Cuál es el propósito de tu viaje?
                 </h2>
-                <p className="text-white/70 text-sm">Elige una opción</p>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', fontFamily: 'Montserrat, sans-serif' }}>Elige una opción</p>
               </div>
 
-              <div className="space-y-2" role="group" aria-label="Opciones de propósito del viaje">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }} role="group" aria-label="Opciones de propósito del viaje">
                 {['Vacation', 'Work', 'Investment Exploration', 'Family Time'].map(
                   (purpose) => (
                     <button
                       key={purpose}
                       onClick={() => setResponses({ ...responses, purpose })}
-                      className={`w-full p-3 rounded-xl text-left text-sm transition backdrop-blur-[20px] border ${
-                        responses.purpose === purpose
-                          ? 'bg-yellow-400/80 border-yellow-500/50 text-gray-900 font-semibold'
-                          : 'border-white/40 bg-white/20 text-white hover:bg-white/30'
-                      }`}
+                      style={{
+                        width: '100%',
+                        padding: '12px 16px',
+                        borderRadius: '12px',
+                        fontSize: '13px',
+                        border: responses.purpose === purpose ? '2px solid rgba(250, 204, 21, 0.6)' : '1px solid rgba(255,255,255,0.3)',
+                        backgroundColor: responses.purpose === purpose ? 'rgba(250, 204, 21, 0.2)' : 'rgba(255,255,255,0.1)',
+                        color: responses.purpose === purpose ? 'rgb(250, 204, 21)' : 'white',
+                        fontWeight: responses.purpose === purpose ? '600' : '400',
+                        fontFamily: 'Montserrat, sans-serif',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                        textAlign: 'left'
+                      }}
+                      className="hover:bg-white/20"
                       aria-pressed={responses.purpose === purpose}
                       aria-label={`Seleccionar ${purpose} como propósito del viaje`}
                     >
@@ -304,15 +340,15 @@ export default function GuestOnboarding() {
 
           {/* Pregunta 5: Experiencias */}
           {step === 'experiences' && (
-            <div className="space-y-6">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-2">
+                <h2 className="font-semibold text-gray-800" style={{ fontSize: '16px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px', marginBottom: '8px' }}>
                   ¿Qué experiencias te atraen?
                 </h2>
-                <p className="text-white/70 text-sm">Selecciona las que te interesan</p>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', fontFamily: 'Montserrat, sans-serif' }}>Selecciona las que te interesan</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3" role="group" aria-label="Opciones de experiencias">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }} role="group" aria-label="Opciones de experiencias">
                 {['Relax', 'Party', 'Explore', 'Luxury'].map((exp) => (
                   <button
                     key={exp}
@@ -325,11 +361,19 @@ export default function GuestOnboarding() {
                           : [...responses.experiences, exp],
                       })
                     }}
-                    className={`p-3 rounded-xl text-sm transition backdrop-blur-[20px] border ${
-                      responses.experiences.includes(exp)
-                        ? 'bg-yellow-400/80 border-yellow-500/50 text-gray-900 font-semibold'
-                        : 'border-white/40 bg-white/20 text-white hover:bg-white/30'
-                    }`}
+                    style={{
+                      padding: '12px 16px',
+                      borderRadius: '12px',
+                      fontSize: '13px',
+                      border: responses.experiences.includes(exp) ? '2px solid rgba(250, 204, 21, 0.6)' : '1px solid rgba(255,255,255,0.3)',
+                      backgroundColor: responses.experiences.includes(exp) ? 'rgba(250, 204, 21, 0.2)' : 'rgba(255,255,255,0.1)',
+                      color: responses.experiences.includes(exp) ? 'rgb(250, 204, 21)' : 'white',
+                      fontWeight: responses.experiences.includes(exp) ? '600' : '400',
+                      fontFamily: 'Montserrat, sans-serif',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                    className="hover:bg-white/20"
                     aria-pressed={responses.experiences.includes(exp)}
                     aria-label={`${responses.experiences.includes(exp) ? 'Deseleccionar' : 'Seleccionar'} ${exp} como experiencia`}
                   >
@@ -341,11 +385,28 @@ export default function GuestOnboarding() {
           )}
 
           {/* Buttons */}
-          <div className="flex gap-3 mt-8">
+          <div style={{ display: 'flex', gap: '12px', marginTop: '28px' }}>
             {stepNumber > 1 && (
               <button
                 onClick={handleBack}
-                className="flex-1 px-4 py-3 backdrop-blur-[20px] border border-white/40 bg-white/20 text-white rounded-xl hover:bg-white/30 transition font-medium text-sm"
+                style={{
+                  flex: 1,
+                  padding: '12px 18px',
+                  height: '44px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  backgroundColor: 'rgba(255,255,255,0.1)',
+                  color: 'white',
+                  borderRadius: '12px',
+                  fontFamily: 'Montserrat, sans-serif',
+                  fontSize: '13px',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                className="hover:bg-white/20"
                 aria-label="Ir a la pregunta anterior"
               >
                 ← Atrás
@@ -353,7 +414,24 @@ export default function GuestOnboarding() {
             )}
             <button
               onClick={handleNext}
-              className="flex-1 px-4 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 rounded-xl transition font-bold text-sm"
+              style={{
+                flex: 1,
+                padding: '12px 18px',
+                height: '44px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'rgb(250, 204, 21)',
+                color: 'rgb(17, 24, 39)',
+                borderRadius: '12px',
+                fontFamily: 'Montserrat, sans-serif',
+                fontSize: '13px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                border: 'none',
+                transition: 'all 0.3s ease'
+              }}
+              className="hover:bg-yellow-500"
               aria-label={step === 'experiences' ? 'Completar cuestionario y comenzar' : 'Ir a la siguiente pregunta'}
             >
               {step === 'experiences' ? '¡Comenzar!' : 'Siguiente →'}
