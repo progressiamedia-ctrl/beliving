@@ -22,9 +22,9 @@ export default function AdminLoginPage() {
   const router = useRouter()
 
   useEffect(() => {
-    setMounted(true)
     const randomIndex = Math.floor(Math.random() * CITY_IMAGES.length)
     setCurrentImageIndex(randomIndex)
+    setMounted(true)
   }, [])
 
   useEffect(() => {

@@ -272,15 +272,13 @@ export default function AgentDashboard() {
 
         {/* NAVEGACIÓN DE TABS */}
         <div className="flex gap-4 mb-8 border-b border-gray-700">
-          {[
+          {([
             { id: 'resumen' as AgentTab, label: '📊 Resumen', icon: '' },
             { id: 'desafios' as AgentTab, label: '🏆 Desafíos', icon: '' },
-            data.agent.tier >= 4 && { id: 'subaff' as AgentTab, label: '👥 Sub-Afiliados', icon: '' },
+            ...(data.agent.tier >= 4 ? [{ id: 'subaff' as AgentTab, label: '👥 Sub-Afiliados', icon: '' }] : []),
             { id: 'earnings' as AgentTab, label: '💰 Earnings', icon: '' },
             { id: 'config' as AgentTab, label: '⚙️ Configuración', icon: '' }
-          ]
-            .filter(Boolean)
-            .map((tab: any) => (
+          ] as const).map((tab: { id: AgentTab; label: string; icon: string }) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
@@ -345,7 +343,7 @@ export default function AgentDashboard() {
           {activeTab === 'desafios' && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {data.challenges && data.challenges.length > 0 ? (
-                data.challenges.map((challenge: any) => (
+                data.challenges.map((challenge: { id: string; challenge?: { challenge_name: string }; completed: boolean; prize_amount: number }) => (
                   <div
                     key={challenge.id}
                     className="bg-gray-800/50 backdrop-blur border border-gray-700 rounded-xl p-6 hover:border-yellow-500/50 transition"
@@ -381,7 +379,7 @@ export default function AgentDashboard() {
                         <p className="text-gray-400 text-sm">Comisión Ganada</p>
                         <p className="text-2xl font-bold text-yellow-400">
                           ${data.subAffiliates
-                            .reduce((sum: number, s: any) => sum + (s.lifetime_commission_earned || 0), 0)
+                            .reduce((sum: number, s: { lifetime_commission_earned?: number; id: string }) => sum + (s.lifetime_commission_earned || 0), 0)
                             .toFixed(2)}
                         </p>
                       </div>
@@ -392,7 +390,7 @@ export default function AgentDashboard() {
                     </div>
                   </div>
 
-                  {data.subAffiliates.map((sub: any) => (
+                  {data.subAffiliates.map((sub: { id: string; referred_user?: { email: string; agent_tier: number }; lifetime_commission_earned?: number }) => (
                     <div key={sub.id} className="bg-gray-800/50 backdrop-blur border border-gray-700 rounded-xl p-4">
                       <div className="flex items-center justify-between">
                         <div>
