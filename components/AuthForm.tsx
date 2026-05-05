@@ -202,8 +202,8 @@ export function AuthForm() {
                 <div className="flex items-center gap-1.5">
                   <span className="text-base">✈️</span>
                   <div className="text-left">
-                    <p className="font-bold text-xs leading-tight">Viajero</p>
-                    <p className="text-xs opacity-95 leading-tight">Buscar hospedajes</p>
+                    <p className="font-bold text-xs leading-tight">TEST1</p>
+                    <p className="text-xs opacity-95 leading-tight">CAMBIO</p>
                   </div>
                 </div>
                 <span className="text-sm">→</span>
@@ -216,8 +216,8 @@ export function AuthForm() {
                 <div className="flex items-center gap-1.5">
                   <span className="text-base">🔑</span>
                   <div className="text-left">
-                    <p className="font-bold text-xs leading-tight">Anfitrión</p>
-                    <p className="text-xs opacity-95 leading-tight">Listar propiedades</p>
+                    <p className="font-bold text-xs leading-tight">TEST2</p>
+                    <p className="text-xs opacity-95 leading-tight">CAMBIO</p>
                   </div>
                 </div>
                 <span className="text-sm">→</span>
@@ -230,8 +230,8 @@ export function AuthForm() {
                 <div className="flex items-center gap-1.5">
                   <span className="text-base">💎</span>
                   <div className="text-left">
-                    <p className="font-bold text-xs leading-tight">Agente</p>
-                    <p className="text-xs opacity-95 leading-tight">Ganar comisiones</p>
+                    <p className="font-bold text-xs leading-tight">TEST3</p>
+                    <p className="text-xs opacity-95 leading-tight">CAMBIO</p>
                   </div>
                 </div>
                 <span className="text-sm">→</span>
