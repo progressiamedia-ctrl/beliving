@@ -227,7 +227,7 @@ export function AuthForm() {
         )}
 
         {/* Card Principal - Login/Registro */}
-        <div className="w-full max-w-md backdrop-blur-[60px] rounded-[32px] p-8 shadow-2xl border transition-all duration-300 bg-white/90 border-white/60 backdrop-saturate-200 hover:border-white/70 hover:bg-white/95">
+        <div className="w-full max-w-md backdrop-blur-[80px] rounded-[32px] p-8 shadow-2xl border transition-all duration-300 bg-white/20 border-white/40 backdrop-saturate-200">
           {/* STEP 1: Role Selection */}
           {step === 'role-select' && (
             <div className="space-y-4">
@@ -284,10 +284,10 @@ export function AuthForm() {
 
               <div className="relative my-8">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
+                  <div className="w-full border-t border-white/30"></div>
                 </div>
                 <div className="relative flex justify-center">
-                  <span className="px-3 text-xs font-medium bg-gray-50 text-gray-600">
+                  <span className="px-3 text-xs font-medium text-white/70">
                     {authMode === 'signup' ? 'Ya tienes cuenta?' : 'No tienes cuenta?'}
                   </span>
                 </div>
