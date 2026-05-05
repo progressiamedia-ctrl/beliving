@@ -213,8 +213,10 @@ export function AuthForm() {
         <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-black/25 to-black/35"></div>
       </div>
 
-      <div className="relative z-10 w-full max-w-md px-6 flex items-center justify-center">
-        <div className="w-full backdrop-blur-[40px] rounded-3xl p-8 shadow-2xl border transition-all duration-300 bg-gradient-to-br from-white/25 to-white/15 border-white/40 backdrop-saturate-150 hover:border-white/50">
+      <div className="relative z-10 w-full px-6 flex items-center justify-center">
+        <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+          {/* Card Principal - Login/Registro */}
+          <div className="w-full backdrop-blur-[40px] rounded-[40px] p-8 shadow-2xl border transition-all duration-300 bg-white/90 border-white/50 backdrop-saturate-150 hover:border-white/60 order-2 lg:order-1">
           {/* Logo */}
           <div className="mb-10 text-center">
             <img
@@ -236,16 +238,19 @@ export function AuthForm() {
                 <button
                   onClick={() => handleRoleSelect('guest')}
                   aria-label="Registrarse como viajero"
-                  className="w-full group relative overflow-hidden rounded-2xl p-px"
+                  className="w-full group relative overflow-hidden rounded-[24px] p-px transition-all duration-300 hover:shadow-lg"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 opacity-100 group-hover:opacity-100 transition duration-300" />
-                  <div className="relative rounded-[14px] px-6 py-4 transition duration-300 bg-white group-hover:bg-gray-50">
-                    <div className="flex items-center justify-center gap-3">
-                      <span className="text-2xl">✈️</span>
-                      <div className="text-left">
-                        <p className="font-bold text-sm text-gray-900">Viajero</p>
-                        <p className="text-xs text-gray-600">Buscar hospedajes</p>
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-600 opacity-100 group-hover:opacity-100 transition duration-300" />
+                  <div className="relative rounded-[22px] px-6 py-5 transition duration-300 bg-white group-hover:bg-blue-50">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <span className="text-4xl">✈️</span>
+                        <div className="text-left">
+                          <p className="font-bold text-base text-gray-900">Viajero</p>
+                          <p className="text-xs text-gray-500">Buscar hospedajes</p>
+                        </div>
                       </div>
+                      <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm">→</div>
                     </div>
                   </div>
                 </button>
@@ -253,16 +258,19 @@ export function AuthForm() {
                 <button
                   onClick={() => handleRoleSelect('host')}
                   aria-label="Registrarse como anfitrión"
-                  className="w-full group relative overflow-hidden rounded-2xl p-px"
+                  className="w-full group relative overflow-hidden rounded-[24px] p-px transition-all duration-300 hover:shadow-lg"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-100 group-hover:opacity-100 transition duration-300" />
-                  <div className="relative rounded-[14px] px-6 py-4 transition duration-300 bg-white group-hover:bg-gray-50">
-                    <div className="flex items-center justify-center gap-3">
-                      <span className="text-2xl">🔑</span>
-                      <div className="text-left">
-                        <p className="font-bold text-sm text-gray-900">Anfitrión</p>
-                        <p className="text-xs text-gray-600">Listar propiedades</p>
+                  <div className="absolute inset-0 bg-gradient-to-br from-slate-700 to-slate-800 opacity-100 group-hover:opacity-100 transition duration-300" />
+                  <div className="relative rounded-[22px] px-6 py-5 transition duration-300 bg-white group-hover:bg-slate-50">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <span className="text-4xl">🔑</span>
+                        <div className="text-left">
+                          <p className="font-bold text-base text-gray-900">Anfitrión</p>
+                          <p className="text-xs text-gray-500">Listar propiedades</p>
+                        </div>
                       </div>
+                      <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold text-sm">→</div>
                     </div>
                   </div>
                 </button>
@@ -270,16 +278,19 @@ export function AuthForm() {
                 <button
                   onClick={() => handleRoleSelect('agent')}
                   aria-label="Registrarse como agente"
-                  className="w-full group relative overflow-hidden rounded-2xl p-px"
+                  className="w-full group relative overflow-hidden rounded-[24px] p-px transition-all duration-300 hover:shadow-lg"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-600 opacity-100 group-hover:opacity-100 transition duration-300" />
-                  <div className="relative rounded-[14px] px-6 py-4 transition duration-300 bg-white group-hover:bg-gray-50">
-                    <div className="flex items-center justify-center gap-3">
-                      <span className="text-2xl">💰</span>
-                      <div className="text-left">
-                        <p className="font-bold text-sm text-gray-900">Agente</p>
-                        <p className="text-xs text-gray-600">Referir y ganar comisiones</p>
+                  <div className="absolute inset-0 bg-gradient-to-br from-rose-500 to-pink-600 opacity-100 group-hover:opacity-100 transition duration-300" />
+                  <div className="relative rounded-[22px] px-6 py-5 transition duration-300 bg-white group-hover:bg-rose-50">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <span className="text-4xl">💰</span>
+                        <div className="text-left">
+                          <p className="font-bold text-base text-gray-900">Agente</p>
+                          <p className="text-xs text-gray-500">Referir y ganar comisiones</p>
+                        </div>
                       </div>
+                      <div className="w-8 h-8 rounded-full bg-rose-500 flex items-center justify-center text-white font-bold text-sm">→</div>
                     </div>
                   </div>
                 </button>
@@ -469,6 +480,39 @@ export function AuthForm() {
               </button>
             </form>
           )}
+        </div>
+
+        {/* Sidebar - Destinos Destacados */}
+        {step === 'role-select' && (
+          <div className="hidden lg:flex flex-col w-full max-w-sm order-1 lg:order-2">
+            <div className="backdrop-blur-[40px] rounded-[40px] p-6 shadow-2xl border bg-white/90 border-white/50 backdrop-saturate-150 h-full">
+              <p className="text-sm font-semibold text-gray-900 mb-5">Más por explorar</p>
+              <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
+                {[
+                  { icon: '🏖️', name: 'Cancún', desc: 'Playas paradisíacas' },
+                  { icon: '🏔️', name: 'Machu Picchu', desc: 'Ruinas antiguas' },
+                  { icon: '🗼', name: 'París', desc: 'La ciudad del amor' },
+                  { icon: '🌊', name: 'Bora Bora', desc: 'Islas exóticas' },
+                  { icon: '🏛️', name: 'Roma', desc: 'Historia milenaria' },
+                  { icon: '🌴', name: 'Tailandia', desc: 'Templos y selva' },
+                ].map((dest, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-3 rounded-2xl bg-gray-50 hover:bg-blue-50 transition cursor-pointer group">
+                    <div className="flex items-center gap-3 flex-1">
+                      <span className="text-2xl">{dest.icon}</span>
+                      <div className="min-w-0">
+                        <p className="font-semibold text-sm text-gray-900">{dest.name}</p>
+                        <p className="text-xs text-gray-500 truncate">{dest.desc}</p>
+                      </div>
+                    </div>
+                    <button className="w-7 h-7 rounded-full bg-rose-500 text-white flex items-center justify-center text-xs font-bold opacity-0 group-hover:opacity-100 transition flex-shrink-0">
+                      +
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
         </div>
       </div>
 
