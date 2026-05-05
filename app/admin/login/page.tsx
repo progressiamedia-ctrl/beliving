@@ -110,7 +110,6 @@ export default function AdminLoginPage() {
               alt="Be Living"
               className="h-16 w-auto mx-auto mb-4"
             />
-            <h1 className="text-3xl font-bold mb-2 tracking-tight text-gray-900">Be Living</h1>
             <p className="text-sm font-medium text-gray-600">Panel de Administración</p>
             <div className="mt-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-200">
               <div className="w-2 h-2 rounded-full bg-red-500"></div>

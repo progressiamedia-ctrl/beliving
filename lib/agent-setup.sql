@@ -1,25 +1,23 @@
--- AGENT REFERRAL & COMMISSION SYSTEM
--- Ejecuta este script en Supabase SQL Editor después de admin-setup.sql
+-- Agent System Setup for Be Living
+-- Run this migration in Supabase SQL Editor after existing setup
 
--- 1. Add 'agent' to user_type CHECK
+-- 1. Add 'agent' to user_type enum
 ALTER TABLE users DROP CONSTRAINT IF EXISTS users_user_type_check;
 ALTER TABLE users ADD CONSTRAINT users_user_type_check
   CHECK (user_type IN ('guest', 'host', 'admin', 'agent'));
 
--- 2. Agent-specific columns on users
+-- 2. Agent-specific columns on users table
 ALTER TABLE users ADD COLUMN IF NOT EXISTS agent_referral_code VARCHAR(50) UNIQUE;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS agent_commission_tier INT DEFAULT 1;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS agent_enabled BOOLEAN DEFAULT FALSE;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS agent_specialization VARCHAR(20) DEFAULT 'hybrid';
-
--- 3. Track which agent referred this user
-ALTER TABLE users ADD COLUMN IF NOT EXISTS referred_by_agent_id UUID REFERENCES users(id);
+ALTER TABLE users ADD COLUMN IF NOT EXISTS referred_by_agent_id UUID REFERENCES users(id) ON DELETE SET NULL;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS referral_registration_type VARCHAR(10);
 
--- 4. service_fee_amount on bookings
+-- 3. Add service_fee_amount to bookings (was only calculated frontend)
 ALTER TABLE bookings ADD COLUMN IF NOT EXISTS service_fee_amount DECIMAL(10,2) DEFAULT 0;
 
--- 5. agent_host_referrals: tracks every host an agent referred
+-- 4. Agent host referrals table
 CREATE TABLE IF NOT EXISTS agent_host_referrals (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   agent_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -36,7 +34,7 @@ CREATE TABLE IF NOT EXISTS agent_host_referrals (
   UNIQUE(agent_id, host_id)
 );
 
--- 6. agent_guest_referrals: tracks every guest an agent referred
+-- 5. Agent guest referrals table
 CREATE TABLE IF NOT EXISTS agent_guest_referrals (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   agent_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -53,7 +51,7 @@ CREATE TABLE IF NOT EXISTS agent_guest_referrals (
   UNIQUE(agent_id, guest_id)
 );
 
--- 7. agent_commissions: one row per booking per referral side
+-- 6. Agent commissions table
 CREATE TABLE IF NOT EXISTS agent_commissions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   agent_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -74,7 +72,7 @@ CREATE TABLE IF NOT EXISTS agent_commissions (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
--- 8. agent_commission_summary: denormalized totals
+-- 7. Agent commission summary (denormalized for fast queries)
 CREATE TABLE IF NOT EXISTS agent_commission_summary (
   agent_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
   total_hosts_referred INT DEFAULT 0,
@@ -99,7 +97,7 @@ CREATE TABLE IF NOT EXISTS agent_commission_summary (
   updated_at TIMESTAMP DEFAULT NOW()
 );
 
--- 9. Indices
+-- 8. Indices for performance
 CREATE INDEX IF NOT EXISTS idx_agent_host_referrals_agent ON agent_host_referrals(agent_id);
 CREATE INDEX IF NOT EXISTS idx_agent_guest_referrals_agent ON agent_guest_referrals(agent_id);
 CREATE INDEX IF NOT EXISTS idx_agent_commissions_agent ON agent_commissions(agent_id);
@@ -107,6 +105,8 @@ CREATE INDEX IF NOT EXISTS idx_agent_commissions_booking ON agent_commissions(bo
 CREATE INDEX IF NOT EXISTS idx_users_referral_code ON users(agent_referral_code);
 CREATE INDEX IF NOT EXISTS idx_users_referred_by ON users(referred_by_agent_id);
 
--- Verificación
-SELECT 'Agent setup complete' as status;
-SELECT COUNT(*) as users_count FROM users;
+-- 9. Enable Row-Level Security
+ALTER TABLE agent_host_referrals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE agent_guest_referrals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE agent_commissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE agent_commission_summary ENABLE ROW LEVEL SECURITY;

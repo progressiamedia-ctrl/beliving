@@ -215,8 +215,7 @@ export function AuthForm() {
               alt="Be Living"
               className="h-16 w-auto mx-auto mb-4"
             />
-            <h1 className="text-3xl font-bold mb-2 tracking-tight text-gray-900">Be Living</h1>
-            <p className="text-base font-medium text-gray-600">El futuro del alojamiento global</p>
+            <p className="text-base font-medium text-gray-600">Una nueva forma de vivir</p>
           </div>
 
           {/* STEP 1: Role Selection */}
