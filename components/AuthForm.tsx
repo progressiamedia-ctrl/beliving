@@ -251,21 +251,21 @@ export function AuthForm() {
         )}
 
         {step === 'auth-mode' && (
-          <div className="border border-white/40 bg-white/15 backdrop-blur-xl" style={{ padding: '48px 36px', maxWidth: '440px', width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px', borderRadius: '24px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
-            <h2 className="font-semibold text-gray-900 text-center" style={{ fontSize: '18px', marginBottom: '12px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px' }}>¿Qué deseas hacer?</h2>
+          <div className="border border-white/40 bg-white/15 backdrop-blur-xl" style={{ padding: '56px 40px', maxWidth: '440px', width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '0', borderRadius: '24px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
+            <h2 className="font-semibold text-gray-900 text-center" style={{ fontSize: '18px', marginBottom: '36px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px' }}>¿Qué deseas hacer?</h2>
 
             <button
               onClick={() => handleAuthModeSelect('signup')}
-              style={{ padding: '16px 18px', borderRadius: '14px', fontFamily: 'Montserrat, sans-serif', fontSize: '15px', fontWeight: '600', transition: 'all 0.3s ease', boxShadow: '0 4px 12px rgba(250, 204, 21, 0.3)' }}
-              className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 py-3 transition hover:shadow-lg hover:scale-105"
+              style={{ padding: '16px 18px', borderRadius: '14px', fontFamily: 'Montserrat, sans-serif', fontSize: '15px', fontWeight: '600', transition: 'all 0.3s ease', boxShadow: '0 4px 12px rgba(250, 204, 21, 0.3)', marginBottom: '18px' }}
+              className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 py-4 transition hover:shadow-lg hover:scale-105"
             >
               Registrarse
             </button>
 
             <button
               onClick={() => handleAuthModeSelect('signin')}
-              style={{ padding: '16px 18px', borderRadius: '14px', fontFamily: 'Montserrat, sans-serif', fontSize: '15px', fontWeight: '600', border: '2px solid rgba(255, 255, 255, 0.5)', transition: 'all 0.3s ease', background: 'transparent' }}
-              className="w-full text-white hover:bg-white/20 py-3 transition hover:shadow-lg hover:scale-105"
+              style={{ padding: '16px 18px', borderRadius: '14px', fontFamily: 'Montserrat, sans-serif', fontSize: '15px', fontWeight: '600', border: '2px solid rgba(255, 255, 255, 0.5)', transition: 'all 0.3s ease', background: 'transparent', marginBottom: '28px' }}
+              className="w-full text-white hover:bg-white/20 py-4 transition hover:shadow-lg hover:scale-105"
             >
               Iniciar Sesión
             </button>
@@ -286,10 +286,10 @@ export function AuthForm() {
         )}
 
         {step === 'registration' && (
-          <div className="border border-white/40 bg-white/15 backdrop-blur-xl w-full" style={{ maxWidth: '440px', padding: '40px 36px', borderRadius: '24px', fontFamily: 'Montserrat, sans-serif', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
-            <h2 className="font-semibold text-gray-900 text-center mb-8" style={{ fontSize: '18px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px' }}>Crear Cuenta</h2>
+          <div className="border border-white/40 bg-white/15 backdrop-blur-xl w-full" style={{ maxWidth: '440px', padding: '48px 40px', borderRadius: '24px', fontFamily: 'Montserrat, sans-serif', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
+            <h2 className="font-semibold text-gray-900 text-center" style={{ fontSize: '18px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px', marginBottom: '32px' }}>Crear Cuenta</h2>
 
-            <form onSubmit={handleRegistration} className="space-y-4">
+            <form onSubmit={handleRegistration} className="space-y-6">
               <input
                 type="email"
                 value={email}
@@ -322,20 +322,22 @@ export function AuthForm() {
 
               {error && <div className="p-4 rounded-xl bg-red-500/40 border border-red-400/80 text-white text-sm" style={{ fontFamily: 'Montserrat, sans-serif' }}>{error}</div>}
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-3.5 rounded-xl transition disabled:opacity-50 hover:shadow-lg hover:scale-105 disabled:scale-100"
-                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '15px' }}
-              >
-                {loading ? 'Creando...' : 'Crear Cuenta'}
-              </button>
+              <div style={{ marginTop: '32px' }}>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-4 rounded-xl transition disabled:opacity-50 hover:shadow-lg hover:scale-105 disabled:scale-100"
+                  style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '15px', fontWeight: '600' }}
+                >
+                  {loading ? 'Creando...' : 'Crear Cuenta'}
+                </button>
+              </div>
 
               <button
                 type="button"
                 onClick={() => setStep('auth-mode')}
-                className="w-full text-white/80 hover:text-white text-sm font-medium py-2 transition"
-                style={{ fontFamily: 'Montserrat, sans-serif' }}
+                className="w-full text-white/80 hover:text-white text-sm font-medium py-3 transition"
+                style={{ fontFamily: 'Montserrat, sans-serif', marginTop: '16px' }}
               >
                 ← Volver
               </button>
@@ -344,10 +346,10 @@ export function AuthForm() {
         )}
 
         {step === 'login' && (
-          <div className="border border-white/40 bg-white/15 backdrop-blur-xl w-full" style={{ maxWidth: '440px', padding: '40px 36px', borderRadius: '24px', fontFamily: 'Montserrat, sans-serif', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
-            <h2 className="font-semibold text-gray-900 text-center mb-8" style={{ fontSize: '18px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px' }}>Ingresar</h2>
+          <div className="border border-white/40 bg-white/15 backdrop-blur-xl w-full" style={{ maxWidth: '440px', padding: '48px 40px', borderRadius: '24px', fontFamily: 'Montserrat, sans-serif', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
+            <h2 className="font-semibold text-gray-900 text-center" style={{ fontSize: '18px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px', marginBottom: '32px' }}>Ingresar</h2>
 
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-6">
               <input
                 type="email"
                 value={email}
@@ -370,20 +372,22 @@ export function AuthForm() {
 
               {error && <div className="p-4 rounded-xl bg-red-500/40 border border-red-400/80 text-white text-sm" style={{ fontFamily: 'Montserrat, sans-serif' }}>{error}</div>}
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-3.5 rounded-xl transition disabled:opacity-50 hover:shadow-lg hover:scale-105 disabled:scale-100"
-                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '15px' }}
-              >
-                {loading ? 'Ingresando...' : 'Ingresar'}
-              </button>
+              <div style={{ marginTop: '32px' }}>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-4 rounded-xl transition disabled:opacity-50 hover:shadow-lg hover:scale-105 disabled:scale-100"
+                  style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '15px', fontWeight: '600' }}
+                >
+                  {loading ? 'Ingresando...' : 'Ingresar'}
+                </button>
+              </div>
 
               <button
                 type="button"
                 onClick={() => setStep('auth-mode')}
-                className="w-full text-white/80 hover:text-white text-sm font-medium py-2 transition"
-                style={{ fontFamily: 'Montserrat, sans-serif' }}
+                className="w-full text-white/80 hover:text-white text-sm font-medium py-3 transition"
+                style={{ fontFamily: 'Montserrat, sans-serif', marginTop: '16px' }}
               >
                 ← Volver
               </button>
