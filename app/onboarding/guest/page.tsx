@@ -72,49 +72,60 @@ export default function GuestOnboarding() {
 
   if (step === 'done') {
     return (
-      <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
-        {/* Fondo con imagen */}
-        <div
-          className="absolute inset-0 transition-all duration-1000 ease-in-out"
-          style={{
-            backgroundImage: `url(${CITY_IMAGES[currentImageIndex]})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundAttachment: 'fixed'
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-black/35 via-black/30 to-black/40"></div>
-        </div>
-
-        {/* Confites de celebración */}
+      <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white">
+        {/* Fuegos artificiales */}
         <div className="absolute inset-0 pointer-events-none">
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute animate-bounce text-3xl"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animation: `bounce ${2 + Math.random() * 2}s infinite`,
-                animationDelay: `${Math.random() * 0.5}s`
-              }}
-            >
-              {['🎉', '🎊', '✨', '🌟', '💫'][Math.floor(Math.random() * 5)]}
-            </div>
-          ))}
+          <style>{`
+            @keyframes firework {
+              0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+              }
+              100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+              }
+            }
+            .firework-particle {
+              animation: firework 1.5s ease-out forwards;
+            }
+          `}</style>
+          {[...Array(80)].map((_, i) => {
+            const angle = (i / 80) * Math.PI * 2;
+            const distance = 100;
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+            const colors = ['#FFD700', '#FFA500', '#FF6347', '#FF1493', '#00CED1', '#32CD32'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+
+            return (
+              <div
+                key={i}
+                className="firework-particle absolute w-2 h-2 rounded-full"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  '--tx': `${tx}px`,
+                  '--ty': `${ty}px`,
+                  backgroundColor: color,
+                  boxShadow: `0 0 10px ${color}`,
+                } as any}
+              />
+            );
+          })}
         </div>
 
         {/* Card de bienvenida */}
         <div className="relative z-10 w-full px-6 flex items-center justify-center">
-          <div className="w-full max-w-md backdrop-blur-[80px] rounded-[32px] p-8 shadow-2xl border transition-all duration-300 bg-white/20 border-white/40">
+          <div className="w-full max-w-md backdrop-blur-[80px] rounded-[32px] p-8 shadow-2xl border transition-all duration-300 bg-white/90 border-gray-200">
             <div className="text-center space-y-6">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-500 animate-pulse">
-                <span className="text-3xl">🎉</span>
+                <span className="text-3xl">✨</span>
               </div>
 
               <div>
-                <h1 className="text-3xl font-bold text-white mb-2">¡Bienvenido a Be Living!</h1>
-                <p className="text-lg text-white/80 mb-6">Tu perfil está completo. Ahora explora increíbles propiedades alrededor del mundo.</p>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">¡Bienvenido a Be Living!</h1>
+                <p className="text-lg text-gray-700 mb-6">Tu perfil está completo. Ahora explora increíbles propiedades alrededor del mundo.</p>
               </div>
 
               <div className="space-y-3 pt-4">
