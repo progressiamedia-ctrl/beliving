@@ -230,7 +230,7 @@ export function AuthForm() {
           {/* STEP 1: Role Selection */}
           {step === 'role-select' && (
             <div className="space-y-4">
-              <p className="text-center text-xl font-bold text-gray-900 mb-4">
+              <p className="text-center text-xl font-bold text-white mb-4">
                 {authMode === 'signup' ? '¿Cuál es tu rol?' : 'Elige tu perfil'}
               </p>
 
@@ -307,8 +307,8 @@ export function AuthForm() {
           {step === 'registration' && isSignUp && (
             <form onSubmit={handleRegistration} className="space-y-6">
               <div>
-                <p className="text-base mb-2 text-gray-700">
-                  Crear cuenta como <span className="font-bold capitalize text-gray-900">
+                <p className="text-base mb-2 text-white">
+                  Crear cuenta como <span className="font-bold capitalize text-white">
                     {role === 'guest' ? 'Viajero' : role === 'host' ? 'Anfitrión' : 'Agente'}
                   </span>
                 </p>
@@ -316,13 +316,13 @@ export function AuthForm() {
 
               <div className="space-y-3">
                 <div>
-                  <label htmlFor="auth-email" className="block text-sm font-semibold mb-2 text-gray-900">Correo electrónico</label>
+                  <label htmlFor="auth-email" className="block text-sm font-semibold mb-2 text-white">Correo electrónico</label>
                   <input
                     id="auth-email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500"
+                    className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition backdrop-blur-[20px] bg-white/20 border-white/40 text-white placeholder-white/70"
                     placeholder="tu@email.com"
                     required
                   />
@@ -335,7 +335,7 @@ export function AuthForm() {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500"
+                    className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition backdrop-blur-[20px] bg-white/20 border-white/40 text-white placeholder-white/70"
                     placeholder="Mínimo 6 caracteres"
                     required
                   />
@@ -348,7 +348,7 @@ export function AuthForm() {
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500"
+                    className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition backdrop-blur-[20px] bg-white/20 border-white/40 text-white placeholder-white/70"
                     placeholder="Confirma tu contraseña"
                     required
                   />
@@ -370,7 +370,7 @@ export function AuthForm() {
               <button
                 type="button"
                 onClick={() => setStep('role-select')}
-                className="w-full text-sm transition font-medium text-gray-600 hover:text-gray-900"
+                className="w-full text-sm transition font-medium text-white/70 hover:text-white"
               >
                 Volver atras
               </button>
@@ -385,7 +385,7 @@ export function AuthForm() {
               </div>
               <div>
                 <p className="font-bold text-lg mb-2 text-green-700">{successMessage}</p>
-                <p className="text-sm text-gray-600">Te llevaremos al siguiente paso en unos momentos...</p>
+                <p className="text-sm text-gray-700">Te llevaremos al siguiente paso en unos momentos...</p>
               </div>
               <div className="w-full rounded-full h-1 overflow-hidden bg-gray-200">
                 <div className="h-full bg-green-400 animate-pulse" style={{ width: '100%' }} />
@@ -397,8 +397,8 @@ export function AuthForm() {
           {step === 'login' && (
             <form onSubmit={handleLogin} className="space-y-6">
               <div>
-                <p className="text-base mb-1 text-gray-700">
-                  Ingresar como <span className="font-bold capitalize text-gray-900">
+                <p className="text-base mb-1 text-white">
+                  Ingresar como <span className="font-bold capitalize text-white">
                     {role === 'guest' ? 'Viajero' : role === 'host' ? 'Anfitrión' : 'Agente'}
                   </span>
                 </p>
@@ -408,7 +408,7 @@ export function AuthForm() {
                     setRole(null)
                     setError('')
                   }}
-                  className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-xs text-blue-300 hover:text-blue-100 font-medium"
                 >
                   Cambiar tipo de cuenta
                 </button>
@@ -421,7 +421,7 @@ export function AuthForm() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500"
+                    className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition backdrop-blur-[20px] bg-white/20 border-white/40 text-white placeholder-white/70"
                     placeholder="tu@email.com"
                     required
                   />
@@ -434,7 +434,7 @@ export function AuthForm() {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500"
+                    className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition backdrop-blur-[20px] bg-white/20 border-white/40 text-white placeholder-white/70"
                     placeholder="Tu contraseña"
                     required
                   />
@@ -456,7 +456,7 @@ export function AuthForm() {
               <button
                 type="button"
                 onClick={() => setStep('role-select')}
-                className="w-full text-sm transition font-medium text-gray-600 hover:text-gray-900"
+                className="w-full text-sm transition font-medium text-white/70 hover:text-white"
               >
                 Volver atras
               </button>
