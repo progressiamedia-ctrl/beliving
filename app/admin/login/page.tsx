@@ -30,7 +30,7 @@ export default function AdminLoginPage() {
   useEffect(() => {
     const imageInterval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % CITY_IMAGES.length)
-    }, 8000)
+    }, 4000)
     return () => clearInterval(imageInterval)
   }, [])
 
