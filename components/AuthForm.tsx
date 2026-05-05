@@ -281,15 +281,12 @@ export function AuthForm() {
                 </button>
               </div>
 
-              <div className="relative my-8">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-white/30"></div>
-                </div>
-                <div className="relative flex justify-center">
-                  <span className="px-3 text-xs font-medium text-white/80 bg-white/5">
-                    {authMode === 'signup' ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?'}
-                  </span>
-                </div>
+              <div className="relative my-8 flex items-center gap-4">
+                <div className="flex-1 h-px bg-gradient-to-r from-white/30 to-transparent"></div>
+                <span className="text-xs font-medium text-white/70 whitespace-nowrap">
+                  {authMode === 'signup' ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?'}
+                </span>
+                <div className="flex-1 h-px bg-gradient-to-l from-white/30 to-transparent"></div>
               </div>
 
               <button
