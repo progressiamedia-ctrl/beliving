@@ -22,10 +22,13 @@ export default function AdminLoginPage() {
   const router = useRouter()
 
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * CITY_IMAGES.length)
-    setCurrentImageIndex(randomIndex)
     setMounted(true)
   }, [])
+
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * CITY_IMAGES.length)
+    setCurrentImageIndex(randomIndex)
+  }, [mounted])
 
   useEffect(() => {
     const imageInterval = setInterval(() => {
