@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { LogoutButton } from './LogoutButton'
 
 export function LayoutClient({ children }: { children: React.ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -17,7 +16,6 @@ export function LayoutClient({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {isLoggedIn && <LogoutButton />}
       {children}
     </>
   )

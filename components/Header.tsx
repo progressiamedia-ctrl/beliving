@@ -1,5 +1,7 @@
 'use client'
 
+import { LogoutButton } from './LogoutButton'
+
 interface HeaderProps {
   title?: string
 }
@@ -15,6 +17,7 @@ export function Header({ title = 'Be Living' }: HeaderProps) {
             className="h-10 w-auto"
           />
         </div>
+        <LogoutButton />
       </div>
     </header>
   )
