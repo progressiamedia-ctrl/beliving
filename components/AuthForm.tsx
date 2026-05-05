@@ -295,8 +295,8 @@ export function AuthForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tu@email.com"
-                className="w-full px-6 rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
-                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', height: '44px', display: 'flex', alignItems: 'center', paddingTop: '0', paddingBottom: '0' }}
+                className="w-full rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
+                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', height: '44px', paddingLeft: '20px', paddingRight: '20px' }}
                 required
               />
 
@@ -305,8 +305,8 @@ export function AuthForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Contraseña"
-                className="w-full px-6 rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
-                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', height: '44px', display: 'flex', alignItems: 'center', paddingTop: '0', paddingBottom: '0' }}
+                className="w-full rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
+                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', height: '44px', paddingLeft: '20px', paddingRight: '20px' }}
                 required
               />
 
@@ -315,8 +315,8 @@ export function AuthForm() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirmar contraseña"
-                className="w-full px-6 rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
-                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', height: '44px', display: 'flex', alignItems: 'center', paddingTop: '0', paddingBottom: '0' }}
+                className="w-full rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
+                style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', height: '44px', paddingLeft: '20px', paddingRight: '20px' }}
                 required
               />
 
