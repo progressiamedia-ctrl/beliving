@@ -197,13 +197,14 @@ export function AuthForm() {
             <div className="space-y-1.5">
               <button
                 onClick={() => handleRoleSelect('guest')}
-                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-1.5 px-3 rounded-full transition flex items-center justify-between"
+                style={{ padding: '4px 12px', borderRadius: '999px', lineHeight: '1' }}
+                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold transition flex items-center justify-between"
               >
                 <div className="flex items-center gap-1.5">
                   <span className="text-base">✈️</span>
                   <div className="text-left">
-                    <p className="font-bold text-xs leading-tight">TEST1</p>
-                    <p className="text-xs opacity-95 leading-tight">CAMBIO</p>
+                    <p className="font-bold text-xs leading-tight">Viajero</p>
+                    <p className="text-xs opacity-95 leading-tight">Buscar hospedajes</p>
                   </div>
                 </div>
                 <span className="text-sm">→</span>
@@ -211,13 +212,14 @@ export function AuthForm() {
 
               <button
                 onClick={() => handleRoleSelect('host')}
-                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold py-1.5 px-3 rounded-full transition flex items-center justify-between"
+                style={{ padding: '4px 12px', borderRadius: '999px', lineHeight: '1' }}
+                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold transition flex items-center justify-between"
               >
                 <div className="flex items-center gap-1.5">
                   <span className="text-base">🔑</span>
                   <div className="text-left">
-                    <p className="font-bold text-xs leading-tight">TEST2</p>
-                    <p className="text-xs opacity-95 leading-tight">CAMBIO</p>
+                    <p className="font-bold text-xs leading-tight">Anfitrión</p>
+                    <p className="text-xs opacity-95 leading-tight">Listar propiedades</p>
                   </div>
                 </div>
                 <span className="text-sm">→</span>
@@ -225,13 +227,14 @@ export function AuthForm() {
 
               <button
                 onClick={() => handleRoleSelect('agent')}
-                className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-1.5 px-3 rounded-full transition flex items-center justify-between"
+                style={{ padding: '4px 12px', borderRadius: '999px', lineHeight: '1' }}
+                className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold transition flex items-center justify-between"
               >
                 <div className="flex items-center gap-1.5">
                   <span className="text-base">💎</span>
                   <div className="text-left">
-                    <p className="font-bold text-xs leading-tight">TEST3</p>
-                    <p className="text-xs opacity-95 leading-tight">CAMBIO</p>
+                    <p className="font-bold text-xs leading-tight">Agente</p>
+                    <p className="text-xs opacity-95 leading-tight">Ganar comisiones</p>
                   </div>
                 </div>
                 <span className="text-sm">→</span>
