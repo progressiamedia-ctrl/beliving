@@ -14,14 +14,17 @@ const CITY_IMAGES = [
   'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1920&h=1080&fit=crop&q=85', // París
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop&q=85', // Melbourne
   'https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=1920&h=1080&fit=crop&q=85', // Bogotá
-  'https://images.unsplash.com/photo-1532619675605-1ede6c2e5ddb?w=1920&h=1080&fit=crop&q=85', // Ciudad de México
+  'https://images.unsplash.com/photo-1532619675605-1ede6c2e5ddb?w=1920&h=1080&fit=crop&q=85', // Tailandia
+  'https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=1920&h=1080&fit=crop&q=85', // Santorini
+  'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920&h=1080&fit=crop&q=85', // Bora Bora
 ]
 
 type Step = 'role-select' | 'registration' | 'confirmation' | 'login'
+type UserRole = 'host' | 'guest' | 'agent'
 
 export function AuthForm() {
   const [step, setStep] = useState<Step>('role-select')
-  const [role, setRole] = useState<'host' | 'guest' | null>(null)
+  const [role, setRole] = useState<UserRole | null>(null)
   const [isSignUp, setIsSignUp] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -30,14 +33,24 @@ export function AuthForm() {
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const [mounted, setMounted] = useState(false)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const router = useRouter()
 
   useEffect(() => {
     setMounted(true)
+    const randomIndex = Math.floor(Math.random() * CITY_IMAGES.length)
+    setCurrentImageIndex(randomIndex)
+  }, [])
+
+  useEffect(() => {
+    const imageInterval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % CITY_IMAGES.length)
+    }, 8000)
+    return () => clearInterval(imageInterval)
   }, [])
 
 
-  const handleRoleSelect = (selectedRole: 'guest' | 'host') => {
+  const handleRoleSelect = (selectedRole: UserRole) => {
     setRole(selectedRole)
     setStep('registration')
     setIsSignUp(true)
@@ -76,6 +89,10 @@ export function AuthForm() {
 
       if (!role) throw new Error('Debes seleccionar un tipo de cuenta')
 
+      // Get referral code from localStorage if available
+      const referralCode = typeof window !== 'undefined' ? localStorage.getItem('agentReferralCode') : null
+      const referralType = typeof window !== 'undefined' ? localStorage.getItem('agentReferralType') : null
+
       // Call the API endpoint instead of directly accessing Supabase
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
@@ -83,7 +100,8 @@ export function AuthForm() {
         body: JSON.stringify({
           email,
           password,
-          user_type: role
+          user_type: role,
+          ...(referralCode && referralType && { referral_code: referralCode, referral_type: referralType })
         })
       })
 
@@ -97,6 +115,10 @@ export function AuthForm() {
       localStorage.setItem('userId', data.id)
       localStorage.setItem('userRole', data.user_type)
       localStorage.setItem('userEmail', data.email)
+
+      // Clear referral codes from localStorage
+      localStorage.removeItem('agentReferralCode')
+      localStorage.removeItem('agentReferralType')
 
       setStep('confirmation')
       setSuccessMessage(`¡Cuenta creada! Te hemos enviado un email de confirmación a ${email}`)
@@ -145,7 +167,14 @@ export function AuthForm() {
       localStorage.setItem('userRole', user.user_type)
       localStorage.setItem('userEmail', user.email)
 
-      router.push(user.user_type === 'host' ? '/host/dashboard' : '/properties')
+      // Redirect based on user type
+      const redirectMap: Record<string, string> = {
+        'host': '/host/dashboard',
+        'guest': '/properties',
+        'agent': '/agent',
+        'admin': '/admin'
+      }
+      router.push(redirectMap[user.user_type] || '/properties')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al ingresar')
     } finally {
@@ -162,11 +191,23 @@ export function AuthForm() {
   }
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-black">
-
+    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
+      {/* Fondo con imagen de país turístico */}
+      <div
+        className="absolute inset-0 transition-all duration-1000 ease-in-out"
+        style={{
+          backgroundImage: `url(${CITY_IMAGES[currentImageIndex]})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* Overlay oscuro para mejorar legibilidad */}
+        <div className="absolute inset-0 bg-black/40"></div>
+      </div>
 
       <div className="relative z-10 w-full max-w-md px-6">
-        <div className="backdrop-blur-xl rounded-3xl p-10 shadow-2xl border transition-colors duration-300 bg-white/90 border-gray-200">
+        <div className="backdrop-blur-2xl rounded-3xl p-10 shadow-2xl border transition-colors duration-300 bg-white/95 border-white/30 backdrop-saturate-150">
           {/* Logo */}
           <div className="mb-10 text-center">
             <img
@@ -192,7 +233,7 @@ export function AuthForm() {
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 opacity-100 group-hover:opacity-100 transition duration-300" />
                   <div className="relative rounded-[14px] px-6 py-4 transition duration-300 bg-white group-hover:bg-gray-50">
                     <div className="flex items-center justify-center gap-3">
-                      <span className="text-2xl">🏠</span>
+                      <span className="text-2xl">✈️</span>
                       <div className="text-left">
                         <p className="font-bold text-sm text-gray-900">Viajero</p>
                         <p className="text-xs text-gray-600">Buscar hospedajes</p>
@@ -213,6 +254,23 @@ export function AuthForm() {
                       <div className="text-left">
                         <p className="font-bold text-sm text-gray-900">Anfitrión</p>
                         <p className="text-xs text-gray-600">Listar propiedades</p>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => handleRoleSelect('agent')}
+                  aria-label="Registrarse como agente"
+                  className="w-full group relative overflow-hidden rounded-2xl p-px"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-600 opacity-100 group-hover:opacity-100 transition duration-300" />
+                  <div className="relative rounded-[14px] px-6 py-4 transition duration-300 bg-white group-hover:bg-gray-50">
+                    <div className="flex items-center justify-center gap-3">
+                      <span className="text-2xl">💰</span>
+                      <div className="text-left">
+                        <p className="font-bold text-sm text-gray-900">Agente</p>
+                        <p className="text-xs text-gray-600">Referir y ganar comisiones</p>
                       </div>
                     </div>
                   </div>
@@ -247,7 +305,9 @@ export function AuthForm() {
             <form onSubmit={handleRegistration} className="space-y-6">
               <div>
                 <p className="text-base mb-2 text-gray-700">
-                  Crear cuenta como <span className="font-bold capitalize text-gray-900">{role === 'guest' ? 'Viajero' : 'Anfitrión'}</span>
+                  Crear cuenta como <span className="font-bold capitalize text-gray-900">
+                    {role === 'guest' ? 'Viajero' : role === 'host' ? 'Anfitrión' : 'Agente'}
+                  </span>
                 </p>
               </div>
 
@@ -385,7 +445,17 @@ export function AuthForm() {
         </div>
       </div>
 
-      {/* Image indicators */}
+      {/* Indicadores de imagen */}
+      <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2 z-20">
+        {CITY_IMAGES.map((_, index) => (
+          <div
+            key={index}
+            className={`h-2 rounded-full transition-all duration-500 ${
+              index === currentImageIndex ? 'w-8 bg-white' : 'w-2 bg-white/40'
+            }`}
+          />
+        ))}
+      </div>
     </div>
   )
 }

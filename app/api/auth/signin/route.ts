@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
+import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
   try {
@@ -19,6 +20,19 @@ async function verifyPassword(password: string, hashedPassword: string): Promise
 
 export async function POST(request: NextRequest) {
   try {
+    const clientIp = getClientIp(request.headers)
+    const { success, remaining } = rateLimit(clientIp)
+
+    if (!success) {
+      return NextResponse.json(
+        { error: 'Demasiados intentos. Intenta de nuevo en 15 minutos' },
+        {
+          status: 429,
+          headers: { 'Retry-After': '900' }
+        }
+      )
+    }
+
     const { email, password } = await request.json()
 
     if (!email || !password) {
