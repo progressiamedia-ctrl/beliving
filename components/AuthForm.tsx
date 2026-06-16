@@ -5,24 +5,53 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
 const CITY_IMAGES = [
-  'https://images.unsplash.com/photo-1512453575128-d2f4b0e961c3?w=1920&h=1080&fit=crop&q=85', // Dubai
-  'https://images.unsplash.com/photo-1562883714-47a98a3c3872?w=1920&h=1080&fit=crop&q=85', // Barcelona
-  'https://images.unsplash.com/photo-1543936552-5150209c26d6?w=1920&h=1080&fit=crop&q=85', // Madrid
-  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop&q=85', // Cancún
-  'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&h=1080&fit=crop&q=85', // Punta Cana
-  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&h=1080&fit=crop&q=85', // Viña del Mar
-  'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1920&h=1080&fit=crop&q=85', // París
-  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop&q=85', // Melbourne
-  'https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=1920&h=1080&fit=crop&q=85', // Bogotá
-  'https://images.unsplash.com/photo-1532619675605-1ede6c2e5ddb?w=1920&h=1080&fit=crop&q=85', // Ciudad de México
+  'https://images.unsplash.com/photo-1512453575128-d2f4b0e961c3?w=1920&h=1080&fit=crop&q=85',
+  'https://images.unsplash.com/photo-1562883714-47a98a3c3872?w=1920&h=1080&fit=crop&q=85',
+  'https://images.unsplash.com/photo-1543936552-5150209c26d6?w=1920&h=1080&fit=crop&q=85',
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop&q=85',
+  'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&h=1080&fit=crop&q=85',
+  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&h=1080&fit=crop&q=85',
 ]
 
-type Step = 'role-select' | 'registration' | 'confirmation' | 'login'
+type Step = 'role-select' | 'auth-mode' | 'registration' | 'login' | 'confirmation'
+type UserRole = 'host' | 'guest' | 'agent'
+type AuthMode = 'signup' | 'signin'
+
+function InputWithIcon({
+  type,
+  value,
+  onChange,
+  placeholder,
+  icon,
+  required = false
+}: {
+  type: string
+  value: string
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  placeholder: string
+  icon: string
+  required?: boolean
+}) {
+  return (
+    <div style={{ position: 'relative' }}>
+      <input
+        type={type}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className="w-full rounded-lg bg-white/50 border border-white/60 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white/60 transition"
+        style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', height: '44px', paddingLeft: '44px', paddingRight: '20px' }}
+        required={required}
+      />
+      <span aria-hidden="true" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontSize: '18px', pointerEvents: 'none' }}>{icon}</span>
+    </div>
+  )
+}
 
 export function AuthForm() {
   const [step, setStep] = useState<Step>('role-select')
-  const [role, setRole] = useState<'host' | 'guest' | null>(null)
-  const [isSignUp, setIsSignUp] = useState(false)
+  const [role, setRole] = useState<UserRole | null>(null)
+  const [authMode, setAuthMode] = useState<AuthMode>('signup')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -30,18 +59,34 @@ export function AuthForm() {
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const [mounted, setMounted] = useState(false)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const router = useRouter()
 
   useEffect(() => {
     setMounted(true)
+    setCurrentImageIndex(0)
   }, [])
 
+  useEffect(() => {
+    const imageInterval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % CITY_IMAGES.length)
+    }, 4000)
+    return () => clearInterval(imageInterval)
+  }, [])
 
-  const handleRoleSelect = (selectedRole: 'guest' | 'host') => {
+  const handleRoleSelect = (selectedRole: UserRole) => {
     setRole(selectedRole)
-    setStep('registration')
-    setIsSignUp(true)
+    setStep('auth-mode')
     setError('')
+  }
+
+  const handleAuthModeSelect = (mode: AuthMode) => {
+    setAuthMode(mode)
+    setEmail('')
+    setPassword('')
+    setConfirmPassword('')
+    setError('')
+    setStep(mode === 'signup' ? 'registration' : 'login')
   }
 
   const validateEmail = (emailStr: string): boolean => {
@@ -62,28 +107,28 @@ export function AuthForm() {
     setError('')
 
     try {
-      // Validate email
       if (!email.trim()) throw new Error('El email es requerido')
-      if (!validateEmail(email)) throw new Error('Por favor ingresa un email válido (ej: usuario@ejemplo.com)')
+      if (!validateEmail(email)) throw new Error('Por favor ingresa un email válido')
 
-      // Validate password
       const passwordError = validatePassword(password)
       if (passwordError) throw new Error(passwordError)
 
-      // Validate password confirmation
       if (!confirmPassword) throw new Error('Debes confirmar tu contraseña')
       if (password !== confirmPassword) throw new Error('Las contraseñas no coinciden')
 
       if (!role) throw new Error('Debes seleccionar un tipo de cuenta')
 
-      // Call the API endpoint instead of directly accessing Supabase
+      const referralCode = typeof window !== 'undefined' ? localStorage.getItem('agentReferralCode') : null
+      const referralType = typeof window !== 'undefined' ? localStorage.getItem('agentReferralType') : null
+
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
           password,
-          user_type: role
+          user_type: role,
+          ...(referralCode && referralType && { referral_code: referralCode, referral_type: referralType })
         })
       })
 
@@ -93,15 +138,16 @@ export function AuthForm() {
         throw new Error(data.error || 'Error al registrarse')
       }
 
-      // Save to localStorage
       localStorage.setItem('userId', data.id)
       localStorage.setItem('userRole', data.user_type)
       localStorage.setItem('userEmail', data.email)
 
+      localStorage.removeItem('agentReferralCode')
+      localStorage.removeItem('agentReferralType')
+
       setStep('confirmation')
       setSuccessMessage(`¡Cuenta creada! Te hemos enviado un email de confirmación a ${email}`)
 
-      // Simulate email confirmation - in production, use Resend or similar
       setTimeout(() => {
         router.push(`/onboarding/${role}`)
       }, 3000)
@@ -118,14 +164,11 @@ export function AuthForm() {
     setError('')
 
     try {
-      // Validate email
       if (!email.trim()) throw new Error('El email es requerido')
       if (!validateEmail(email)) throw new Error('Por favor ingresa un email válido')
 
-      // Validate password
       if (!password) throw new Error('La contraseña es requerida')
 
-      // Call the API endpoint instead of directly accessing Supabase
       const response = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -145,7 +188,13 @@ export function AuthForm() {
       localStorage.setItem('userRole', user.user_type)
       localStorage.setItem('userEmail', user.email)
 
-      router.push(user.user_type === 'host' ? '/host/dashboard' : '/properties')
+      const redirectMap: Record<string, string> = {
+        'host': '/host/dashboard',
+        'guest': '/properties',
+        'agent': '/agent',
+        'admin': '/admin'
+      }
+      router.push(redirectMap[user.user_type] || '/properties')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al ingresar')
     } finally {
@@ -154,238 +203,232 @@ export function AuthForm() {
   }
 
   if (!mounted) {
-    return (
-      <div className="min-h-screen w-full flex items-center justify-center bg-white dark:bg-black">
-        <p className="text-gray-600 dark:text-gray-400">Cargando...</p>
-      </div>
-    )
+    return <div className="h-screen w-full bg-black flex items-center justify-center"><p className="text-white">Cargando...</p></div>
   }
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-black">
+    <div className="h-screen w-full overflow-hidden flex flex-col items-center justify-center"
+      style={{
+        backgroundImage: `url(${CITY_IMAGES[currentImageIndex]})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+        fontFamily: 'Montserrat, sans-serif'
+      }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-black/40"></div>
 
-
-      <div className="relative z-10 w-full max-w-md px-6">
-        <div className="backdrop-blur-xl rounded-3xl p-10 shadow-2xl border transition-colors duration-300 bg-white/90 border-gray-200">
-          {/* Logo */}
-          <div className="mb-10 text-center">
-            <img
-              src="/logo.png"
-              alt="Be Living"
-              className="h-16 w-auto mx-auto mb-4"
-            />
-            <h1 className="text-3xl font-bold mb-2 tracking-tight text-gray-900">Be Living</h1>
-            <p className="text-base font-medium text-gray-600">El futuro del alojamiento global</p>
+      <div className="relative z-10 w-full px-6 flex flex-col items-center justify-center" style={{ gap: '32px' }}>
+        {step === 'role-select' && (
+          <div className="text-center" style={{ marginTop: '20px' }}>
+            <img src="/logo.png" alt="BELIVING" style={{ maxWidth: '280px', height: 'auto', marginBottom: '16px', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))' }} />
+            <p className="text-white drop-shadow-lg" style={{ fontSize: '18px', marginTop: '12px', fontWeight: '400', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.3px' }}>Una nueva forma de vivir</p>
           </div>
+        )}
 
-          {/* STEP 1: Role Selection */}
-          {step === 'role-select' && (
-            <div className="space-y-6">
-              <p className="text-center text-lg font-medium text-gray-900">¿Cuál es tu rol?</p>
+        {step === 'role-select' && (
+          <div className="border border-white/40 bg-white/15 backdrop-blur-xl" style={{ padding: '40px 36px', maxWidth: '440px', width: '100%', minHeight: '400px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRadius: '24px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
+            <div>
+              <h2 className="font-semibold text-gray-900 text-center" style={{ fontSize: '18px', marginBottom: '28px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px' }}>¿Cuál es tu rol?</h2>
 
-              <div className="space-y-3">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 <button
                   onClick={() => handleRoleSelect('guest')}
-                  aria-label="Registrarse como viajero"
-                  className="w-full group relative overflow-hidden rounded-2xl p-px"
+                  style={{ padding: '14px 18px', borderRadius: '14px', lineHeight: '1.3', alignSelf: 'center', width: '290px', fontFamily: 'Montserrat, sans-serif', transition: 'all 0.3s ease', boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)' }}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium flex items-center justify-between hover:shadow-lg hover:scale-105"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 opacity-100 group-hover:opacity-100 transition duration-300" />
-                  <div className="relative rounded-[14px] px-6 py-4 transition duration-300 bg-white group-hover:bg-gray-50">
-                    <div className="flex items-center justify-center gap-3">
-                      <span className="text-2xl">🏠</span>
-                      <div className="text-left">
-                        <p className="font-bold text-sm text-gray-900">Viajero</p>
-                        <p className="text-xs text-gray-600">Buscar hospedajes</p>
-                      </div>
+                  <div className="flex items-center" style={{ gap: '14px', flex: 1 }}>
+                    <span style={{ fontSize: '22px', flexShrink: 0 }}>✈️</span>
+                    <div className="text-left">
+                      <p className="font-semibold" style={{ fontSize: '14px', lineHeight: '1.2', margin: '0', fontFamily: 'Montserrat, sans-serif' }}>Viajero</p>
+                      <p style={{ fontSize: '12px', opacity: 0.95, lineHeight: '1.2', margin: '2px 0 0 0', fontFamily: 'Montserrat, sans-serif' }}>Buscar hospedajes</p>
                     </div>
                   </div>
+                  <span style={{ fontSize: '18px', marginLeft: '12px', flexShrink: 0 }}>→</span>
                 </button>
 
                 <button
                   onClick={() => handleRoleSelect('host')}
-                  aria-label="Registrarse como anfitrión"
-                  className="w-full group relative overflow-hidden rounded-2xl p-px"
+                  style={{ padding: '14px 18px', borderRadius: '14px', lineHeight: '1.3', alignSelf: 'center', width: '290px', fontFamily: 'Montserrat, sans-serif', transition: 'all 0.3s ease', boxShadow: '0 4px 12px rgba(245, 158, 11, 0.2)' }}
+                  className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-medium flex items-center justify-between hover:shadow-lg hover:scale-105"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-100 group-hover:opacity-100 transition duration-300" />
-                  <div className="relative rounded-[14px] px-6 py-4 transition duration-300 bg-white group-hover:bg-gray-50">
-                    <div className="flex items-center justify-center gap-3">
-                      <span className="text-2xl">🔑</span>
-                      <div className="text-left">
-                        <p className="font-bold text-sm text-gray-900">Anfitrión</p>
-                        <p className="text-xs text-gray-600">Listar propiedades</p>
-                      </div>
+                  <div className="flex items-center" style={{ gap: '14px', flex: 1 }}>
+                    <span style={{ fontSize: '22px', flexShrink: 0 }}>🔑</span>
+                    <div className="text-left">
+                      <p className="font-semibold" style={{ fontSize: '14px', lineHeight: '1.2', margin: '0', fontFamily: 'Montserrat, sans-serif' }}>Anfitrión</p>
+                      <p style={{ fontSize: '12px', opacity: 0.95, lineHeight: '1.2', margin: '2px 0 0 0', fontFamily: 'Montserrat, sans-serif' }}>Listar propiedades</p>
                     </div>
                   </div>
+                  <span style={{ fontSize: '18px', marginLeft: '12px', flexShrink: 0 }}>→</span>
+                </button>
+
+                <button
+                  onClick={() => handleRoleSelect('agent')}
+                  style={{ padding: '14px 18px', borderRadius: '14px', lineHeight: '1.3', alignSelf: 'center', width: '290px', fontFamily: 'Montserrat, sans-serif', transition: 'all 0.3s ease', boxShadow: '0 4px 12px rgba(236, 72, 153, 0.2)' }}
+                  className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-medium flex items-center justify-between hover:shadow-lg hover:scale-105"
+                >
+                  <div className="flex items-center" style={{ gap: '14px', flex: 1 }}>
+                    <span style={{ fontSize: '22px', flexShrink: 0 }}>💎</span>
+                    <div className="text-left">
+                      <p className="font-semibold" style={{ fontSize: '14px', lineHeight: '1.2', margin: '0', fontFamily: 'Montserrat, sans-serif' }}>Agente</p>
+                      <p style={{ fontSize: '12px', opacity: 0.95, lineHeight: '1.2', margin: '2px 0 0 0', fontFamily: 'Montserrat, sans-serif' }}>Referir y ganar</p>
+                    </div>
+                  </div>
+                  <span style={{ fontSize: '18px', marginLeft: '12px', flexShrink: 0 }}>→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {step === 'auth-mode' && (
+          <div className="border border-white/40 bg-white/15 backdrop-blur-xl" style={{ padding: '56px 40px', maxWidth: '440px', width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '0', borderRadius: '24px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
+            <h2 className="font-semibold text-gray-900 text-center" style={{ fontSize: '18px', marginBottom: '36px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px' }}>¿Qué deseas hacer?</h2>
+
+            <button
+              onClick={() => handleAuthModeSelect('signup')}
+              style={{ padding: '16px 18px', borderRadius: '14px', fontFamily: 'Montserrat, sans-serif', fontSize: '15px', fontWeight: '600', transition: 'all 0.3s ease', boxShadow: '0 4px 12px rgba(250, 204, 21, 0.3)', marginBottom: '18px' }}
+              className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 py-4 transition hover:shadow-lg hover:scale-105"
+            >
+              Registrarse
+            </button>
+
+            <button
+              onClick={() => handleAuthModeSelect('signin')}
+              style={{ padding: '16px 18px', borderRadius: '14px', fontFamily: 'Montserrat, sans-serif', fontSize: '15px', fontWeight: '600', border: '2px solid rgba(255, 255, 255, 0.5)', transition: 'all 0.3s ease', background: 'transparent', marginBottom: '28px' }}
+              className="w-full text-white hover:bg-white/20 py-4 transition hover:shadow-lg hover:scale-105"
+            >
+              Iniciar Sesión
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setRole(null)
+                setStep('role-select')
+                setError('')
+              }}
+              className="w-full text-white/80 hover:text-white text-sm font-medium py-3 transition"
+              style={{ fontFamily: 'Montserrat, sans-serif' }}
+            >
+              ← Volver
+            </button>
+          </div>
+        )}
+
+        {step === 'registration' && (
+          <div className="border border-white/40 bg-white/15 backdrop-blur-xl w-full" style={{ maxWidth: '380px', padding: '42px 32px', borderRadius: '20px', fontFamily: 'Montserrat, sans-serif', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
+            <h2 className="font-semibold text-gray-800 text-center" style={{ fontSize: '16px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px', marginBottom: '28px' }}>Crear Cuenta</h2>
+
+            <form onSubmit={handleRegistration} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <InputWithIcon
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="tu@email.com"
+                icon="📧"
+                required
+              />
+
+              <InputWithIcon
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Contraseña"
+                icon="🔒"
+                required
+              />
+
+              <InputWithIcon
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirmar contraseña"
+                icon="🔐"
+                required
+              />
+
+              {error && <div className="p-3 rounded-lg bg-red-500/40 border border-red-400/80 text-white text-xs" style={{ fontFamily: 'Montserrat, sans-serif', marginTop: '8px' }}>{error}</div>}
+
+              <div style={{ marginTop: '20px' }}>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold rounded-lg transition disabled:opacity-50 hover:shadow-lg"
+                  style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '15px', fontWeight: '600', padding: '12px 18px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  {loading ? 'Creando...' : 'Crear Cuenta'}
                 </button>
               </div>
 
-              <div className="relative my-8">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
-                </div>
-                <div className="relative flex justify-center">
-                  <span className="px-3 text-xs font-medium bg-gray-50 text-gray-600">¿Ya tienes cuenta?</span>
-                </div>
-              </div>
-
               <button
-                onClick={() => {
-                  setStep('login')
-                  setIsSignUp(false)
-                  setError('')
-                }}
-                aria-label="Ir a iniciar sesión"
-                className="w-full px-6 py-3 border font-medium rounded-2xl transition duration-300 border-gray-300 text-gray-900 hover:bg-gray-50 hover:border-gray-400"
+                type="button"
+                onClick={() => setStep('auth-mode')}
+                className="text-white/70 hover:text-white text-xs font-medium py-2 transition text-center"
+                style={{ fontFamily: 'Montserrat, sans-serif', marginTop: '8px' }}
               >
-                Ingresar
+                ← Volver
               </button>
-            </div>
-          )}
+            </form>
+          </div>
+        )}
 
-          {/* STEP 2: Registration Form */}
-          {step === 'registration' && isSignUp && (
-            <form onSubmit={handleRegistration} className="space-y-6">
-              <div>
-                <p className="text-base mb-2 text-gray-700">
-                  Crear cuenta como <span className="font-bold capitalize text-gray-900">{role === 'guest' ? 'Viajero' : 'Anfitrión'}</span>
-                </p>
+        {step === 'login' && (
+          <div className="border border-white/40 bg-white/15 backdrop-blur-xl w-full" style={{ maxWidth: '380px', padding: '42px 32px', borderRadius: '20px', fontFamily: 'Montserrat, sans-serif', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
+            <h2 className="font-semibold text-gray-800 text-center" style={{ fontSize: '16px', fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.2px', marginBottom: '28px' }}>Ingresar</h2>
+
+            <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <InputWithIcon
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="tu@email.com"
+                icon="📧"
+                required
+              />
+
+              <InputWithIcon
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Contraseña"
+                icon="🔒"
+                required
+              />
+
+              {error && <div className="p-3 rounded-lg bg-red-500/40 border border-red-400/80 text-white text-xs" style={{ fontFamily: 'Montserrat, sans-serif', marginTop: '8px' }}>{error}</div>}
+
+              <div style={{ marginTop: '20px' }}>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold rounded-lg transition disabled:opacity-50 hover:shadow-lg"
+                  style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '15px', fontWeight: '600', padding: '12px 18px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  {loading ? 'Ingresando...' : 'Ingresar'}
+                </button>
               </div>
-
-              <div className="space-y-3">
-                <div>
-                  <label htmlFor="auth-email" className="block text-sm font-semibold mb-2 text-gray-900">Correo electrónico</label>
-                  <input
-                    id="auth-email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500"
-                    placeholder="tu@email.com"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="auth-password" className="block text-sm font-semibold mb-2 text-gray-900">Contraseña</label>
-                  <input
-                    id="auth-password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500"
-                    placeholder="Mínimo 6 caracteres"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="auth-confirm-password" className="block text-sm font-semibold mb-2 text-gray-900">Confirmar contraseña</label>
-                  <input
-                    id="auth-confirm-password"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500"
-                    placeholder="Confirma tu contraseña"
-                    required
-                  />
-                </div>
-              </div>
-
-              {error && (
-                <div role="alert" className="p-3 border rounded-xl text-sm bg-red-50 border-red-300 text-red-700">{error}</div>
-              )}
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 disabled:from-yellow-400/50 disabled:to-yellow-500/50 text-black font-bold py-3 rounded-xl transition duration-300 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Creando cuenta...' : 'Crear cuenta'}
-              </button>
 
               <button
                 type="button"
-                onClick={() => setStep('role-select')}
-                className="w-full text-sm transition font-medium text-gray-600 hover:text-gray-900"
+                onClick={() => setStep('auth-mode')}
+                className="text-white/70 hover:text-white text-xs font-medium py-2 transition text-center"
+                style={{ fontFamily: 'Montserrat, sans-serif', marginTop: '8px' }}
               >
-                ← Volver atrás
+                ← Volver
               </button>
             </form>
-          )}
+          </div>
+        )}
 
-          {/* STEP 3: Confirmation */}
-          {step === 'confirmation' && (
-            <div className="text-center space-y-6 py-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 animate-bounce">
-                <span className="text-3xl">✓</span>
-              </div>
-              <div>
-                <p className="font-bold text-lg mb-2 text-green-700">{successMessage}</p>
-                <p className="text-sm text-gray-600">Te llevaremos al siguiente paso en unos momentos...</p>
-              </div>
-              <div className="w-full rounded-full h-1 overflow-hidden bg-gray-200">
-                <div className="h-full bg-green-400 animate-pulse" style={{ width: '100%' }} />
-              </div>
-            </div>
-          )}
-
-          {/* STEP 4: Login */}
-          {step === 'login' && (
-            <form onSubmit={handleLogin} className="space-y-6">
-              <div className="space-y-3">
-                <div>
-                  <label htmlFor="login-email" className="block text-sm font-semibold mb-2 text-gray-900">Correo electrónico</label>
-                  <input
-                    id="login-email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500"
-                    placeholder="tu@email.com"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="login-password" className="block text-sm font-semibold mb-2 text-gray-900">Contraseña</label>
-                  <input
-                    id="login-password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500"
-                    placeholder="Tu contraseña"
-                    required
-                  />
-                </div>
-              </div>
-
-              {error && (
-                <div role="alert" className="p-3 border rounded-xl text-sm bg-red-50 border-red-300 text-red-700">{error}</div>
-              )}
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 disabled:from-yellow-400/50 disabled:to-yellow-500/50 text-black font-bold py-3 rounded-xl transition duration-300 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Ingresando...' : 'Ingresar'}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setStep('role-select')}
-                className="w-full text-sm transition font-medium text-gray-600 hover:text-gray-900"
-              >
-                ← Volver atrás
-              </button>
-            </form>
-          )}
-        </div>
+        {step === 'confirmation' && (
+          <div className="border border-white/40 bg-white/15 backdrop-blur-xl text-center w-full" style={{ maxWidth: '440px', padding: '40px 36px', borderRadius: '24px', fontFamily: 'Montserrat, sans-serif', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)' }}>
+            <div className="text-5xl mb-4">✓</div>
+            <p className="text-white font-semibold mb-3 text-base" style={{ fontFamily: 'Montserrat, sans-serif' }}>{successMessage}</p>
+            <p className="text-white/80 text-sm" style={{ fontFamily: 'Montserrat, sans-serif' }}>Te llevaremos al siguiente paso en unos momentos...</p>
+          </div>
+        )}
       </div>
-
-      {/* Image indicators */}
     </div>
   )
 }

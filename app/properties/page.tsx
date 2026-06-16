@@ -226,6 +226,7 @@ export default function PropertiesPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveCategory(tab.id as CategoryFilter)}
+                aria-current={activeCategory === tab.id ? 'page' : undefined}
                 className={`flex items-center gap-2 pb-3 text-sm font-medium transition-colors whitespace-nowrap ${
                   activeCategory === tab.id
                     ? 'text-gray-900 dark:text-white border-b-2 border-yellow-400'

@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
+import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 async function hashPassword(password: string): Promise<string> {
   const salt = crypto.randomBytes(16).toString('hex')
@@ -12,7 +13,20 @@ async function hashPassword(password: string): Promise<string> {
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, user_type } = await request.json()
+    const clientIp = getClientIp(request.headers)
+    const { success, remaining } = rateLimit(clientIp)
+
+    if (!success) {
+      return NextResponse.json(
+        { error: 'Demasiados intentos. Intenta de nuevo en 15 minutos' },
+        {
+          status: 429,
+          headers: { 'Retry-After': '900' }
+        }
+      )
+    }
+
+    const { email, password, user_type, referral_code, referral_type } = await request.json()
 
     if (!email || !password || !user_type) {
       return NextResponse.json(
@@ -41,13 +55,30 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Handle referral code if provided
+    let referred_by_agent_id = null
+    if (referral_code && referral_type && ['host', 'guest'].includes(referral_type)) {
+      const { data: agentData } = await supabase
+        .from('users')
+        .select('id')
+        .eq('agent_referral_code', referral_code)
+        .eq('agent_enabled', true)
+        .single()
+
+      if (agentData) {
+        referred_by_agent_id = agentData.id
+      }
+    }
+
     const { data, error } = await supabase
       .from('users')
       .insert([{
         email,
         password_hash: hashedPassword,
         user_type,
-        verified: false
+        verified: false,
+        referred_by_agent_id,
+        referral_registration_type: referral_type || null
       }])
       .select()
       .single()
@@ -58,6 +89,35 @@ export async function POST(request: NextRequest) {
         { error: error.message || 'Registration failed' },
         { status: 400 }
       )
+    }
+
+    // Create referral tracking record
+    if (referred_by_agent_id && referral_type) {
+      try {
+        if (referral_type === 'host') {
+          await supabase
+            .from('agent_host_referrals')
+            .insert({
+              agent_id: referred_by_agent_id,
+              host_id: data.id,
+              referral_code,
+              registered_at: new Date().toISOString(),
+              status: 'prospect'
+            })
+        } else if (referral_type === 'guest') {
+          await supabase
+            .from('agent_guest_referrals')
+            .insert({
+              agent_id: referred_by_agent_id,
+              guest_id: data.id,
+              referral_code,
+              registered_at: new Date().toISOString(),
+              status: 'prospect'
+            })
+        }
+      } catch (refError) {
+        console.error('Referral tracking error:', refError)
+      }
     }
 
     return NextResponse.json({
